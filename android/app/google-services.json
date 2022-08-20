@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "280600597933",
+    "project_id": "my-car-records-5548b",
+    "storage_bucket": "my-car-records-5548b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:280600597933:android:522a9e144f24128e5f3d24",
+        "android_client_info": {
+          "package_name": "com.example.my_car_records"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "280600597933-om2qrihn13k50akdvkarpmnkdjj14aln.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcWlHcqeuzJU0TLTVKOEZVhzsVOITvWwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "280600597933-om2qrihn13k50akdvkarpmnkdjj14aln.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
