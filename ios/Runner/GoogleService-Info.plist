@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>280600597933-gdc7sqp263cti7ll7d3g18d6l8usm365.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.280600597933-gdc7sqp263cti7ll7d3g18d6l8usm365</string>
+	<key>API_KEY</key>
+	<string>AIzaSyAAU5sERpxuw1kJMbvrpBSfjTggk6eI8Q8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>280600597933</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.myCarRecords</string>
+	<key>PROJECT_ID</key>
+	<string>my-car-records-5548b</string>
+	<key>STORAGE_BUCKET</key>
+	<string>my-car-records-5548b.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:280600597933:ios:78d60c71d20244fc5f3d24</string>
+	<key>DATABASE_URL</key>
+	<string>https://my-car-records-5548b-default-rtdb.firebaseio.com</string>
+</dict>
+</plist>
