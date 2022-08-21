@@ -39,7 +39,7 @@ class _CarFormState extends State<CarForm> {
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
-                // Add TextFormFields and ElevatedButton here.
+                // TextFormFields for all vehicle information
                 TextFormField(
                   decoration: const InputDecoration(
                     labelText: "VIN",
@@ -110,6 +110,7 @@ class _CarFormState extends State<CarForm> {
                     return null;
                   },
                 ),
+                // submit button to add a car
                 ElevatedButton(
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {

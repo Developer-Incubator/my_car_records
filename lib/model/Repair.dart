@@ -10,7 +10,7 @@ class Repair {
 
   Repair(this.id, this.hours, this.tech, this.odometer, this.workRequested,
       this.parts);
-
+/// returns all information about repair
   getRepairInfo() {
     return {
       "id": id,
@@ -25,7 +25,8 @@ class Part {
   final int unitPrice;
   final int total;
   Part(this.name, this.quantity, this.unitPrice, this.total);
-
+  
+/// gets a parts total price 
   getPartTotal() {
     int total = unitPrice * quantity;
     return total;

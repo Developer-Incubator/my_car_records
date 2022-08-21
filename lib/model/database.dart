@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:firebase_database/firebase_database.dart';
 
 import 'Car.dart';
-
+/// gets all the cars from the database and returns them in an array
 Future<List> getCars() async {
   final cars = await FirebaseDatabase.instance.ref().child("cars").get();
   var testArr = [];
@@ -36,7 +36,9 @@ addCar(String vin, int year, make, String model, String ownerUsername) {
     "owner": ownerUsername,
   });
 }
-
+/// gets a single car from the database 
+/// 
+/// @param vin String id of car unique db identifier  
 Future<List> getACar(String vin) async {
   final car = await FirebaseDatabase.instance.ref().child("cars/$vin").get();
   final repairs =
@@ -56,7 +58,7 @@ Future<List> getACar(String vin) async {
   }
   return cardata;
 }
-
+/// gets all repairs for a vehicle using the vin 
 getCarRepairs(vin) async {
   final repairs =
       await FirebaseDatabase.instance.ref().child("Repairs/$vin").get();

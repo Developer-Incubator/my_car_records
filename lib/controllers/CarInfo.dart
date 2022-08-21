@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// displays all the information about a single car
+/// 
+/// @param car Array holds all the car information and matinance records 
 class CarInfo extends StatelessWidget {
   const CarInfo({Key? key, required this.car}) : super(key: key);
   final car;
