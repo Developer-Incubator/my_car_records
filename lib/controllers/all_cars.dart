@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_car_records/views/CarDetails.dart';
+import 'package:my_car_records/views/car_details.dart';
 
 /// showAllCars
 ///

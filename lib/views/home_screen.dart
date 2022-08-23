@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 // import 'package:my_car_records/controllers/CarForm.dart';
 
-import '../controllers/CarForm.dart';
-import 'CarList.dart';
+import 'car_form.dart';
+import 'car_list.dart';
 /// MyHomePage
 /// 
 /// this is the home screen that displays a the Carlist widget which is just a list of cars 

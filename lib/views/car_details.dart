@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 // import 'package:my_car_records/controllers/AllCars.dart';
-import 'package:my_car_records/controllers/CarInfo.dart';
+import 'package:my_car_records/controllers/car_info.dart';
 import 'package:my_car_records/model/database.dart';
 
 class CarDetailsPage extends StatelessWidget {
@@ -32,7 +32,7 @@ class CarDetailsPage extends StatelessWidget {
                 );
                 
               }
-              return SingleChildScrollView(
+              return Container(
                 child: child,
               );
             })
