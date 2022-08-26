@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:my_car_records/controllers/car/update_car_form.dart';
+import 'package:my_car_records/controllers/my_extensions.dart';
 import 'package:my_car_records/model/car.dart';
 import 'package:my_car_records/model/db/car.dart';
 import 'package:my_car_records/views/car_details.dart';
 
-/// showAllCars
+/// Creates a card widget with the cars information and adds it to the cars array.
 ///
-/// loops throught the [carList], uses the [context] to know what the last screen was, [refresh] is a function that changes the state of the parent widget. Creates a card widget with the cars information and adds it to the cars array.
+/// loops throught the [carList],
+/// uses the [context] to know what the last screen was,
+/// [refresh] is a function that changes the state of the parent widget.
+///
 ///
 
 List<Widget> showAllCars(carList, BuildContext context, Function refresh) {
   List<Widget> cars = [];
   for (Car car in carList.data) {
-    
-    Map<String,dynamic> carData = car.getInfo();
-    String vin = carData['vin'];
+    Map<String, dynamic> carData = car.getInfo();
+    String vin = carData['vin'].toUpperCase();
     cars.add(
       Card(
         child: ListTile(
           leading: const Icon(Icons.directions_car_filled),
-          title:
-              Text("${carData['year']} ${carData['make']} ${carData['model']}"),
+          title: Text(
+              "${carData['year']} ${carData['make']} ${carData['model']}"),
           subtitle: Text(vin),
           trailing: PopupMenuButton(
             itemBuilder: (BuildContext ctx) => [
@@ -39,7 +42,7 @@ List<Widget> showAllCars(carList, BuildContext context, Function refresh) {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               scrollable: true,
-                              title: const Text('Car Update Form'),
+                              title: const Text('Update Car'),
                               content: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: CarUpdateForm(
@@ -79,8 +82,6 @@ List<Widget> showAllCars(carList, BuildContext context, Function refresh) {
   }
   return cars;
 }
-
-
 
 // showDialog(
 //                     context: context,

@@ -3,7 +3,7 @@ import 'package:my_car_records/controllers/part/all_parts.dart';
 
 import 'package:my_car_records/model/db/part.dart';
 import 'package:my_car_records/controllers/part/part_form.dart';
-import 'package:my_car_records/model/repair.dart';
+
 
 /// displays all the information about a single Repair including parts
 ///

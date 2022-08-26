@@ -1,3 +1,4 @@
+import 'package:my_car_records/controllers/my_extensions.dart';
 import 'package:my_car_records/model/part.dart';
 
 /// Create a Repair
@@ -25,9 +26,9 @@ class Repair {
     return {
       "id": id,
       "hours": hours,
-      "tech": tech,
+      "tech": eachCap(tech),
       "odometer": odometer,
-      "workRequested": workRequested,
+      "workRequested": capitalize(workRequested),
       "parts": parts,
     };
   }

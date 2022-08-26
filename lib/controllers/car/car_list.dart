@@ -5,11 +5,15 @@ import 'package:my_car_records/model/db/car.dart';
 
 /// Gets a list of all the cars , checks if the future lst has any data. if so procede to populate page, if not than a text widget will appear. Untill one of those happen a circle progression will appear as a loading screen
 ///
-
+///[refresh] resets the state of the parent widget
 // ignore: must_be_immutable
 class CarList extends StatelessWidget {
   CarList({Key? key, required this.refresh}) : super(key: key);
-  Function refresh;
+   Function refresh;
+
+   Future swipeRefresh() async{
+    refresh();
+  }
 
   late Future<List> cars = getCars();
 
@@ -33,9 +37,10 @@ class CarList extends StatelessWidget {
               ),
             ];
           }
-          return ListView(
+          return RefreshIndicator(onRefresh:()=> swipeRefresh(), child: ListView(
             children: children,
-          );
+          )) 
+          ;
         });
   }
 }

@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
+import 'package:my_car_records/controllers/my_extensions.dart';
 import 'package:my_car_records/model/car.dart';
 
 // Create
@@ -12,12 +13,12 @@ import 'package:my_car_records/model/car.dart';
 void addCar(
     String vin, int year, String make, String model, String ownerUsername) {
   DatabaseReference db =
-      FirebaseDatabase.instance.ref().child("cars").child(vin);
+      FirebaseDatabase.instance.ref().child("cars").child(vin.toUpperCase());
   db.set({
     "make": make,
     "model": model,
     "year": year,
-    "owner": ownerUsername,
+    "owner": eachCap(ownerUsername),
   });
 }
 
@@ -30,7 +31,6 @@ Future<List> getCars() async {
 
   if (cars.exists) {
     for (DataSnapshot element in cars.children) {
-      
       String vin = element.key.toString();
       int year = int.parse(element.child("year").value.toString());
       String make = element.child("make").value.toString();
@@ -60,7 +60,7 @@ Future<List> getACar(String vin) async {
     String make = car.child("make").value.toString();
     String model = car.child("model").value.toString();
     String owner = car.child("owner").value.toString();
-   Car myCar = Car(vin, year, make, model, owner);
+    Car myCar = Car(vin, year, make, model, owner);
 
     cardata.add(myCar);
   }
@@ -83,9 +83,9 @@ void updateCar(String vin, int year, String make, String model, String owner) {
 
   Map<String, dynamic> carData = {
     'make': make,
-    'model': model,
+    'model':model,
     'year': year,
-    "owner": owner
+    "owner": owner,
   };
   carToUpdate.update(carData);
 }

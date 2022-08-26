@@ -21,9 +21,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'My Car Records',
+      title:  'My Car Records',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.blueGrey,
+        primaryColor: Colors.blueGrey.shade600,
+        fontFamily: "NunitoSans"
       ),
       home: FutureBuilder(
         future: _fbApp,
