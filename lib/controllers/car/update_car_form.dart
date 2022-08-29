@@ -2,6 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:my_car_records/model/db/car.dart';
 
+/// updates information about a car and refreshes the state to update the page to display the correct information.
+/// 
+/// [refresh] resets state to show the correct info
+/// [vin] vehicle id
+/// [year] year the vehicle was produced
+/// [make] manufacture of the vehicle
+/// [model] product of the manufacturer
+/// [owner] owner of the vehicle 
 class CarUpdateForm extends StatefulWidget {
   const CarUpdateForm({
     Key? key,
@@ -32,16 +40,6 @@ class _CarUpdateFormState extends State<CarUpdateForm> {
   final yearController = TextEditingController();
   final ownerController = TextEditingController();
 
-  @override
-  void dispose() {
-    makeController.dispose();
-    modelController.dispose();
-    yearController.dispose();
-    vinController.dispose();
-    ownerController.dispose();
-
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {

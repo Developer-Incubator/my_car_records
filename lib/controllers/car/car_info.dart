@@ -21,7 +21,7 @@ class _CarInfoState extends State<CarInfo> {
   Widget build(BuildContext context) {
     Map<String, dynamic> carInfo = widget.car[0].getInfo();
     Future<List<dynamic>> repairs = getCarRepairs(carInfo["vin"]);
-    
+    // resets state to get the latest repairs
     refresh() {
       setState(() {
         repairs = getCarRepairs(carInfo["vin"]);
@@ -81,18 +81,17 @@ class _CarInfoState extends State<CarInfo> {
               const Spacer(),
               ElevatedButton(
                 onPressed: () {
-                  // Navigator.of(context).push(
-                  //     MaterialPageRoute(builder: (_) =>  RepairForm(vin: carInfo['vin'],))).then((value) => setState((){}));
                   showDialog(
                     context: context,
                     builder: (BuildContext context) {
                       return AlertDialog(
                         scrollable: true,
-                        title: const Text('Car Form'),
+                        title: const Text('Add Repair'),
                         content: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child:
-                              RepairForm(vin: carInfo["vin"], refresh: refresh),
+                          child:RepairForm(
+                            vin: carInfo["vin"], 
+                            refresh: refresh),
                         ),
                       );
                     },

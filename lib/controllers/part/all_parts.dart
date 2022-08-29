@@ -48,7 +48,7 @@ List<Widget> showAllParts(partsList, BuildContext context, Function refresh,
                           builder: (BuildContext context) {
                             return AlertDialog(
                               scrollable: true,
-                              title: const Text('Car Update Form'),
+                              title: const Text('Update Part'),
                               content: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: UpdatePartForm(

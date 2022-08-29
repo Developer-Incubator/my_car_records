@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:my_car_records/model/db/repair.dart';
 
+/// form to create a repair on a car assigning the hours it takes to perform the repair, the current milege on the vehicle at time of repair, the techs name that performed the repairs, and the work that was requested by the customer. 
+/// 
+/// [vin] vehicle id, 
+/// [refresh] refreshes the state of the page ato display the correct information.
+
 // ignore: must_be_immutable
 class RepairForm extends StatelessWidget {
   RepairForm({Key? key, required this.vin, required refresh}) : super(key: key);

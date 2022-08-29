@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:my_car_records/model/db/part.dart';
 
+/// updates information about a part and refreshes the state to update the page to display the correct information.
+/// 
+/// [vin] vehicle id
+/// [repairId] id of the repair that the parts are a part of.
+/// [partId] unique id of the part.
+/// [name] name of the part with the manufacturer.
+/// [quantity] number of this part that is needed.
+/// [unitPrice] price of a individual part.
+/// [refresh] refreshes thre state of the page to the current information  
 class UpdatePartForm extends StatelessWidget {
   final String vin;
   final String repairId;
@@ -81,19 +90,6 @@ class UpdatePartForm extends StatelessWidget {
                 return null;
               },
             ),
-            // TextFormField(
-            //   controller: workRequestedController,
-            //   decoration: const InputDecoration(
-            //     labelText: "Work Requested",
-            //     hintText: "What you asked the technition to look into",
-            //   ),
-            //   validator: (value) {
-            //     if (value == null || value.isEmpty) {
-            //       return 'Please enter some text';
-            //     }
-            //     return null;
-            //   },
-            // ),
 
             // submit button to add a car
             ElevatedButton(

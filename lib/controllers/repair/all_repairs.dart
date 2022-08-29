@@ -44,7 +44,7 @@ List<Widget> showAllRepairs(vin, repairList, context, refresh) {
                           builder: (BuildContext context) {
                             return AlertDialog(
                               scrollable: true,
-                              title: const Text('Car Update Form'),
+                              title: const Text('Update Repair'),
                               content: Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: RepairUpdateForm(

@@ -1,6 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:my_car_records/model/db/repair.dart';
 
+/// form to update the information about a repair
+/// 
+/// [vin] vehicle id,
+/// [repairId] unique id that is assigned to the repair,
+/// [hours] current length of time to complete the repair,
+/// [odometer] current miles on the car at time of repair,
+/// [tech] current techs name that performed the repairs,
+/// [workRequested] current work that was requested by the owner of the vehicle,
+/// [refresh] refreshes the state to display the current information.
+
 // ignore: must_be_immutable
 class RepairUpdateForm extends StatelessWidget {
   RepairUpdateForm(

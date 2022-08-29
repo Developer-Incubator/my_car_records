@@ -52,8 +52,9 @@ Future<List> getParts(String vin, String repairId) async {
 
 /// gets a specific part from the db and creates aa Part object from the data.
 ///
-/// [vin] vehicle id that is getting the repair
-/// [repairId] id of the repair with the desired parts
+/// [vin] vehicle id that is getting the repair,
+/// [repairId] id of the repair with the desired parts,
+/// [partId] unique id that is assigned to the part
 ///
 Future<Part> getAPart(String vin, String repairId, String partId) async {
   DataSnapshot part = await FirebaseDatabase.instance

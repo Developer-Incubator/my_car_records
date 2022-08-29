@@ -9,9 +9,9 @@ import 'package:my_car_records/model/db/car.dart';
 // ignore: must_be_immutable
 class CarList extends StatelessWidget {
   CarList({Key? key, required this.refresh}) : super(key: key);
-   Function refresh;
+  Function refresh;
 
-   Future swipeRefresh() async{
+  Future swipeRefresh() async {
     refresh();
   }
 
@@ -20,27 +20,30 @@ class CarList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-        future: cars,
-        builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
-          List<Widget> children;
-          if (snapshot.hasData) {
-            children = showAllCars(snapshot, context, refresh);
-          } else if (snapshot.hasError) {
-            children = [const Text("Error Populating Data")];
-            debugPrint("Error populating list");
-          } else {
-            children = const <Widget>[
-              SizedBox(
-                width: 60,
-                height: 60,
-                child: CircularProgressIndicator(),
-              ),
-            ];
-          }
-          return RefreshIndicator(onRefresh:()=> swipeRefresh(), child: ListView(
+      future: cars,
+      builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+        List<Widget> children;
+        if (snapshot.hasData) {
+          children = showAllCars(snapshot, context, refresh);
+        } else if (snapshot.hasError) {
+          children = [const Text("Error Populating Data")];
+          debugPrint("Error populating list");
+        } else {
+          children = const <Widget>[
+            SizedBox(
+              width: 60,
+              height: 60,
+              child: CircularProgressIndicator(),
+            ),
+          ];
+        }
+        return RefreshIndicator(
+          onRefresh: () => swipeRefresh(),
+          child: ListView(
             children: children,
-          )) 
-          ;
-        });
+          ),
+        );
+      },
+    );
   }
 }

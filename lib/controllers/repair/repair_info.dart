@@ -8,6 +8,7 @@ import 'package:my_car_records/controllers/part/part_form.dart';
 /// displays all the information about a single Repair including parts
 ///
 /// [repair] holds all the repair information.
+/// [vin] vehicle id
 ///
 // ignore: must_be_immutable
 class RepairInfo extends StatefulWidget {
@@ -95,7 +96,7 @@ class _RepairInfoState extends State<RepairInfo> {
                       builder: (BuildContext context) {
                         return AlertDialog(
                           scrollable: true,
-                          title: const Text('Car Form'),
+                          title: const Text('Add Part'),
                           content: Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: PartForm(
