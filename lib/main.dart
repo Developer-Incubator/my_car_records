@@ -15,6 +15,7 @@ void main() async {
 ///
 class MyApp extends StatelessWidget {
   final Future<FirebaseApp> _fbApp = Firebase.initializeApp();
+  bool isLoading = false;
 
   MyApp({Key? key}) : super(key: key);
 
@@ -22,12 +23,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title:  'My Car Records',
+      title: 'My Car Records',
       theme: ThemeData(
-        primarySwatch: Colors.blueGrey,
-        primaryColor: Colors.blueGrey.shade600,
-        fontFamily: "NunitoSans"
-      ),
+          primarySwatch: Colors.blueGrey,
+          primaryColor: Colors.blueGrey.shade600,
+          fontFamily: "NunitoSans"),
       home: FutureBuilder(
         future: _fbApp,
         builder: (context, snapshot) {
@@ -37,7 +37,6 @@ class MyApp extends StatelessWidget {
           } else if (snapshot.hasData) {
             return const MyHomePage(title: 'My Car Records');
           } else {
-            
             return const Center(
               child: SizedBox(
                 width: 60,
