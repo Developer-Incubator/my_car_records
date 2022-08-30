@@ -14,7 +14,7 @@ class Part {
   /// multiplies the price of the item by the quantityto get the toal price of the part
   double getPartTotal() {
     double total = double.parse(unitPrice.toString()) * quantity;
-    return total;
+    return double.parse(total.toStringAsPrecision(2)) ;
   }
 
   /// returns the information about the part in json format

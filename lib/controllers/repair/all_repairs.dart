@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_car_records/controllers/my_extensions.dart';
 
 import 'package:my_car_records/controllers/repair/update_repair_form.dart';
 import 'package:my_car_records/model/db/car.dart';
@@ -17,7 +18,7 @@ List<Widget> showAllRepairs(vin, repairList, context, refresh) {
 // creates a card for each repair entry
   for (Repair repair in repairList.data) {
     Map<String,dynamic> repairData = repair.getRepairInfo();
-    String workRequested = repairData['workRequested'];
+    String workRequested = capitalize(repairData['workRequested']);
     repairs.add(
       Card(
         child: ListTile(
@@ -49,7 +50,7 @@ List<Widget> showAllRepairs(vin, repairList, context, refresh) {
                                 padding: const EdgeInsets.all(8.0),
                                 child: RepairUpdateForm(
                                   refresh: refresh,
-                                hours: repairData['hours'], tech: repairData['tech'], odometer: repairData['odometer'], workRequested: repairData['workRequested'], vin: vin, repairId: repairData['id'],
+                                hours: repairData['hours'],labor:repairData['labor'], tech: repairData['tech'], odometer: repairData['odometer'], workRequested: repairData['workRequested'], vin: vin, repairId: repairData['id'],
                                 ),
                               ),
                             );

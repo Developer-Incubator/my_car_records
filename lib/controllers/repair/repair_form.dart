@@ -15,9 +15,12 @@ class RepairForm extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final hoursController = TextEditingController();
+   final laborController = TextEditingController();
   final odometerController = TextEditingController();
   final techController = TextEditingController();
   final workRequestedController = TextEditingController();
+ 
+
 
   @override
   Widget build(BuildContext context) {
@@ -34,6 +37,20 @@ class RepairForm extends StatelessWidget {
                 hintText: "Hours to complete work",
               ),
               controller: hoursController,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: "Labor",
+                hintText: "Price of the Technititon",
+              ),
+              controller: laborController,
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -95,6 +112,7 @@ class RepairForm extends StatelessWidget {
                   addRepair(
                       vin,
                       double.parse(hoursController.text),
+                      double.parse(laborController.text),
                       odometerController.text,
                       techController.text,
                       workRequestedController.text);

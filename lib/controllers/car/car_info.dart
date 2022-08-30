@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_car_records/controllers/my_extensions.dart';
 import 'package:my_car_records/controllers/repair/all_repairs.dart';
 import 'package:my_car_records/model/db/repair.dart';
 import 'package:my_car_records/controllers/repair/repair_form.dart';
@@ -19,10 +20,10 @@ class CarInfo extends StatefulWidget {
 class _CarInfoState extends State<CarInfo> {
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> carInfo = widget.car[0].getInfo();
+    var carInfo = widget.car.getInfo();
     Future<List<dynamic>> repairs = getCarRepairs(carInfo["vin"]);
     // resets state to get the latest repairs
-    refresh() {
+    Future refresh() async {
       setState(() {
         repairs = getCarRepairs(carInfo["vin"]);
       });
@@ -60,7 +61,7 @@ class _CarInfoState extends State<CarInfo> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: Text(carInfo['make']),
+                child: Text(capitalize(carInfo['make'])),
               ),
               const Text(
                 "Model: ",
@@ -68,7 +69,7 @@ class _CarInfoState extends State<CarInfo> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: Text(carInfo['model']),
+                child: Text(eachCap(carInfo['model'])),
               ),
             ],
           ),
@@ -77,7 +78,10 @@ class _CarInfoState extends State<CarInfo> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              const Text("Repairs"),
+              const Text(
+                "Repairs:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const Spacer(),
               ElevatedButton(
                 onPressed: () {
@@ -89,9 +93,8 @@ class _CarInfoState extends State<CarInfo> {
                         title: const Text('Add Repair'),
                         content: Padding(
                           padding: const EdgeInsets.all(8.0),
-                          child:RepairForm(
-                            vin: carInfo["vin"], 
-                            refresh: refresh),
+                          child:
+                              RepairForm(vin: carInfo["vin"], refresh: refresh),
                         ),
                       );
                     },
@@ -126,12 +129,15 @@ class _CarInfoState extends State<CarInfo> {
                   ),
                 ];
               }
-              return ListView(
-                children: children,
+              return RefreshIndicator(
+                onRefresh: () => refresh(),
+                child: ListView(
+                  children: children,
+                ),
               );
             },
           ),
-        )
+        ),
       ],
     );
   }

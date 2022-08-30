@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_car_records/controllers/my_extensions.dart';
 import 'package:my_car_records/controllers/part/update_part_form.dart';
 import 'package:my_car_records/model/db/part.dart';
 import 'package:my_car_records/model/part.dart';
@@ -12,7 +13,7 @@ List<Widget> showAllParts(partsList, BuildContext context, Function refresh,
   List<Widget> parts = [];
 // creates a card for each repair entry
   for (Part part in partsList.data) {
-    Map<String,dynamic> partData = part.getPartInfo();
+    Map<String, dynamic> partData = part.getPartInfo();
 
     parts.add(
       Card(
@@ -21,14 +22,14 @@ List<Widget> showAllParts(partsList, BuildContext context, Function refresh,
             Icons.settings,
             size: 56.0,
           ),
-          title: Text(partData["name"]),
+          title: Text(eachCap(partData["name"])),
           subtitle: Row(
             children: [
               const Text("Quantity: "),
               Text("${partData['quantity']}"),
               const Spacer(),
               const Text("Total: "),
-              Text("${part.getPartTotal()}")
+              Text(part.getPartTotal().toStringAsFixed(2))
             ],
           ),
           trailing: PopupMenuButton(
@@ -36,7 +37,7 @@ List<Widget> showAllParts(partsList, BuildContext context, Function refresh,
               PopupMenuItem(
                   child: TextButton(
                       onPressed: (() {
-                          deletePart(vin,repairId,partData["id"]);
+                        deletePart(vin, repairId, partData["id"]);
                         refresh();
                       }),
                       child: const Text("Delete"))),

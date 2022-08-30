@@ -1,6 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
-import 'package:my_car_records/controllers/my_extensions.dart';
+// import 'package:my_car_records/controllers/my_extensions.dart';
 import 'package:my_car_records/model/car.dart';
 
 // Create
@@ -18,7 +18,7 @@ void addCar(
     "make": make,
     "model": model,
     "year": year,
-    "owner": eachCap(ownerUsername),
+    "owner": ownerUsername,
   });
 }
 
@@ -48,23 +48,18 @@ Future<List> getCars() async {
 /// gets a single car from the database
 //
 /// [vin] vehicle id number.
-Future<List> getACar(String vin) async {
+Future<Car> getACar(String vin) async {
   DataSnapshot car =
       await FirebaseDatabase.instance.ref().child("cars/$vin").get();
 
-  List<Car> cardata = [];
+  // String vin = car.key.toString();
+  int year = int.parse(car.child("year").value.toString());
+  String make = car.child("make").value.toString();
+  String model = car.child("model").value.toString();
+  String owner = car.child("owner").value.toString();
+  Car myCar = Car(vin, year, make, model, owner);
 
-  if (car.exists) {
-    String vin = car.key.toString();
-    int year = int.parse(car.child("year").value.toString());
-    String make = car.child("make").value.toString();
-    String model = car.child("model").value.toString();
-    String owner = car.child("owner").value.toString();
-    Car myCar = Car(vin, year, make, model, owner);
-
-    cardata.add(myCar);
-  }
-  return cardata;
+  return myCar;
 }
 
 // update
@@ -83,7 +78,7 @@ void updateCar(String vin, int year, String make, String model, String owner) {
 
   Map<String, dynamic> carData = {
     'make': make,
-    'model':model,
+    'model': model,
     'year': year,
     "owner": owner,
   };

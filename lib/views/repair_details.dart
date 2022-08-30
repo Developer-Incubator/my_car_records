@@ -18,9 +18,15 @@ class RepairDetails extends StatefulWidget {
 class _RepairDetailsState extends State<RepairDetails> {
   @override
   Widget build(BuildContext context) {
-    
     Map<String, dynamic> repairInfo = widget.repair.getRepairInfo();
-    Future<List<dynamic>> repair = getARepair(vin: widget.vin, repairId: repairInfo["id"]);
+    Future<Repair> repair =
+        getARepair(vin: widget.vin, repairId: repairInfo["id"]);
+
+    pageRefresh() {
+      setState(() {
+        repair = getARepair(vin: widget.vin, repairId: repairInfo["id"]);
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -28,10 +34,15 @@ class _RepairDetailsState extends State<RepairDetails> {
       ),
       body: FutureBuilder(
           future: repair,
-          builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+          builder: (BuildContext context, AsyncSnapshot<Repair> snapshot) {
             Widget child;
             if (snapshot.hasData) {
-              child = RepairInfo(repair: snapshot.data, vin: widget.vin);
+              print(snapshot.data);
+              child = RepairInfo(
+                repair: snapshot.data,
+                vin: widget.vin,
+                pageRefresh: pageRefresh,
+              );
             } else if (snapshot.hasError) {
               child = const Text("Error populating list");
               debugPrint("Error populating list");

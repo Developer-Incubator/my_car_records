@@ -1,21 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:my_car_records/controllers/my_extensions.dart';
 import 'package:my_car_records/controllers/part/all_parts.dart';
 
 import 'package:my_car_records/model/db/part.dart';
 import 'package:my_car_records/controllers/part/part_form.dart';
 
-
 /// displays all the information about a single Repair including parts
 ///
 /// [repair] holds all the repair information.
 /// [vin] vehicle id
+/// [pageRefresh] updates the whole pageto display the current information.
 ///
 // ignore: must_be_immutable
 class RepairInfo extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
-  late var repair;
+  final repair;
   final String vin;
-  RepairInfo({Key? key, required this.repair, required this.vin})
+  final Function pageRefresh;
+  const RepairInfo(
+      {Key? key,
+      required this.repair,
+      required this.vin,
+      required this.pageRefresh})
       : super(key: key);
 
   @override
@@ -25,14 +31,22 @@ class RepairInfo extends StatefulWidget {
 class _RepairInfoState extends State<RepairInfo> {
   @override
   Widget build(BuildContext context) {
-    Map<String, dynamic> repairInfo = widget.repair[0].getRepairInfo();
+    var repairInfo = widget.repair.getRepairInfo();
     // gets app the parts associated with selected repair
     Future<List<dynamic>> parts = getParts(widget.vin, repairInfo['id']);
+
+    double repairTotal = double.parse(widget.repair.getRepairTotal()) + widget.repair.labor;
+
     // refreshes the list of parts to keep it accurate when a part is deleted.
     refresh() {
       setState(() {
         parts = getParts(widget.vin, repairInfo['id']);
+        widget.pageRefresh();
       });
+    }
+
+    Future swipeRefresh() async {
+      refresh();
     }
 
     return Column(
@@ -75,7 +89,7 @@ class _RepairInfoState extends State<RepairInfo> {
               ),
               Padding(
                 padding: const EdgeInsets.only(right: 8.0),
-                child: Text(repairInfo['tech']),
+                child: Text(eachCap(repairInfo['tech'])),
               ),
               //
             ],
@@ -85,12 +99,13 @@ class _RepairInfoState extends State<RepairInfo> {
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
-              const Text("Parts"),
+              const Text(
+                "Parts:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
               const Spacer(),
               ElevatedButton(
                   onPressed: () {
-                    // Navigator.of(context).push(
-                    //     MaterialPageRoute(builder: (_) =>  RepairForm(vin: carInfo['vin'],))).then((value) => setState((){}));
                     showDialog(
                       context: context,
                       builder: (BuildContext context) {
@@ -108,6 +123,7 @@ class _RepairInfoState extends State<RepairInfo> {
                       },
                     ).then(
                       (value) {
+                        widget.pageRefresh();
                         refresh();
                       },
                     );
@@ -136,12 +152,31 @@ class _RepairInfoState extends State<RepairInfo> {
                   ),
                 ];
               }
-              return ListView(
-                children: children,
+              return RefreshIndicator(
+                onRefresh: () => swipeRefresh(),
+                child: ListView(
+                  children: children,
+                ),
               );
             },
           ),
-        )
+        ),
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              const Spacer(),
+              Column(
+                children: [
+                  const Text("Cost:"),
+                  Text("Parts: \$${widget.repair.getRepairTotal()}"),
+                  Text("Labor: \$${widget.repair.labor.toStringAsFixed(2)}"),
+                  Text("Total: \$${repairTotal.toStringAsFixed(2)}"),
+                ],
+              )
+            ],
+          ),
+        ),
       ],
     );
   }

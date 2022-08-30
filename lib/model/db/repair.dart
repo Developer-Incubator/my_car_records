@@ -1,5 +1,6 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
+// import 'package:my_car_records/model/db/part.dart';
 
 import 'package:my_car_records/model/part.dart';
 import 'package:my_car_records/model/repair.dart';
@@ -14,8 +15,8 @@ import 'package:uuid/uuid.dart';
 /// [hours] total number of hours to complete the repair
 /// [odometer] total miles that are on the car of time of repair
 /// [tech] name of the technition that performed repairs
-void addRepair(String vin, double hours, String odometer, String tech,
-    String workRequested) {
+void addRepair(String vin, double hours, double labor, String odometer,
+    String tech, String workRequested) {
   Uuid uuid = const Uuid();
   DatabaseReference repairsRef = FirebaseDatabase.instance
       .ref()
@@ -25,6 +26,7 @@ void addRepair(String vin, double hours, String odometer, String tech,
   repairsRef.set(
     {
       "hours": hours,
+      "labor": labor,
       "odometer": odometer,
       "technition": tech,
       "workRequested": workRequested
@@ -48,12 +50,14 @@ Future<List> getCarRepairs(vin) async {
       // gets information from DB
       String name = repair.key.toString();
       double hours = double.parse(repair.child("hours").value.toString());
+      double labor = double.parse(repair.child("labor").value.toString());
+
       String odometer = repair.child("odometer").value.toString();
       String tech = repair.child("technition").value.toString();
       String workRequested = repair.child("workRequested").value.toString();
 
       Repair myRepair =
-          Repair(name, hours, tech, odometer, workRequested, partsList);
+          Repair(name, hours, labor, tech, odometer, workRequested, partsList);
       // print(myRepair.getRepairInfo());
       repairArr.add(myRepair);
     }
@@ -68,25 +72,36 @@ Future<List> getCarRepairs(vin) async {
 ///
 /// [vin] vehicle id number.
 /// [repairId] id associated with the desired repair
-Future<List> getARepair({required String vin, required repairId}) async {
+Future<Repair> getARepair({required String vin, required repairId}) async {
   DataSnapshot repair = await FirebaseDatabase.instance
       .ref()
       .child("Repairs/$vin/$repairId")
       .get();
-  List<Repair> repairData = [];
-  List<Part> partsList = [];
-  if (repair.exists) {
-    double hours = double.parse(repair.child("hours").value.toString());
-    String tech = repair.child("technition").value.toString();
-    String odometer = repair.child("odometer").value.toString();
-    String requested = repair.child("workRequested").value.toString();
+  DataSnapshot parts = await FirebaseDatabase.instance
+      .ref()
+      .child("Repairs/$vin/$repairId/parts")
+      .get();
 
-    Repair carRepair =
-        Repair(repairId, hours, tech, odometer, requested, partsList);
-    repairData.add(carRepair);
-    return repairData;
+// getting all the parts
+  List<Part> partsList = [];
+  for (DataSnapshot part in parts.children) {
+    String id = part.key.toString();
+    String name = part.child("name").value.toString();
+    int quantity = int.parse(part.child("quantity").value.toString());
+    double unitPrice = double.parse(part.child("unitPrice").value.toString());
+    partsList.add(Part(id, name, quantity, unitPrice));
   }
-  return repairData;
+
+  double hours = double.parse(repair.child("hours").value.toString());
+  double labor = double.parse(repair.child("labor").value.toString());
+  String tech = repair.child("technition").value.toString();
+  String odometer = repair.child("odometer").value.toString();
+  String requested = repair.child("workRequested").value.toString();
+
+  Repair carRepair =
+      Repair(repairId, hours, labor, tech, odometer, requested, partsList);
+
+  return carRepair;
 }
 
 // update

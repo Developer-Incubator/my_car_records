@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_car_records/model/db/repair.dart';
 
 /// form to update the information about a repair
-/// 
+///
 /// [vin] vehicle id,
 /// [repairId] unique id that is assigned to the repair,
 /// [hours] current length of time to complete the repair,
@@ -18,6 +18,7 @@ class RepairUpdateForm extends StatelessWidget {
       required this.vin,
       required this.repairId,
       required this.hours,
+      required this.labor,
       required this.odometer,
       required this.tech,
       required this.workRequested,
@@ -27,6 +28,7 @@ class RepairUpdateForm extends StatelessWidget {
   final String vin;
   final String repairId;
   final double hours;
+  final double labor;
   final String odometer;
   final String tech;
   final String workRequested;
@@ -34,6 +36,8 @@ class RepairUpdateForm extends StatelessWidget {
 
   final _formKey = GlobalKey<FormState>();
   final hoursController = TextEditingController();
+  final laborController = TextEditingController();
+
   final odometerController = TextEditingController();
   final techController = TextEditingController();
   final workRequestedController = TextEditingController();
@@ -56,6 +60,20 @@ class RepairUpdateForm extends StatelessWidget {
                 hintText: "Hours to complete work",
               ),
               controller: hoursController,
+              keyboardType: TextInputType.number,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter some text';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              decoration: const InputDecoration(
+                labelText: "Labor",
+                hintText: "Price of the Technititon",
+              ),
+              controller: laborController,
               keyboardType: TextInputType.number,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -115,7 +133,12 @@ class RepairUpdateForm extends StatelessWidget {
                     const SnackBar(content: Text('Repair Updated')),
                   );
                   updateRepair(
-                      vin, repairId,double.parse( hoursController.text.toString()), techController.text, odometerController.text, workRequestedController.text);
+                      vin,
+                      repairId,
+                      double.parse(hoursController.text.toString()),
+                      techController.text,
+                      odometerController.text,
+                      workRequestedController.text);
                   refresh();
                   Navigator.pop(context);
                 }

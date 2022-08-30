@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_car_records/controllers/car/car_info.dart';
+import 'package:my_car_records/model/car.dart';
 import 'package:my_car_records/model/db/car.dart';
 
 
@@ -26,7 +27,7 @@ class _CarDetailsPageState extends State<CarDetailsPage> {
         ),
         body: FutureBuilder(
             future: widget.car,
-            builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
+            builder: (BuildContext context, AsyncSnapshot<Car> snapshot) {
               Widget child;
               if (snapshot.hasData) {
                
