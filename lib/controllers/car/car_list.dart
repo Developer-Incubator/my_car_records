@@ -27,6 +27,7 @@ class CarList extends StatelessWidget {
           children = showAllCars(snapshot, context, refresh);
         } else if (snapshot.hasError) {
           children = [const Text("Error Populating Data")];
+          print(snapshot.error);
           debugPrint("Error populating list");
         } else {
           children = const <Widget>[

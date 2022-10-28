@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_car_records/model/db/car.dart';
 
@@ -18,6 +19,7 @@ class _CarFormState extends State<CarForm> {
   final modelController = TextEditingController();
   final yearController = TextEditingController();
   final ownerController = TextEditingController();
+  final userID = FirebaseAuth.instance.currentUser?.uid;
 
   @override
   void dispose() {
@@ -94,20 +96,20 @@ class _CarFormState extends State<CarForm> {
                 return null;
               },
             ),
-            TextFormField(
-              controller: ownerController,
-              keyboardType: TextInputType.text,
-              decoration: const InputDecoration(
-                labelText: "Owner",
-                hintText: "Owner of the vehicle",
-              ),
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'Please enter some text';
-                }
-                return null;
-              },
-            ),
+            // TextFormField(
+            //   controller: ownerController,
+            //   keyboardType: TextInputType.text,
+            //   decoration: const InputDecoration(
+            //     labelText: "Owner",
+            //     hintText: "Owner of the vehicle",
+            //   ),
+            //   validator: (value) {
+            //     if (value == null || value.isEmpty) {
+            //       return 'Please enter some text';
+            //     }
+            //     return null;
+            //   },
+            // ),
             // submit button to add a car
             Row(
               children: [
@@ -127,7 +129,7 @@ class _CarFormState extends State<CarForm> {
                           int.parse(yearController.text),
                           makeController.text,
                           modelController.text,
-                          ownerController.text);
+                          userID.toString());
 
                       widget.refresh();
 
