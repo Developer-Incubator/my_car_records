@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -31,9 +33,18 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final userID = FirebaseAuth.instance.currentUser?.uid;
+    // final userID = FirebaseAuth.instance.currentUser?.uid;
 
     return Scaffold(
+      drawer: Drawer(
+        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+          ElevatedButton(
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+              },
+              child: const Text("Logout"))
+        ]),
+      ),
       appBar: AppBar(
         actions: <Widget>[
           IconButton(
