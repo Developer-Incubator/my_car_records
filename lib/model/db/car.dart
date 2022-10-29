@@ -29,14 +29,9 @@ void addCar(
 // Read
 /// gets all the cars from the database and returns them in an array as a Car object
 Future<List> getCars() async {
-<<<<<<< Updated upstream
-  DataSnapshot cars =
-      await FirebaseDatabase.instance.ref().child("cars").get();
-=======
   
   DataSnapshot cars = await db.ref().child(user!.uid).child("cars").get();
 
->>>>>>> Stashed changes
 
   final List<Car> testArr = [];
 

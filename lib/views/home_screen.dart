@@ -1,15 +1,8 @@
-<<<<<<< Updated upstream
-import 'dart:html';
-
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-=======
 import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
->>>>>>> Stashed changes
 import 'package:flutter/material.dart';
 // import 'package:my_car_records/controllers/CarForm.dart';
 
@@ -34,13 +27,10 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   bool isLoading = false;
-<<<<<<< Updated upstream
-=======
   @override
   initState() {
     super.initState();
   }
->>>>>>> Stashed changes
 
   refresh() {
     setState(() {});
@@ -48,19 +38,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-<<<<<<< Updated upstream
-    // final userID = FirebaseAuth.instance.currentUser?.uid;
-
-    return Scaffold(
-      drawer: Drawer(
-        child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-          ElevatedButton(
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-              },
-              child: const Text("Logout"))
-        ]),
-=======
     final userID = FirebaseAuth.instance.currentUser?.uid;
 
     return Scaffold(
@@ -76,7 +53,6 @@ class _MyHomePageState extends State<MyHomePage> {
             )
           ],
         ),
->>>>>>> Stashed changes
       ),
       appBar: AppBar(
         actions: <Widget>[

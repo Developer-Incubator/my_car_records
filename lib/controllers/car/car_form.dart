@@ -20,11 +20,7 @@ class _CarFormState extends State<CarForm> {
   final modelController = TextEditingController();
   final yearController = TextEditingController();
   final ownerController = TextEditingController();
-<<<<<<< Updated upstream
-  final userID = FirebaseAuth.instance.currentUser?.uid;
-=======
   final userID = MyFirebase().auth.currentUser?.uid;
->>>>>>> Stashed changes
 
   @override
   void dispose() {

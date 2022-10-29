@@ -1,20 +1,3 @@
-<<<<<<< Updated upstream
-import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
-
-class SignupPage extends StatelessWidget {
-  const SignupPage({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(),
-      body: Center(
-          child: Column(
-        children: [],
-      )),
-=======
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_car_records/model/db/user.dart';
@@ -59,7 +42,6 @@ class SignupPage extends StatelessWidget {
           ],
         ),
       ),
->>>>>>> Stashed changes
     );
   }
 }
