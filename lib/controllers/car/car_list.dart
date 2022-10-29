@@ -15,7 +15,7 @@ class CarList extends StatelessWidget {
     refresh();
   }
 
-  late Future<List> cars = getCars();
+  late Future<List> cars = DbCar().getCars();
 
   @override
   Widget build(BuildContext context) {

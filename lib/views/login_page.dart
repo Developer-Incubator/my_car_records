@@ -26,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           ElevatedButton(
             child: const Text("Login"),
+<<<<<<< Updated upstream
             onPressed: () async{
           
                 try {
@@ -43,6 +44,25 @@ class _LoginPageState extends State<LoginPage> {
             },
           ),
           ElevatedButton(onPressed: () {}, child: const Text("Signup"))
+=======
+            onPressed: () async {
+              try {
+                await FirebaseAuth.instance.signInWithEmailAndPassword(
+                    email: emailController.text,
+                    password: passwordController.text);
+              } on FirebaseAuthException catch (e) {
+                if (e.code == 'user-not-found') {
+                  print('No user found for that email.');
+                } else if (e.code == 'wrong-password') {
+                  print('Wrong password provided for that user.');
+                }
+              }
+            },
+          ),
+          ElevatedButton(
+              onPressed: () => Navigator.pushNamed(context, "/signup"),
+              child: const Text("Signup"))
+>>>>>>> Stashed changes
         ]),
       ),
     );

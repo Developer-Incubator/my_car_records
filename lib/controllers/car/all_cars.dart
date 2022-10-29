@@ -34,7 +34,7 @@ List<Widget> showAllCars(carList, BuildContext context, Function refresh) {
               PopupMenuItem(
                   child: TextButton(
                       onPressed: (() {
-                        deleteCar(vin);
+                        DbCar().deleteCar(vin);
                         refresh();
                       }),
                       child: const Text("Delete"))),

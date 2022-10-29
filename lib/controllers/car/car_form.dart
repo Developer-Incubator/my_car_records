@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_car_records/model/db/car.dart';
+import 'package:my_car_records/model/firebase/firebase.dart';
 
 /// form to input car information to save records about the car
 // need to check vin for length as well as make a drop down with all the dent manufacturers and all of there products
@@ -19,7 +20,11 @@ class _CarFormState extends State<CarForm> {
   final modelController = TextEditingController();
   final yearController = TextEditingController();
   final ownerController = TextEditingController();
+<<<<<<< Updated upstream
   final userID = FirebaseAuth.instance.currentUser?.uid;
+=======
+  final userID = MyFirebase().auth.currentUser?.uid;
+>>>>>>> Stashed changes
 
   @override
   void dispose() {
@@ -124,7 +129,7 @@ class _CarFormState extends State<CarForm> {
                         const SnackBar(content: Text('Car Added')),
                       );
 
-                      addCar(
+                      DbCar().addCar(
                           vinController.text,
                           int.parse(yearController.text),
                           makeController.text,

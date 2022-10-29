@@ -139,7 +139,7 @@ class _CarUpdateFormState extends State<CarUpdateForm> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Car Updated')),
                       );
-                      updateCar(
+                      DbCar().updateCar(
                         vinController.text,
                         int.parse(yearController.text),
                         makeController.text,

@@ -33,7 +33,7 @@ List<Widget> showAllRepairs(vin, repairList, context, refresh) {
               PopupMenuItem(
                   child: TextButton(
                       onPressed: (() {
-                        deleteCar(vin);
+                        DbCar().deleteCar(vin);
                         refresh();
                       }),
                       child: const Text("Delete"))),

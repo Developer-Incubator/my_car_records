@@ -20,7 +20,7 @@ class CarDetailsPage extends StatefulWidget {
 class _CarDetailsPageState extends State<CarDetailsPage> {
  @override
   Widget build(BuildContext context) {
-    widget.car = getACar(widget.vin);
+    widget.car = DbCar().getACar(widget.vin);
     return Scaffold(
         appBar: AppBar(
           title: const Text("Car Details"),

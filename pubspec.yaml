@@ -37,7 +37,11 @@ dependencies:
   firebase_core: ^2.1.1
   firebase_database: ^10.0.3
   firebase_auth: ^4.1.0
+<<<<<<< Updated upstream
   # cloud_firestore: ^3.4.4
+=======
+  firebase_messaging: ^14.0.3
+>>>>>>> Stashed changes
 
 dev_dependencies:
   flutter_test:

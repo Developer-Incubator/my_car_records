@@ -1,8 +1,9 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
-// import 'package:my_car_records/controllers/my_extensions.dart';
 import 'package:my_car_records/model/car.dart';
+import 'package:my_car_records/model/firebase/firebase.dart';
 
+class DbCar extends MyFirebase{
 // Create
 /// add a car to the database
 /// [vin] vehicle id number.
@@ -11,27 +12,37 @@ import 'package:my_car_records/model/car.dart';
 /// [model] product of the manufacturer
 /// [ownerUsername] the name of the cars owner
 void addCar(
-    String vin, int year, String make, String model, String ownerUsername) {
-  DatabaseReference db =
-      FirebaseDatabase.instance.ref().child("cars").child(vin.toUpperCase());
-  db.set({
+    String vin, int year, String make, String model, String ownerUsername) async{
+  DatabaseReference dbLocation =
+      db.ref().child(user!.uid).child("cars").child(vin.toUpperCase());
+      
+
+      
+  dbLocation.set({
     "make": make,
     "model": model,
     "year": year,
     "owner": ownerUsername,
   });
-}
 
+}
 // Read
 /// gets all the cars from the database and returns them in an array as a Car object
 Future<List> getCars() async {
+<<<<<<< Updated upstream
   DataSnapshot cars =
       await FirebaseDatabase.instance.ref().child("cars").get();
+=======
+  
+  DataSnapshot cars = await db.ref().child(user!.uid).child("cars").get();
+
+>>>>>>> Stashed changes
 
   final List<Car> testArr = [];
 
   if (cars.exists) {
     for (DataSnapshot element in cars.children) {
+
       String vin = element.key.toString();
       int year = int.parse(element.child("year").value.toString());
       String make = element.child("make").value.toString();
@@ -51,7 +62,7 @@ Future<List> getCars() async {
 /// [vin] vehicle id number.
 Future<Car> getACar(String vin) async {
   DataSnapshot car =
-      await FirebaseDatabase.instance.ref().child("cars/$vin").get();
+      await db.ref().child("${user!.uid}/cars/$vin").get();
 
   // String vin = car.key.toString();
   int year = int.parse(car.child("year").value.toString());
@@ -75,7 +86,7 @@ Future<Car> getACar(String vin) async {
 /// [workRequested] Work asked to be done by the customer.
 void updateCar(String vin, int year, String make, String model, String owner) {
   DatabaseReference carToUpdate =
-      FirebaseDatabase.instance.ref().child("cars").child(vin);
+      db.ref().child(user!.uid).child(vin);
 
   Map<String, dynamic> carData = {
     'make': make,
@@ -91,6 +102,9 @@ void updateCar(String vin, int year, String make, String model, String owner) {
 ///
 /// [vin] vehicle id number.
 void deleteCar(String vin) {
-  FirebaseDatabase.instance.ref().child("cars").child(vin).remove();
-  FirebaseDatabase.instance.ref().child("Repairs").child(vin).remove();
+  
+  db.ref().child(user!.uid).child(vin).remove();
+  db.ref().child("Repairs").child(vin).remove();
 }
+}
+
