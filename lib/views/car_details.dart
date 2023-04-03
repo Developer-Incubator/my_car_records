@@ -3,9 +3,6 @@ import 'package:my_car_records/controllers/car/car_info.dart';
 import 'package:my_car_records/model/car.dart';
 import 'package:my_car_records/model/db/car_reat_time.dart';
 
-
-
-
 // ignore: must_be_immutable
 class CarDetailsPage extends StatefulWidget {
   final String vin;
@@ -18,9 +15,9 @@ class CarDetailsPage extends StatefulWidget {
 }
 
 class _CarDetailsPageState extends State<CarDetailsPage> {
- @override
+  @override
   Widget build(BuildContext context) {
-    widget.car = getACar(widget.vin);
+    // widget.car = getACar(widget.vin);
     return Scaffold(
         appBar: AppBar(
           title: const Text("Car Details"),
@@ -30,7 +27,6 @@ class _CarDetailsPageState extends State<CarDetailsPage> {
             builder: (BuildContext context, AsyncSnapshot<Car> snapshot) {
               Widget child;
               if (snapshot.hasData) {
-               
                 child = CarInfo(car: snapshot.data);
               } else if (snapshot.hasError) {
                 child = const Text("Error populating list");
@@ -41,12 +37,10 @@ class _CarDetailsPageState extends State<CarDetailsPage> {
                   height: 60,
                   child: CircularProgressIndicator(),
                 );
-                
               }
               return Container(
                 child: child,
               );
-            })
-        );
+            }));
   }
 }

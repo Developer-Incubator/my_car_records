@@ -88,19 +88,23 @@ class _MyHomePageState extends State<MyHomePage> {
                         itemBuilder: (BuildContext context, int index) {
                           QueryDocumentSnapshot car =
                               snapshot.data!.docs[index];
+                          print(car.data());
 
                           return Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: CupertinoListTile(
                               title: Text(
                                   "${car["year"]} ${car["make"]} ${car["model"]}"),
+                              subtitle:
+                                  car["vin"] != null ? Text(car["vin"]) : null,
                               onTap: () => Navigator.pushNamed(
                                   context, "/iosCarDetails",
                                   arguments: {
                                     "carId": car.id,
                                     "make": car["make"].toString(),
                                     "model": car["model"].toString(),
-                                    "year": car["year"].toString()
+                                    "year": car["year"].toString(),
+                                    "vin": car["vin"].toString()
                                   }),
                             ),
                           );

@@ -18,6 +18,7 @@ Map<String, Widget Function(BuildContext)> routes = {
       make: args["make"]!,
       model: args["model"]!,
       year: args["year"]!,
+      vin: args["vin"]!,
     );
   },
 };

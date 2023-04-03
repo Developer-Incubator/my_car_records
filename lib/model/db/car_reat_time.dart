@@ -38,7 +38,7 @@ Future<List> getCars() async {
       String make = element.child("make").value.toString();
       String model = element.child("model").value.toString();
       String owner = element.child("owner").value.toString();
-      testArr.add(Car(vin, year, make, model, owner));
+      // testArr.add(Car(vin, year, make, model, owner));
     }
   } else {
     debugPrint("No Cars");
@@ -50,19 +50,19 @@ Future<List> getCars() async {
 /// gets a single car from the database
 //
 /// [vin] vehicle id number.
-Future<Car> getACar(String vin) async {
-  DataSnapshot car =
-      await FirebaseDatabase.instance.ref().child("cars/$vin").get();
+// Future<Car> getACar(String vin) async {
+  // DataSnapshot car =
+  //     await FirebaseDatabase.instance.ref().child("cars/$vin").get();
 
-  // String vin = car.key.toString();
-  int year = int.parse(car.child("year").value.toString());
-  String make = car.child("make").value.toString();
-  String model = car.child("model").value.toString();
-  String owner = car.child("owner").value.toString();
-  Car myCar = Car(vin, year, make, model, owner);
+  // // String vin = car.key.toString();
+  // int year = int.parse(car.child("year").value.toString());
+  // String make = car.child("make").value.toString();
+  // String model = car.child("model").value.toString();
+  // String owner = car.child("owner").value.toString();
+  // Car myCar = Car(vin, year, make, model, owner);
 
-  return myCar;
-}
+  // return myCar;
+// }
 
 // update
 

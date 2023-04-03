@@ -24,7 +24,7 @@ class CarList extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<List> snapshot) {
         List<Widget> children;
         if (snapshot.hasData) {
-          children = showAllCars(snapshot, context, refresh);
+          // children = showAllCars(snapshot, context, refresh);
         } else if (snapshot.hasError) {
           children = [const Text("Error Populating Data")];
           debugPrint("Error populating list");
@@ -40,8 +40,8 @@ class CarList extends StatelessWidget {
         return RefreshIndicator(
           onRefresh: () => swipeRefresh(),
           child: ListView(
-            children: children,
-          ),
+              // children: children,
+              ),
         );
       },
     );

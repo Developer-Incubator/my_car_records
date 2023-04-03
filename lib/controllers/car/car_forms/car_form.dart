@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_car_records/constance/constance.dart';
+import 'package:my_car_records/model/car.dart';
 import 'package:my_car_records/model/db/car.dart';
 import 'package:my_car_records/model/db/car_reat_time.dart';
 import 'package:my_car_records/model/vin_decoder.dart';
@@ -25,6 +26,7 @@ class _CarFormState extends State<CarForm> {
   final yearController = TextEditingController();
   final ownerController = TextEditingController();
   final odometerController = TextEditingController();
+  Car? vehicle;
 
   @override
   void dispose() {
@@ -91,20 +93,17 @@ class _CarFormState extends State<CarForm> {
                                 child: const Text("Search"),
                                 onPressed: () async {
                                   try {
-                                    Map<String, dynamic>? vehicleInformation =
-                                        await VinDecoder()
-                                            .decodeVin(vinController.text);
-                                    print(vehicleInformation);
-                                    if (vehicleInformation != null) {
+                                    vehicle = await VinDecoder()
+                                        .decodeVin(vinController.text);
+
+                                    if (vehicle != null) {
                                       setState(() {
                                         makeController.text =
-                                            vehicleInformation["Make"] ?? "N/A";
+                                            vehicle?.make ?? "N/A";
                                         modelController.text =
-                                            vehicleInformation["Model"] ??
-                                                "N/A";
+                                            vehicle?.model ?? "N/A";
                                         yearController.text =
-                                            vehicleInformation["ModelYear"] ??
-                                                "N/A";
+                                            vehicle?.modelYear ?? "N/A";
                                       });
                                     }
                                   } catch (e) {
@@ -194,12 +193,12 @@ class _CarFormState extends State<CarForm> {
                           color: CupertinoColors.activeGreen,
                           child: const Text("Submit"),
                           onPressed: () {
-                            CarDB().addCar(
-                              vinController.text,
-                              makeController.text,
-                              modelController.text,
-                              yearController.text,
-                            );
+                            vehicle ??= Car(
+                                make: makeController.text,
+                                model: modelController.text,
+                                modelYear: yearController.text);
+
+                            CarDB().addCar(vehicle);
                             Navigator.pop(context);
                             widget.refresh();
                           },
