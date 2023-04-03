@@ -36,10 +36,16 @@ class MyApp extends StatelessWidget {
             navigatorKey: navKey,
             routes: routes,
             theme: CupertinoThemeData(
-                barBackgroundColor: Colors.blueGrey.shade600,
+              barBackgroundColor: Colors.blueGrey.shade600,
+              primaryColor: Colors.blueGrey,
+              textTheme: const CupertinoTextThemeData(
                 primaryColor: Colors.white,
-                textTheme: const CupertinoTextThemeData(
-                    textStyle: TextStyle(fontFamily: "NunitoSans"))),
+
+                // navActionTextStyle: TextStyle(color: Colors.white),
+                textStyle:
+                    TextStyle(fontFamily: "NunitoSans", color: Colors.blueGrey),
+              ),
+            ),
             // initialRoute: "/login",
             home: const LoginPage(),
           )

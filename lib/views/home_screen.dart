@@ -1,12 +1,14 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_car_records/constance/constance.dart';
+import 'package:my_car_records/controllers/my_extensions.dart';
 // import 'package:my_car_records/controllers/CarForm.dart';
 
-import '../controllers/car/car_form.dart';
+import '../controllers/car/car_forms/car_form.dart';
 import '../controllers/car/car_list.dart';
 
 /// MyHomePage
@@ -26,65 +28,89 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final User? user = FirebaseAuth.instance.currentUser;
+
   refresh() {
     setState(() {});
   }
 
+  Future<QuerySnapshot<Map<String, dynamic>>> getCars() async {
+    return await FirebaseFirestore.instance
+        .collection('cars')
+        .where("user_id", isEqualTo: user!.uid)
+        .get()
+        .then((value) {
+      return value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final User? user = FirebaseAuth.instance.currentUser;
-    if (user != null) {
-      final uid = user.uid;
-      print(uid);
-    }
-
     return Platform.isIOS
         ? CupertinoPageScaffold(
-            child: CupertinoNavigationBar(
-            middle: Text(
-              homePageTitle,
-              style: const TextStyle(color: Colors.white),
-            ),
-            leading: CupertinoButton(
-              child: const Icon(
-                CupertinoIcons.person_fill,
+            navigationBar: CupertinoNavigationBar(
+              middle: Text(
+                homePageTitle,
+                style: const TextStyle(color: Colors.white),
               ),
-              onPressed: () => Navigator.pushNamed(context, '/profile'),
-            ),
-            trailing: CupertinoButton(
-              child: const Icon(
-                CupertinoIcons.add,
+              leading: CupertinoButton(
+                padding: EdgeInsets.zero,
+                child: const Icon(
+                  CupertinoIcons.person_fill,
+                  color: Colors.white,
+                ),
+                onPressed: () => Navigator.pushNamed(context, '/profile'),
               ),
-              onPressed: () => showCupertinoDialog(
-                  barrierDismissible: true,
-                  context: context,
-                  builder: (context) {
-                    return CupertinoPopupSurface(
-                        isSurfacePainted: false,
-                        child: CarForm(refresh: refresh)
-                        // ListView(
-                        //   children: [
-                        //     Row(
-                        //       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        //       children: [
-                        //         CupertinoButton(
-                        //           color: CupertinoColors.destructiveRed,
-                        //           child: const Text("Cancel"),
-                        //           onPressed: () => Navigator.pop(context),
-                        //         ),
-                        //         CupertinoButton(
-                        //           color: CupertinoColors.activeGreen,
-                        //           child: const Text("Save"),
-                        //           onPressed: () => Navigator.pop(context),
-                        //         ),
-                        //       ],
-                        //     ),
-                        //   ],
-                        // ),
-                        );
-                  }),
+              trailing: CupertinoButton(
+                  padding: EdgeInsets.zero,
+                  child: const Icon(
+                    CupertinoIcons.add,
+                    color: Colors.white,
+                  ),
+                  onPressed: () => showCupertinoDialog(
+                      context: context,
+                      builder: (context) {
+                        return CupertinoPopupSurface(
+                            child: CarForm(refresh: refresh));
+                      })),
             ),
-          ))
+            child: FutureBuilder<QuerySnapshot>(
+                future: getCars(),
+                builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                  if (snapshot.hasError) {
+                    return const Center(
+                      child: Text("Could not get cars"),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          QueryDocumentSnapshot car =
+                              snapshot.data!.docs[index];
+
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: CupertinoListTile(
+                              title: Text(
+                                  "${car["year"]} ${car["make"]} ${car["model"]}"),
+                              onTap: () => Navigator.pushNamed(
+                                  context, "/iosCarDetails",
+                                  arguments: {
+                                    "carId": car.id,
+                                    "make": car["make"].toString(),
+                                    "model": car["model"].toString(),
+                                    "year": car["year"].toString()
+                                  }),
+                            ),
+                          );
+                        });
+                  }
+                  return const Center(
+                    child: CupertinoActivityIndicator(),
+                  );
+                }),
+          )
         : Scaffold(
             appBar: AppBar(
               actions: <Widget>[

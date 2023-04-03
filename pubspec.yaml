@@ -40,6 +40,8 @@ dependencies:
   google_sign_in: ^6.0.2
   sign_in_with_apple: ^4.3.0
   crypto: ^3.0.2
+  http: ^0.13.5
+  cloud_firestore: ^3.5.1
   # cloud_firestore: ^3.4.4
 
 dev_dependencies:

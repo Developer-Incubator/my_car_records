@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:my_car_records/controllers/car/all_cars.dart';
-import 'package:my_car_records/model/db/car.dart';
+import 'package:my_car_records/model/db/car_reat_time.dart';
 
 /// Gets a list of all the cars , checks if the future lst has any data. if so procede to populate page, if not than a text widget will appear. Untill one of those happen a circle progression will appear as a loading screen
 ///

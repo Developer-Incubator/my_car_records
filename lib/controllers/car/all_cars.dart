@@ -3,7 +3,7 @@ import 'package:my_car_records/controllers/car/update_car_form.dart';
 import 'package:my_car_records/controllers/my_extensions.dart';
 // import 'package:my_car_records/controllers/my_extensions.dart';
 import 'package:my_car_records/model/car.dart';
-import 'package:my_car_records/model/db/car.dart';
+import 'package:my_car_records/model/db/car_reat_time.dart';
 import 'package:my_car_records/views/car_details.dart';
 
 /// Creates a card widget with the cars information and adds it to the cars array.

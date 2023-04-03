@@ -1,6 +1,6 @@
 // need to check vin for length as well as make a drop down with all the dent manufacturers and all of there products
 import 'package:flutter/material.dart';
-import 'package:my_car_records/model/db/car.dart';
+import 'package:my_car_records/model/db/car_reat_time.dart';
 
 /// updates information about a car and refreshes the state to update the page to display the correct information.
 /// 

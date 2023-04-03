@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_car_records/controllers/car/car_info.dart';
 import 'package:my_car_records/model/car.dart';
-import 'package:my_car_records/model/db/car.dart';
+import 'package:my_car_records/model/db/car_reat_time.dart';
 
 
 

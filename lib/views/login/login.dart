@@ -71,11 +71,7 @@ class _LoginPageState extends State<LoginPage> {
           CupertinoButton(
               child: Text("Sign in with Google"),
               onPressed: (() {
-                try {
-                  signInWithGoogle();
-                } catch (e) {
-                  debugPrint(e.toString());
-                }
+                signInWithGoogle();
               })),
           SignInWithAppleButton(
             onPressed: () async {
