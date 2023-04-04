@@ -1,7 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_car_records/views/home/ios_home.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
+final GlobalKey<IOSHomePageState> iosHomeKey = GlobalKey<IOSHomePageState>();
 
 String homePageTitle = "My Car Records";
 

@@ -19,7 +19,7 @@ class CarForm extends StatefulWidget {
 }
 
 class _CarFormState extends State<CarForm> {
-  final _formKey = GlobalKey<FormState>();
+  final formKey = GlobalKey<FormState>();
   final vinController = TextEditingController();
   final makeController = TextEditingController();
   final modelController = TextEditingController();
@@ -46,7 +46,7 @@ class _CarFormState extends State<CarForm> {
     return Platform.isIOS
         ? SafeArea(
             child: Form(
-              key: _formKey,
+              key: formKey,
               // header: const Text("Add a Vehicle"),
               child: Stack(
                 children: <Widget>[
@@ -198,7 +198,7 @@ class _CarFormState extends State<CarForm> {
                                 model: modelController.text,
                                 modelYear: yearController.text);
 
-                            CarDB().addCar(vehicle);
+                            CarDB().add(vehicle);
                             Navigator.pop(context);
                             widget.refresh();
                           },
@@ -211,7 +211,7 @@ class _CarFormState extends State<CarForm> {
             ),
           )
         : Form(
-            key: _formKey,
+            key: formKey,
             child: SingleChildScrollView(
               child: Column(
                 children: <Widget>[
@@ -295,7 +295,7 @@ class _CarFormState extends State<CarForm> {
                       ),
                       ElevatedButton(
                         onPressed: () {
-                          if (_formKey.currentState!.validate()) {
+                          if (formKey.currentState!.validate()) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(content: Text('Car Added')),
                             );

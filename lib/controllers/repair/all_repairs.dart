@@ -17,7 +17,7 @@ List<Widget> showAllRepairs(vin, repairList, context, refresh) {
   List<Widget> repairs = [];
 // creates a card for each repair entry
   for (Repair repair in repairList.data) {
-    Map<String,dynamic> repairData = repair.getRepairInfo();
+    Map<String, dynamic> repairData = repair.getRepairInfo();
     String workRequested = capitalize(repairData['workRequested']);
     repairs.add(
       Card(
@@ -50,7 +50,13 @@ List<Widget> showAllRepairs(vin, repairList, context, refresh) {
                                 padding: const EdgeInsets.all(8.0),
                                 child: RepairUpdateForm(
                                   refresh: refresh,
-                                hours: repairData['hours'],labor:repairData['labor'], tech: repairData['tech'], odometer: repairData['odometer'], workRequested: repairData['workRequested'], vin: vin, repairId: repairData['id'],
+                                  hours: repairData['hours'],
+                                  labor: repairData['labor'],
+                                  tech: repairData['tech'],
+                                  odometer: repairData['odometer'],
+                                  workRequested: repairData['workRequested'],
+                                  vin: vin,
+                                  repairId: repairData['id'],
                                 ),
                               ),
                             );
@@ -66,13 +72,13 @@ List<Widget> showAllRepairs(vin, repairList, context, refresh) {
           ),
 
           onTap: () {
-            Navigator.of(context).push(
-              MaterialPageRoute(
-                  builder: (_) => RepairDetails(
-                        vin: vin,
-                        repair: repair,
-                      )),
-            );
+            // Navigator.of(context).push(
+            //   // MaterialPageRoute(
+            //   //     builder: (_) => RepairDetails(
+            //   //           vin: vin,
+            //   //           repair: repair,
+            //   //         )),
+            // );
           },
         ),
       ),

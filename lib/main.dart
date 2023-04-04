@@ -7,9 +7,6 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/constance/routes.dart';
 import 'package:my_car_records/views/login/login.dart';
-import 'package:my_car_records/views/register.dart';
-
-import 'views/home_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

@@ -8,7 +8,7 @@ class CarDB {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final User? user = FirebaseAuth.instance.currentUser;
 
-  void addCar(Car? vehicle, {String? owner}) {
+  void add(Car? vehicle, {String? owner}) {
     if (vehicle != null) {
       CollectionReference cars = _firestore.collection("cars");
       cars
@@ -27,7 +27,17 @@ class CarDB {
     }
   }
 
-  void deleteCar(String carId) {
+  Future<QuerySnapshot<Map<String, dynamic>>> get() async {
+    return await _firestore
+        .collection('cars')
+        .where("user_id", isEqualTo: user!.uid)
+        .get()
+        .then((value) {
+      return value;
+    });
+  }
+
+  void delete(String carId) {
     _firestore
         .collection("cars")
         .doc(carId)

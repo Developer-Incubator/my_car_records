@@ -1,6 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/controllers/my_extensions.dart';
+import 'package:my_car_records/model/db/repair.dart';
+import 'package:my_car_records/model/repair.dart';
+import 'package:my_car_records/views/repair_form/repair_form_shell.dart';
 import 'package:my_car_records/model/db/car.dart';
 import 'package:my_car_records/model/vin_decoder.dart';
 
@@ -25,6 +30,54 @@ class IOSCarDetails extends StatefulWidget {
 }
 
 class _IOSCarDetailsState extends State<IOSCarDetails> {
+  refresh() {
+    setState(() {});
+  }
+
+  void _showVehicleDetailsDialog(BuildContext context, double screenWidth) {
+    showCupertinoModalPopup(
+        context: context,
+        builder: (BuildContext builder) {
+          return CupertinoPopupSurface(
+            child: widget.vin != null
+                ? FutureBuilder(
+                    future: VinDecoder().decodeVin(widget.vin),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      if (snapshot.hasError) {
+                        return const SizedBox(
+                          height: 400,
+                          child: Center(
+                              child:
+                                  Text("Could not get vehicles information")),
+                        );
+                      }
+                      if (snapshot.hasData) {
+                        return SizedBox(
+                          height: 400,
+                          width: screenWidth,
+                          child: Column(
+                            children: const [
+                              Text("Info will go here"),
+                            ],
+                          ),
+                        );
+                      }
+                      return const SizedBox(
+                        height: 400,
+                        child: Center(child: CupertinoActivityIndicator()),
+                      );
+                    })
+                : const SizedBox(
+                    height: 400,
+                    child: Center(
+                      child: Text(
+                          "Please enter vin to get more information about your vehicle"),
+                    ),
+                  ),
+          );
+        });
+  }
+
   void _showDeleteCarDialog(BuildContext context) {
     showCupertinoModalPopup<void>(
       context: context,
@@ -45,14 +98,29 @@ class _IOSCarDetailsState extends State<IOSCarDetails> {
             /// the action's text color to red.
             isDestructiveAction: true,
             onPressed: () {
-              CarDB().deleteCar(widget.carId);
-              Navigator.pop(context);
+              CarDB().delete(widget.carId);
+
+              Navigator.popUntil(context, ModalRoute.withName("/dashboard"));
+              iosHomeKey.currentState!.setState(() {});
             },
             child: const Text('Delete'),
           ),
         ],
       ),
     );
+  }
+
+  void _showAddRepairPopUp() {
+    showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoPopupSurface(
+              child: RepairForm(
+            refresh: refresh,
+            carID: widget.carId,
+            vin: widget.vin,
+          ));
+        });
   }
 
   @override
@@ -72,203 +140,189 @@ class _IOSCarDetailsState extends State<IOSCarDetails> {
             color: CupertinoColors.white,
           ),
           onPressed: () {
-            print("add part");
+            _showAddRepairPopUp();
           },
         ),
       ),
       child: SingleChildScrollView(
         child: FutureBuilder(
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-          return Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 14.0),
-                child: Row(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.only(right: 8, left: 8),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(30)),
-                      child: Image(
-                        width: screenWidth * .5,
-                        image: const NetworkImage(
-                            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFcWLa3OBZA7nASekS1HqjnoQ9TaagdrmNjHkN9e0lceyBCHcLwBGShj4B7dqcJUZy_uc&usqp=CAU'),
-                      ),
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+            future: RepairDB().get(widget.carId),
+            builder:
+                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CupertinoActivityIndicator();
+              }
+              if (snapshot.hasError) {
+                return const Text("Could not retrieve vehicle repairs");
+              }
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 14.0),
+                    child: Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              RichText(
-                                text: TextSpan(
-                                  text: 'Vin ',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blueGrey),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: widget.vin,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.normal))
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: 'Make ',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blueGrey),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: widget.make,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.normal))
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: 'Model ',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blueGrey),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: widget.model,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.normal))
-                                  ],
-                                ),
-                              ),
-                              RichText(
-                                text: TextSpan(
-                                  text: 'Year ',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.blueGrey),
-                                  children: <TextSpan>[
-                                    TextSpan(
-                                        text: widget.year,
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.normal))
-                                  ],
-                                ),
-                              ),
-                            ],
+                        Container(
+                          padding: const EdgeInsets.only(right: 8, left: 8),
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30)),
+                          child: Image(
+                            width: screenWidth * .5,
+                            image: const NetworkImage(
+                                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFcWLa3OBZA7nASekS1HqjnoQ9TaagdrmNjHkN9e0lceyBCHcLwBGShj4B7dqcJUZy_uc&usqp=CAU'),
                           ),
                         ),
-                        Row(
+                        Column(
                           children: [
-                            SizedBox(
-                              height: 50,
-                              width: 50,
-                              child: CupertinoButton(
-                                color: Colors.blueGrey,
-                                child: const Icon(Icons.camera_alt_outlined),
-                                onPressed: () {},
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Vin ',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blueGrey),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: widget.vin,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal))
+                                    ],
+                                  ),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Make ',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blueGrey),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: widget.make,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal))
+                                    ],
+                                  ),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Model ',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blueGrey),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: widget.model,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal))
+                                    ],
+                                  ),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Year ',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blueGrey),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: widget.year,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal))
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: SizedBox(
+                                width: screenWidth * .37,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    SizedBox(
+                                      height: 40,
+                                      width: 40,
+                                      child: CupertinoButton(
+                                        padding: EdgeInsets.zero,
+                                        color: Colors.blueGrey,
+                                        child: const Icon(
+                                            Icons.camera_alt_outlined),
+                                        onPressed: () {},
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 40,
+                                      width: 60,
+                                      child: CupertinoButton(
+                                        padding: EdgeInsets.zero,
+                                        color: Colors.blueGrey,
+                                        child: const Text("Specs"),
+                                        onPressed: () =>
+                                            _showVehicleDetailsDialog(
+                                                context, screenWidth),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                            CupertinoButton(
-                              color: Colors.blueGrey,
-                              child: const Text("Specs"),
-                              onPressed: () {
-                                showCupertinoModalPopup(
-                                    context: context,
-                                    builder: (BuildContext builder) {
-                                      return CupertinoPopupSurface(
-                                        child: widget.vin != null
-                                            ? FutureBuilder(
-                                                future: VinDecoder()
-                                                    .decodeVin(widget.vin),
-                                                builder: (BuildContext context,
-                                                    AsyncSnapshot snapshot) {
-                                                  if (snapshot.hasError) {
-                                                    return const SizedBox(
-                                                      height: 400,
-                                                      child: Center(
-                                                          child: Text(
-                                                              "Could not get vehicles information")),
-                                                    );
-                                                  }
-                                                  if (snapshot.hasData) {
-                                                    return SizedBox(
-                                                      height: 400,
-                                                      width: screenWidth,
-                                                      child: Column(
-                                                        children: const [
-                                                          Text(
-                                                              "Info will go here"),
-                                                        ],
-                                                      ),
-                                                    );
-                                                  }
-                                                  return const SizedBox(
-                                                    height: 400,
-                                                    child: Center(
-                                                        child:
-                                                            CupertinoActivityIndicator()),
-                                                  );
-                                                })
-                                            : const SizedBox(
-                                                height: 400,
-                                                child: Center(
-                                                  child: Text(
-                                                      "Please enter vin to get more information about your vehicle"),
-                                                ),
-                                              ),
-                                      );
-                                    });
-                              },
-                            ),
                           ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: Column(
+                      children: [
+                        const Text(
+                          "Repair List",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        SizedBox(
+                          height: screenHeight * .7,
+                          width: screenWidth * .95,
+                          child: ListView.separated(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              Repair repair = Repair.fromJson(
+                                  snapshot.data!.docs[index].data()
+                                      as Map<String, dynamic>);
+
+                              return CupertinoListTile(
+                                title: Text(repair.workRequested),
+                                onTap: () {
+                                  print("Repair Details");
+                                },
+                              );
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              return const Divider(
+                                color: Colors.blueGrey,
+                              );
+                            },
+                          ),
                         ),
                       ],
-                    )
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 12.0),
-                child: Column(
-                  children: [
-                    const Text(
-                      "Parts List",
-                      style:
-                          TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
                     ),
-                    SizedBox(
-                      height: screenHeight * .63,
-                      width: screenWidth * .95,
-                      child: ListView.separated(
-                        itemCount: 10,
-                        itemBuilder: (BuildContext context, int index) {
-                          return CupertinoListTile(title: Text("PART"));
-                        },
-                        separatorBuilder: (BuildContext context, int index) {
-                          return const Divider(
-                            color: Colors.blueGrey,
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              CupertinoButton(
-                  color: CupertinoColors.destructiveRed,
-                  child: const Text(
-                    "Delete Car",
-                    style: TextStyle(color: CupertinoColors.white),
                   ),
-                  onPressed: () => _showDeleteCarDialog(context))
-            ],
-          );
-        }),
+                  SafeArea(
+                    child: CupertinoButton(
+                        color: CupertinoColors.destructiveRed,
+                        child: const Text(
+                          "Delete Car",
+                          style: TextStyle(color: CupertinoColors.white),
+                        ),
+                        onPressed: () => _showDeleteCarDialog(context)),
+                  )
+                ],
+              );
+            }),
       ),
     );
   }
