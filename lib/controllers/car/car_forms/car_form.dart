@@ -26,7 +26,7 @@ class _CarFormState extends State<CarForm> {
   final yearController = TextEditingController();
   final ownerController = TextEditingController();
   final odometerController = TextEditingController();
-  Car? vehicle;
+  Vehicle? vehicle;
 
   @override
   void dispose() {
@@ -193,7 +193,7 @@ class _CarFormState extends State<CarForm> {
                           color: CupertinoColors.activeGreen,
                           child: const Text("Submit"),
                           onPressed: () {
-                            vehicle ??= Car(
+                            vehicle ??= Vehicle(
                                 make: makeController.text,
                                 model: modelController.text,
                                 modelYear: yearController.text);

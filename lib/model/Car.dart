@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-class Car {
+class Vehicle {
+  String? id;
   String? abs;
   String? activeSafetySysNote;
   String? adaptiveCruiseControl;
@@ -57,7 +58,7 @@ class Car {
   String? dynamicBrakeSupport;
   String? edr;
   String? esc;
-  String? eVDriveUnit;
+  String? evDriveUnit;
   String? electrificationLevel;
   String? engineConfiguration;
   String? engineCycles;
@@ -151,9 +152,10 @@ class Car {
   String? wheels;
   String? windows;
 
-  Car({
+  Vehicle({
+    this.id,
     this.abs,
-    activeSafetySysNote,
+    this.activeSafetySysNote,
     this.adaptiveCruiseControl,
     this.adaptiveDrivingBeam,
     this.adaptiveHeadlights,
@@ -208,7 +210,7 @@ class Car {
     this.dynamicBrakeSupport,
     this.edr,
     this.esc,
-    this.eVDriveUnit,
+    this.evDriveUnit,
     this.electrificationLevel,
     this.engineConfiguration,
     this.engineCycles,
@@ -315,164 +317,398 @@ class Car {
 //     };
 //   }
 
-  static Car fromJson(Map<String, dynamic> json) {
-    return Car(
-      abs: json["ABS"],
-      activeSafetySysNote: json["ActiveSafetySysNote"],
-      adaptiveCruiseControl: json["AdaptiveCruiseControl"],
-      adaptiveDrivingBeam: json["AdaptiveDrivingBeam"],
-      adaptiveHeadlights: json["AdaptiveHeadlights"],
-      additionalErrorText: json["AdditionalErrorText"],
-      airBagLocCurtain: json["AirBagLocCurtain"],
-      airBagLocFront: json["AirBagLocFront"],
-      airBagLocKnee: json["AirBagLocKnee"],
-      airBagLocSeatCushion: json["AirBagLocSeatCushion"],
-      airBagLocSide: json["AirBagLocSide"],
-      autoReverseSystem: json["AutoReverseSystem"],
+  static Vehicle fromJson(Map<String, dynamic> json) {
+    return Vehicle(
+      id: json["id"],
+      abs: json["ABS"].toString().isNotEmpty ? json["ABS"] : "N/A",
+      activeSafetySysNote: json["ActiveSafetySysNote"].toString().isNotEmpty
+          ? json["ActiveSafetySysNote"]
+          : "N/A",
+      adaptiveCruiseControl: json["AdaptiveCruiseControl"].toString().isNotEmpty
+          ? json["AdaptiveCruiseControl"]
+          : "N/A",
+      adaptiveDrivingBeam: json["AdaptiveDrivingBeam"].toString().isNotEmpty
+          ? json["AdaptiveDrivingBeam"]
+          : "N/A",
+      adaptiveHeadlights: json["AdaptiveHeadlights"].toString().isNotEmpty
+          ? json["AdaptiveHeadlights"]
+          : "N/A",
+      additionalErrorText: json["AdditionalErrorText"].toString().isNotEmpty
+          ? json["AdditionalErrorText"]
+          : "N/A",
+      airBagLocCurtain: json["AirBagLocCurtain"].toString().isNotEmpty
+          ? json["AirBagLocCurtain"]
+          : "N/A",
+      airBagLocFront: json["AirBagLocFront"].toString().isNotEmpty
+          ? json["AirBagLocFront"]
+          : "N/A",
+      airBagLocKnee: json["AirBagLocKnee"].toString().isNotEmpty
+          ? json["AirBagLocKnee"]
+          : "N/A",
+      airBagLocSeatCushion: json["AirBagLocSeatCushion"].toString().isNotEmpty
+          ? json["AirBagLocSeatCushion"]
+          : "N/A",
+      airBagLocSide: json["AirBagLocSide"].toString().isNotEmpty
+          ? json["AirBagLocSide"]
+          : "N/A",
+      autoReverseSystem: json["AutoReverseSystem"].toString().isNotEmpty
+          ? json["AutoReverseSystem"]
+          : "N/A",
       automaticPedestrianAlertingSound:
-          json["AutomaticPedestrianAlertingSound"],
-      axleConfiguration: json["AxleConfiguration"],
-      axles: json["Axles"],
-      basePrice: json["BasePrice"],
-      batteryA: json["BatteryA"],
-      batteryATo: json["BatteryA_to"],
-      batteryCells: json["BatteryCells"],
-      batteryInfo: json["BatteryInfo"],
-      batteryKWh: json["BatteryKWh"],
-      batteryKWhTo: json["BatteryKWh_to"],
-      batteryModules: json["BatteryModules"],
-      batteryPacks: json["BatteryPacks"],
-      batteryType: json["BatteryType"],
-      batteryV: json["BatteryV"],
-      batteryVTo: json["BatteryV_to"],
-      bedLengthIN: json["BedLengthIN"],
-      bedType: json["BedType"],
-      blindSpotIntervention: json["BlindSpotIntervention"],
-      blindSpotMon: json["BlindSpotMon"],
-      bodyCabType: json["BodyCabType"],
-      bodyClass: json["BodyClass"],
-      brakeSystemDesc: json["BrakeSystemDesc"],
-      brakeSystemType: json["BrakeSystemType"],
-      busFloorConfigType: json["BusFloorConfigType"],
-      busLength: json["BusLength"],
-      busType: json["BusType"],
-      cib: json["CIB"],
-      cashForClunkers: json["CashForClunkers"],
-      chargerLevel: json["ChargerLevel"],
-      chargerPowerKW: json["ChargerPowerKW"],
-      coolingType: json["CoolingType"],
-      curbWeightLB: json["CurbWeightLB"],
-      customMotorcycleType: json["CustomMotorcycleType"],
-      daytimeRunningLight: json["DaytimeRunningLight"],
-      destinationMarket: json["DestinationMarket"],
-      displacementCC: json["DisplacementCC"],
-      displacementCI: json["DisplacementCI"],
-      displacementL: json["DisplacementL"],
-      doors: json["Doors"],
-      driveType: json["DriveType"],
-      driverAssist: json["DriverAssist"],
-      dynamicBrakeSupport: json["DynamicBrakeSupport"],
-      edr: json["EDR"],
-      esc: json["ESC"],
-      eVDriveUnit: json["EVDriveUnit"],
-      electrificationLevel: json["ElectrificationLevel"],
-      engineConfiguration: json["EngineConfiguration"],
-      engineCycles: json["EngineCycles"],
-      engineCylinders: json["EngineCylinders"],
-      engineHP: json["EngineHP"],
-      engineHPTo: json["EngineHP_to"],
-      engineKW: json["EngineKW"],
-      engineManufacturer: json["EngineManufacturer"],
-      engineModel: json["EngineModel"],
-      entertainmentSystem: json["EntertainmentSystem"],
-      errorCode: json["ErrorCode"],
-      errorText: json["ErrorText"],
-      forwardCollisionWarning: json["ForwardCollisionWarning"],
-      fuelInjectionType: json["FuelInjectionType"],
-      fuelTypePrimary: json["FuelTypePrimary"],
-      fuelTypeSecondary: json["FuelTypeSecondary"],
-      gcwr: json["GCWR"],
-      gcwrTo: json["GCWR_to"],
-      gvwr: json["GVWR"],
-      gvwrTo: json["GVWR_to"],
-      keylessIgnition: json["KeylessIgnition"],
-      laneCenteringAssistance: json["LaneCenteringAssistance"],
-      laneDepartureWarning: json["LaneDepartureWarning"],
-      laneKeepSystem: json["LaneKeepSystem"],
-      lowerBeamHeadlampLightSource: json["LowerBeamHeadlampLightSource"],
-      make: json["Make"],
-      makeID: json["MakeID"],
-      manufacturer: json["Manufacturer"],
-      manufacturerId: json["ManufacturerId"],
-      model: json["Model"],
-      modelID: json["ModelID"],
-      modelYear: json["ModelYear"],
-      motorcycleChassisType: json["MotorcycleChassisType"],
-      motorcycleSuspensionType: json["MotorcycleSuspensionType"],
-      ncsaBodyType: json["NCSABodyType"],
-      ncsaMake: json["NCSAMake"],
-      ncsaMapExcApprovedBy: json["NCSAMapExcApprovedBy"],
-      ncsaMapExcApprovedOn: json["NCSAMapExcApprovedOn"],
-      ncsaMappingException: json["NCSAMappingException"],
-      ncsaModel: json["NCSAModel"],
-      ncsaNote: json["NCSANote"],
-      nonLandUse: json["NonLandUse"],
-      note: json["Note"],
-      otherBusInfo: json["OtherBusInfo"],
-      otherEngineInfo: json["OtherEngineInfo"],
-      otherMotorcycleInfo: json["OtherMotorcycleInfo"],
-      otherRestraintSystemInfo: json["OtherRestraintSystemInfo"],
-      otherTrailerInfo: json["OtherTrailerInfo"],
-      parkAssist: json["PedestrianAutomaticEmergencyBraking"],
-      pedestrianAutomaticEmergencyBraking: json[""],
-      plantCity: json["PlantCity"],
-      plantCompanyName: json["PlantCompanyName"],
-      plantCountry: json["PlantCountry"],
-      plantState: json["PlantState"],
-      possibleValues: json["PossibleValues"],
-      pretensioner: json["Pretensioner"],
-      rearAutomaticEmergencyBraking: json["RearAutomaticEmergencyBraking"],
-      rearCrossTrafficAlert: json["RearCrossTrafficAlert"],
-      rearVisibilitySystem: json["RearVisibilitySystem"],
-      saeAutomationLevel: json["SAEAutomationLevel"],
-      saeAutomationLevelTo: json["SAEAutomationLevel_to"],
-      seatBeltsAll: json["SeatBeltsAll"],
-      seatRows: json["SeatRows"],
-      seats: json["Seats"],
+          json["AutomaticPedestrianAlertingSound"].toString().isNotEmpty
+              ? json["AutomaticPedestrianAlertingSound"]
+              : "N/A",
+      axleConfiguration: json["AxleConfiguration"].toString().isNotEmpty
+          ? json["AxleConfiguration"]
+          : "N/A",
+      axles: json["Axles"].toString().isNotEmpty ? json["Axles"] : "N/A",
+      basePrice:
+          json["BasePrice"].toString().isNotEmpty ? json["BasePrice"] : "N/A",
+      batteryA:
+          json["BatteryA"].toString().isNotEmpty ? json["BatteryA"] : "N/A",
+      batteryATo: json["BatteryA_to"].toString().isNotEmpty
+          ? json["BatteryA_to"]
+          : "N/A",
+      batteryCells: json["BatteryCells"].toString().isNotEmpty
+          ? json["BatteryCells"]
+          : "N/A",
+      batteryInfo: json["BatteryInfo"].toString().isNotEmpty
+          ? json["BatteryInfo"]
+          : "N/A",
+      batteryKWh:
+          json["BatteryKWh"].toString().isNotEmpty ? json["BatteryKWh"] : "N/A",
+      batteryKWhTo: json["BatteryKWh_to"].toString().isNotEmpty
+          ? json["BatteryKWh_to"]
+          : "N/A",
+      batteryModules: json["BatteryModules"].toString().isNotEmpty
+          ? json["BatteryModules"]
+          : "N/A",
+      batteryPacks: json["BatteryPacks"].toString().isNotEmpty
+          ? json["BatteryPacks"]
+          : "N/A",
+      batteryType: json["BatteryType"].toString().isNotEmpty
+          ? json["BatteryType"]
+          : "N/A",
+      batteryV:
+          json["BatteryV"].toString().isNotEmpty ? json["BatteryV"] : "N/A",
+      batteryVTo: json["BatteryV_to"].toString().isNotEmpty
+          ? json["BatteryV_to"]
+          : "N/A",
+      bedLengthIN: json["BedLengthIN"].toString().isNotEmpty
+          ? json["BedLengthIN"]
+          : "N/A",
+      bedType: json["BedType"].toString().isNotEmpty ? json["BedType"] : "N/A",
+      blindSpotIntervention: json["BlindSpotIntervention"].toString().isNotEmpty
+          ? json["BlindSpotIntervention"]
+          : "N/A",
+      blindSpotMon: json["BlindSpotMon"].toString().isNotEmpty
+          ? json["BlindSpotMon"]
+          : "N/A",
+      bodyCabType: json["BodyCabType"].toString().isNotEmpty
+          ? json["BodyCabType"]
+          : "N/A",
+      bodyClass:
+          json["BodyClass"].toString().isNotEmpty ? json["BodyClass"] : "N/A",
+      brakeSystemDesc: json["BrakeSystemDesc"].toString().isNotEmpty
+          ? json["BrakeSystemDesc"]
+          : "N/A",
+      brakeSystemType: json["BrakeSystemType"].toString().isNotEmpty
+          ? json["BrakeSystemType"]
+          : "N/A",
+      busFloorConfigType: json["BusFloorConfigType"].toString().isNotEmpty
+          ? json["BusFloorConfigType"]
+          : "N/A",
+      busLength:
+          json["BusLength"].toString().isNotEmpty ? json["BusLength"] : "N/A",
+      busType: json["BusType"].toString().isNotEmpty ? json["BusType"] : "N/A",
+      cib: json["CIB"].toString().isNotEmpty ? json["CIB"] : "N/A",
+      cashForClunkers: json["CashForClunkers"].toString().isNotEmpty
+          ? json["CashForClunkers"]
+          : "N/A",
+      chargerLevel: json["ChargerLevel"].toString().isNotEmpty
+          ? json["ChargerLevel"]
+          : "N/A",
+      chargerPowerKW: json["ChargerPowerKW"].toString().isNotEmpty
+          ? json["ChargerPowerKW"]
+          : "N/A",
+      coolingType: json["CoolingType"].toString().isNotEmpty
+          ? json["CoolingType"]
+          : "N/A",
+      curbWeightLB: json["CurbWeightLB"].toString().isNotEmpty
+          ? json["CurbWeightLB"]
+          : "N/A",
+      customMotorcycleType: json["CustomMotorcycleType"].toString().isNotEmpty
+          ? json["CustomMotorcycleType"]
+          : "N/A",
+      daytimeRunningLight: json["DaytimeRunningLight"].toString().isNotEmpty
+          ? json["DaytimeRunningLight"]
+          : "N/A",
+      destinationMarket: json["DestinationMarket"].toString().isNotEmpty
+          ? json["DestinationMarket"]
+          : "N/A",
+      displacementCC:
+          double.tryParse(json["DisplacementCC"])?.toStringAsFixed(2),
+      displacementCI:
+          double.tryParse(json["DisplacementCI"])?.toStringAsFixed(2),
+      displacementL: double.tryParse(json["DisplacementL"])?.toStringAsFixed(1),
+      doors: json["Doors"].toString().isNotEmpty
+          ? json["AxleConfiguration"]
+          : "N/A",
+      driveType:
+          json["DriveType"].toString().isNotEmpty ? json["DriveType"] : "N/A",
+      driverAssist: json["DriverAssist"].toString().isNotEmpty
+          ? json["DriverAssist"]
+          : "N/A",
+      dynamicBrakeSupport: json["DynamicBrakeSupport"].toString().isNotEmpty
+          ? json["DynamicBrakeSupport"]
+          : "N/A",
+      edr: json["EDR"].toString().isNotEmpty ? json["EDR"] : "N/A",
+      esc: json["ESC"].toString().isNotEmpty ? json["ESC"] : "N/A",
+      evDriveUnit: json["EVDriveUnit"].toString().isNotEmpty
+          ? json["EVDriveUnit"]
+          : "N/A",
+      electrificationLevel: json["ElectrificationLevel"].toString().isNotEmpty
+          ? json["ElectrificationLevel"]
+          : "N/A",
+      engineConfiguration: json["EngineConfiguration"].toString().isNotEmpty
+          ? json["EngineConfiguration"]
+          : "N/A",
+      engineCycles: json["EngineCycles"].toString().isNotEmpty
+          ? json["EngineCycles"]
+          : "N/A",
+      engineCylinders: json["EngineCylinders"].toString().isNotEmpty
+          ? json["EngineCylinders"]
+          : "N/A",
+      engineHP:
+          json["EngineHP"].toString().isNotEmpty ? json["EngineHP"] : "N/A",
+      engineHPTo: json["EngineHP_to"].toString().isNotEmpty
+          ? json["EngineHP_to"]
+          : "N/A",
+      engineKW:
+          json["EngineKW"].toString().isNotEmpty ? json["EngineKW"] : "N/A",
+      engineManufacturer: json["EngineManufacturer"].toString().isNotEmpty
+          ? json["EngineManufacturer"]
+          : "N/A",
+      engineModel: json["EngineModel"].toString().isNotEmpty
+          ? json["EngineModel"]
+          : "N/A",
+      entertainmentSystem: json["EntertainmentSystem"].toString().isNotEmpty
+          ? json["EntertainmentSystem"]
+          : "N/A",
+      errorCode:
+          json["ErrorCode"].toString().isNotEmpty ? json["ErrorCode"] : "N/A",
+      errorText:
+          json["ErrorText"].toString().isNotEmpty ? json["ErrorText"] : "N/A",
+      forwardCollisionWarning:
+          json["ForwardCollisionWarning"].toString().isNotEmpty
+              ? json["ForwardCollisionWarning"]
+              : "N/A",
+      fuelInjectionType: json["FuelInjectionType"].toString().isNotEmpty
+          ? json["FuelInjectionType"]
+          : "N/A",
+      fuelTypePrimary: json["FuelTypePrimary"].toString().isNotEmpty
+          ? json["FuelTypePrimary"]
+          : "N/A",
+      fuelTypeSecondary: json["FuelTypeSecondary"].toString().isNotEmpty
+          ? json["FuelTypeSecondary"]
+          : "N/A",
+      gcwr: json["GCWR"].toString().isNotEmpty ? json["GCWR"] : "N/A",
+      gcwrTo: json["GCWR_to"].toString().isNotEmpty ? json["GCWR_to"] : "N/A",
+      gvwr: json["GVWR"].toString().isNotEmpty ? json["GVWR"] : "N/A",
+      gvwrTo: json["GVWR_to"].toString().isNotEmpty ? json["GVWR_to"] : "N/A",
+      keylessIgnition: json["KeylessIgnition"].toString().isNotEmpty
+          ? json["KeylessIgnition"]
+          : "N/A",
+      laneCenteringAssistance:
+          json["LaneCenteringAssistance"].toString().isNotEmpty
+              ? json["LaneCenteringAssistance"]
+              : "N/A",
+      laneDepartureWarning: json["LaneDepartureWarning"].toString().isNotEmpty
+          ? json["LaneDepartureWarning"]
+          : "N/A",
+      laneKeepSystem: json["LaneKeepSystem"].toString().isNotEmpty
+          ? json["LaneKeepSystem"]
+          : "N/A",
+      lowerBeamHeadlampLightSource:
+          json["LowerBeamHeadlampLightSource"].toString().isNotEmpty
+              ? json["LowerBeamHeadlampLightSource"]
+              : "N/A",
+      make: json["Make"].toString().isNotEmpty ? json["Make"] : "N/A",
+      makeID: json["MakeID"].toString().isNotEmpty ? json["MakeID"] : "N/A",
+      manufacturer: json["Manufacturer"].toString().isNotEmpty
+          ? json["Manufacturer"]
+          : "N/A",
+      manufacturerId: json["ManufacturerId"].toString().isNotEmpty
+          ? json["ManufacturerId"]
+          : "N/A",
+      model: json["Model"].toString().isNotEmpty ? json["Model"] : "N/A",
+      modelID: json["ModelID"].toString().isNotEmpty ? json["ModelID"] : "N/A",
+      modelYear:
+          json["ModelYear"].toString().isNotEmpty ? json["ModelYear"] : "N/A",
+      motorcycleChassisType: json["MotorcycleChassisType"].toString().isNotEmpty
+          ? json["MotorcycleChassisType"]
+          : "N/A",
+      motorcycleSuspensionType:
+          json["MotorcycleSuspensionType"].toString().isNotEmpty
+              ? json["MotorcycleSuspensionType"]
+              : "N/A",
+      ncsaBodyType: json["NCSABodyType"].toString().isNotEmpty
+          ? json["NCSABodyType"]
+          : "N/A",
+      ncsaMake:
+          json["NCSAMake"].toString().isNotEmpty ? json["NCSAMake"] : "N/A",
+      ncsaMapExcApprovedBy: json["NCSAMapExcApprovedBy"].toString().isNotEmpty
+          ? json["NCSAMapExcApprovedBy"]
+          : "N/A",
+      ncsaMapExcApprovedOn: json["NCSAMapExcApprovedOn"].toString().isNotEmpty
+          ? json["NCSAMapExcApprovedOn"]
+          : "N/A",
+      ncsaMappingException: json["NCSAMappingException"].toString().isNotEmpty
+          ? json["NCSAMappingException"]
+          : "N/A",
+      ncsaModel:
+          json["NCSAModel"].toString().isNotEmpty ? json["NCSAModel"] : "N/A",
+      ncsaNote:
+          json["NCSANote"].toString().isNotEmpty ? json["NCSANote"] : "N/A",
+      nonLandUse:
+          json["NonLandUse"].toString().isNotEmpty ? json["NonLandUse"] : "N/A",
+      note: json["Note"].toString().isNotEmpty ? json["Note"] : "N/A",
+      otherBusInfo: json["OtherBusInfo"].toString().isNotEmpty
+          ? json["OtherBusInfo"]
+          : "N/A",
+      otherEngineInfo: json["OtherEngineInfo"].toString().isNotEmpty
+          ? json["OtherEngineInfo"]
+          : "N/A",
+      otherMotorcycleInfo: json["OtherMotorcycleInfo"].toString().isNotEmpty
+          ? json["OtherMotorcycleInfo"]
+          : "N/A",
+      otherRestraintSystemInfo:
+          json["OtherRestraintSystemInfo"].toString().isNotEmpty
+              ? json["OtherRestraintSystemInfo"]
+              : "N/A",
+      otherTrailerInfo: json["OtherTrailerInfo"].toString().isNotEmpty
+          ? json["OtherTrailerInfo"]
+          : "N/A",
+      parkAssist:
+          json["ParkAssist"].toString().isNotEmpty ? json["ParkAssist"] : "N/A",
+      pedestrianAutomaticEmergencyBraking:
+          json["PedestrianAutomaticEmergencyBraking"].toString().isNotEmpty
+              ? json["PedestrianAutomaticEmergencyBraking"]
+              : "N/A",
+      plantCity:
+          json["PlantCity"].toString().isNotEmpty ? json["PlantCity"] : "N/A",
+      plantCompanyName: json["PlantCompanyName"].toString().isNotEmpty
+          ? json["PlantCompanyName"]
+          : "N/A",
+      plantCountry: json["PlantCountry"].toString().isNotEmpty
+          ? json["PlantCountry"]
+          : "N/A",
+      plantState:
+          json["PlantState"].toString().isNotEmpty ? json["PlantState"] : "N/A",
+      possibleValues: json["PossibleValues"].toString().isNotEmpty
+          ? json["PossibleValues"]
+          : "N/A",
+      pretensioner: json["Pretensioner"].toString().isNotEmpty
+          ? json["Pretensioner"]
+          : "N/A",
+      rearAutomaticEmergencyBraking:
+          json["RearAutomaticEmergencyBraking"].toString().isNotEmpty
+              ? json["RearAutomaticEmergencyBraking"]
+              : "N/A",
+      rearCrossTrafficAlert: json["RearCrossTrafficAlert"].toString().isNotEmpty
+          ? json["RearCrossTrafficAlert"]
+          : "N/A",
+      rearVisibilitySystem: json["RearVisibilitySystem"].toString().isNotEmpty
+          ? json["RearVisibilitySystem"]
+          : "N/A",
+      saeAutomationLevel: json["SAEAutomationLevel"].toString().isNotEmpty
+          ? json["SAEAutomationLevel"]
+          : "N/A",
+      saeAutomationLevelTo: json["SAEAutomationLevel_to"].toString().isNotEmpty
+          ? json["SAEAutomationLevel_to"]
+          : "N/A",
+      seatBeltsAll: json["SeatBeltsAll"].toString().isNotEmpty
+          ? json["SeatBeltsAll"]
+          : "N/A",
+      seatRows:
+          json["SeatRows"].toString().isNotEmpty ? json["SeatRows"] : "N/A",
+      seats: json["Seats"].toString().isNotEmpty ? json["Seats"] : "N/A",
       semiAutomaticHeadlampBeamSwitching:
-          json["SemiautomaticHeadlampBeamSwitching"],
-      series: json["Series"],
-      series2: json["Series2"],
-      steeringLocation: json["SteeringLocation"],
-      suggestedVIN: json["SuggestedVIN"],
-      tpms: json["TPMS"],
-      topSpeedMPH: json["TopSpeedMPH"],
-      trackWidth: json["TrackWidth"],
-      tractionControl: json["TractionControl"],
-      trailerBodyType: json["TrailerBodyType"],
-      trailerLength: json["TrailerLength"],
-      trailerType: json["TrailerType"],
-      transmissionSpeeds: json["TransmissionSpeeds"],
-      transmissionStyle: json["TransmissionStyle"],
-      trim: json["Trim"],
-      trim2: json["Trim2"],
-      turbo: json["Turbo"],
-      vin: json["VIN"],
-      valveTrainDesign: json["ValveTrainDesign"],
-      vehicleDescriptor: json["VehicleDescriptor"],
-      vehicleType: json["VehicleType"],
-      wheelBaseLong: json["WheelBaseLong"],
-      wheelBaseShort: json["WheelBaseShort"],
-      wheelBaseType: json["WheelBaseType"],
-      wheelSizeFront: json["WheelSizeFront"],
-      wheelSizeRear: json["WheelSizeRear"],
-      wheels: json["Wheels"],
-      windows: json["Windows"],
+          json["SemiautomaticHeadlampBeamSwitching"].toString().isNotEmpty
+              ? json["SemiautomaticHeadlampBeamSwitching"]
+              : "N/A",
+      series: json["Series"].toString().isNotEmpty ? json["Series"] : "N/A",
+      series2: json["Series2"].toString().isNotEmpty ? json["Series2"] : "N/A",
+      steeringLocation: json["SteeringLocation"].toString().isNotEmpty
+          ? json["SteeringLocation"]
+          : "N/A",
+      suggestedVIN: json["SuggestedVIN"].toString().isNotEmpty
+          ? json["SuggestedVIN"]
+          : "N/A",
+      tpms: json["TPMS"].toString().isNotEmpty ? json["TPMS"] : "N/A",
+      topSpeedMPH: json["TopSpeedMPH"].toString().isNotEmpty
+          ? json["TopSpeedMPH"]
+          : "N/A",
+      trackWidth:
+          json["TrackWidth"].toString().isNotEmpty ? json["TrackWidth"] : "N/A",
+      tractionControl: json["TractionControl"].toString().isNotEmpty
+          ? json["TractionControl"]
+          : "N/A",
+      trailerBodyType: json["TrailerBodyType"].toString().isNotEmpty
+          ? json["TrailerBodyType"]
+          : "N/A",
+      trailerLength: json["TrailerLength"].toString().isNotEmpty
+          ? json["TrailerLength"]
+          : "N/A",
+      trailerType: json["TrailerType"].toString().isNotEmpty
+          ? json["TrailerType"]
+          : "N/A",
+      transmissionSpeeds: json["TransmissionSpeeds"].toString().isNotEmpty
+          ? json["TransmissionSpeeds"]
+          : "N/A",
+      transmissionStyle: json["TransmissionStyle"].toString().isNotEmpty
+          ? json["TransmissionStyle"]
+          : "N/A",
+      trim: json["Trim"].toString().isNotEmpty ? json["Trim"] : "N/A",
+      trim2: json["Trim2"].toString().isNotEmpty ? json["Trim2"] : "N/A",
+      turbo: json["Turbo"].toString().isNotEmpty ? json["Turbo"] : "N/A",
+      vin: json["VIN"].toString().isNotEmpty ? json["VIN"] : "N/A",
+      valveTrainDesign: json["ValveTrainDesign"].toString().isNotEmpty
+          ? json["ValveTrainDesign"]
+          : "N/A",
+      vehicleDescriptor: json["VehicleDescriptor"].toString().isNotEmpty
+          ? json["VehicleDescriptor"]
+          : "N/A",
+      vehicleType: json["VehicleType"].toString().isNotEmpty
+          ? json["VehicleType"]
+          : "N/A",
+      wheelBaseLong: json["WheelBaseLong"].toString().isNotEmpty
+          ? json["WheelBaseLong"]
+          : "N/A",
+      wheelBaseShort: json["WheelBaseShort"].toString().isNotEmpty
+          ? json["WheelBaseShort"]
+          : "N/A",
+      wheelBaseType: json["WheelBaseType"].toString().isNotEmpty
+          ? json["WheelBaseType"]
+          : "N/A",
+      wheelSizeFront: json["WheelSizeFront"].toString().isNotEmpty
+          ? json["WheelSizeFront"]
+          : "N/A",
+      wheelSizeRear: json["WheelSizeRear"].toString().isNotEmpty
+          ? json["WheelSizeRear"]
+          : "N/A",
+      wheels: json["Wheels"].toString().isNotEmpty ? json["Wheels"] : "N/A",
+      windows: json["Windows"].toString().isNotEmpty ? json["Windows"] : "N/A",
     );
   }
 
-  Car fromString(String carInfo) {
+  Vehicle fromString(String carInfo) {
     Map<String, dynamic> info = jsonDecode(carInfo);
     return fromJson(info);
+  }
+
+  @override
+  String toString() {
+    return '{"ABS": $abs,"ActiveSafetySysNote": $activeSafetySysNote,"AdaptiveCruiseControl":$adaptiveCruiseControl,"AdaptiveDrivingBeam": $adaptiveDrivingBeam, "AdaptiveHeadlights": $adaptiveHeadlights, "AdditionalErrorText": $additionalErrorText, "AirBagLocCurtain": $airBagLocCurtain, "AirBagLocFront": $airBagLocFront, "AirBagLocKnee": $airBagLocKnee, "AirBagLocSeatCushion": $airBagLocSeatCushion,"AirBagLocSide": $airBagLocSide,"AutoReverseSystem": ,"AutomaticPedestrianAlertingSound": $automaticPedestrianAlertingSound, "AxleConfiguration": $axleConfiguration, "Axles": $axles,"BasePrice": $basePrice, "BatteryA": $batteryA,"BatteryA_to": $batteryATo,"BatteryCells": $batteryCells,"BatteryInfo": $batteryInfo,"BatteryKWh": $batteryKWh,"BatteryKWh_to": $batteryKWhTo,"BatteryModules": $batteryModules,"BatteryPacks": $batteryPacks,"BatteryType": $batteryType,"BatteryV": $batteryV, "BatteryV_to": $batteryV,"BedLengthIN": $bedLengthIN, "BedType": $bedType,"BlindSpotIntervention": $blindSpotIntervention,"BlindSpotMon": $blindSpotMon,"BodyCabType": $bodyCabType, "BodyClass": $bodyClass, "BrakeSystemDesc": $brakeSystemDesc,"BrakeSystemType": $brakeSystemType, "BusFloorConfigType": $busFloorConfigType,"BusLength": $busLength, "BusType": $busType, "CIB": $cib,"CashForClunkers": $cashForClunkers, "ChargerLevel": $chargerLevel,"ChargerPowerKW": $chargerPowerKW, "CoolingType": $coolingType, "CurbWeightLB": $curbWeightLB, "CustomMotorcycleType": $customMotorcycleType, "DaytimeRunningLight": $daytimeRunningLight, "DestinationMarket": $destinationMarket, "DisplacementCC": $displacementCC, "DisplacementCI": $displacementCI, "DisplacementL": $displacementL, "Doors": $doors,"DriveType": $driveType, "DriverAssist": $driverAssist,"DynamicBrakeSupport": $dynamicBrakeSupport, "EDR": $edr,"ESC": $esc, "EVDriveUnit": $evDriveUnit, "ElectrificationLevel": $electrificationLevel, "EngineConfiguration": $engineConfiguration, "EngineCycles": $engineCycles, "EngineCylinders": $engineCycles,"EngineHP": $engineHP, "EngineHP_to": $engineHPTo,"EngineKW": $engineKW, "EngineManufacturer": $engineManufacturer, "EngineModel": $engineModel, "EntertainmentSystem": $entertainmentSystem,"ErrorCode": $errorCode, "ErrorText": $errorText,"ForwardCollisionWarning": $forwardCollisionWarning, "FuelInjectionType": $fuelInjectionType,"FuelTypePrimary": $fuelTypePrimary, "FuelTypeSecondary": $fuelTypeSecondary,"GCWR": $gcwr, "GCWR_to": $gcwrTo, "GVWR": $gvwr, "GVWR_to": $gvwrTo, "KeylessIgnition": $keylessIgnition, "LaneCenteringAssistance": $laneCenteringAssistance, "LaneDepartureWarning": $laneDepartureWarning, "LaneKeepSystem": $laneKeepSystem,  "LowerBeamHeadlampLightSource": $lowerBeamHeadlampLightSource, "Make": $make, "MakeID": $makeID, "Manufacturer": $manufacturer,"ManufacturerId": $manufacturerId, "Model":$model,"ModelID": $modelID, "ModelYear": $modelYear,"MotorcycleChassisType": $motorcycleChassisType, "MotorcycleSuspensionType": $motorcycleSuspensionType,"NCSABodyType": $ncsaBodyType, "NCSAMake": $ncsaMake, "NCSAMapExcApprovedBy": $ncsaMapExcApprovedBy, "NCSAMapExcApprovedOn": $ncsaMapExcApprovedOn, "NCSAMappingException": $ncsaMappingException, "NCSAModel": "$ncsaModel,"NCSANote": $ncsaNote, "NonLandUse": $nonLandUse, "Note": $note, "OtherBusInfo": $otherBusInfo, "OtherEngineInfo": $otherEngineInfo,"OtherMotorcycleInfo": $otherMotorcycleInfo, "OtherRestraintSystemInfo": $otherRestraintSystemInfo, "OtherTrailerInfo": $otherTrailerInfo, "ParkAssist": $parkAssist, "PedestrianAutomaticEmergencyBraking": $pedestrianAutomaticEmergencyBraking, "PlantCity": $plantCity, "PlantCompanyName": $plantCompanyName, "PlantCountry": $plantCountry, "PlantState": $plantState, "PossibleValues": $possibleValues, "Pretensioner": $pretensioner, "RearAutomaticEmergencyBraking": $rearAutomaticEmergencyBraking, "RearCrossTrafficAlert": $rearCrossTrafficAlert,"RearVisibilitySystem": $rearVisibilitySystem,"SAEAutomationLevel": $saeAutomationLevel, "SAEAutomationLevel_to": $saeAutomationLevelTo, "SeatBeltsAll": $seatBeltsAll, "SeatRows": $seatRows, "Seats":$seats, "SemiautomaticHeadlampBeamSwitching": $semiAutomaticHeadlampBeamSwitching, "Series": $series, "Series2": $series2, "SteeringLocation": $steeringLocation, "SuggestedVIN": $suggestedVIN, "TPMS": $tpms, "TopSpeedMPH": $topSpeedMPH, "TrackWidth": $trackWidth, "TractionControl":$tractionControl, "TrailerBodyType": $trailerBodyType, "TrailerLength": $trailerLength, "TrailerType": $trailerType, "TransmissionSpeeds": $transmissionSpeeds, "TransmissionStyle": $transmissionStyle, "Trim": $trim, "Trim2": $trim2, "Turbo": $turbo, "VIN": $vin, "ValveTrainDesign": $valveTrainDesign, "VehicleDescriptor": $vehicleDescriptor, "VehicleType": $vehicleType, "WheelBaseLong": $wheelBaseLong, "WheelBaseShort": $wheelBaseShort,"WheelBaseType": $wheelBaseType, "WheelSizeFront": $wheelSizeFront, "WheelSizeRear": $wheelSizeRear, "Wheels": $wheels, "Windows": $windows }';
   }
 }

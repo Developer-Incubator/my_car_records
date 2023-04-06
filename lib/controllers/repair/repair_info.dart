@@ -2,11 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_car_records/controllers/my_extensions.dart';
-import 'package:my_car_records/controllers/part/all_parts.dart';
-
-import 'package:my_car_records/model/db/part.dart';
 import 'package:my_car_records/controllers/part/part_form.dart';
+import 'package:my_car_records/model/repair.dart';
 
 /// displays all the information about a single Repair including parts
 ///
@@ -17,15 +14,9 @@ import 'package:my_car_records/controllers/part/part_form.dart';
 // ignore: must_be_immutable
 class RepairInfo extends StatefulWidget {
   // ignore: prefer_typing_uninitialized_variables
-  final repair;
-  final String vin;
-  final Function pageRefresh;
-  const RepairInfo(
-      {Key? key,
-      required this.repair,
-      required this.vin,
-      required this.pageRefresh})
-      : super(key: key);
+  final Repair repair;
+
+  const RepairInfo({Key? key, required this.repair}) : super(key: key);
 
   @override
   State<RepairInfo> createState() => _RepairInfoState();
@@ -34,31 +25,48 @@ class RepairInfo extends StatefulWidget {
 class _RepairInfoState extends State<RepairInfo> {
   @override
   Widget build(BuildContext context) {
-    var repairInfo = widget.repair.getRepairInfo();
+    // var repairInfo = widget.repair.getRepairInfo();
     // gets app the parts associated with selected repair
-    Future<List<dynamic>> parts = getParts(widget.vin, repairInfo['id']);
+    // Future<List<dynamic>> parts = getParts(widget.vin, repairInfo['id']);
 
-    double repairTotal =
-        double.parse(widget.repair.getRepairTotal()) + widget.repair.labor;
+    // double repairTotal =
+    //     double.parse(widget.repair.getRepairTotal()) + widget.repair.labor;
 
     // refreshes the list of parts to keep it accurate when a part is deleted.
     refresh() {
       setState(() {
-        parts = getParts(widget.vin, repairInfo['id']);
-        widget.pageRefresh();
+        // parts = getParts(widget.vin, repairInfo['id']);
+        // widget.pageRefresh();
       });
-    }
-
-    Future swipeRefresh() async {
-      refresh();
     }
 
     return Platform.isIOS
         ? CupertinoPageScaffold(
             navigationBar: CupertinoNavigationBar(
-              middle: Text("Repair Info"),
+              middle: Text(
+                "Repair Info",
+                style: const TextStyle(color: CupertinoColors.white),
+              ),
+              trailing: CupertinoButton(
+                padding: EdgeInsets.zero,
+                child: const Icon(
+                  CupertinoIcons.add,
+                  color: CupertinoColors.white,
+                ),
+                onPressed: () => showCupertinoDialog(
+                    context: context,
+                    builder: (context) {
+                      //PartForm
+                      return CupertinoPopupSurface(
+                          child: PartForm(
+                              repairId: widget.repair.id!, refresh: refresh));
+                    }),
+              ),
             ),
-            child: Column())
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text(widget.repair.vehicleID)],
+            ))
         : Column(
             children: [
               Padding(
@@ -69,7 +77,7 @@ class _RepairInfoState extends State<RepairInfo> {
                       "ID: ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Text(repairInfo['id']),
+                    // Text(repairInfo['id']),
                   ],
                 ),
               ),
@@ -81,26 +89,26 @@ class _RepairInfoState extends State<RepairInfo> {
                       "hours: ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Text(repairInfo['hours'].toString()),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(right: 8),
+                    //   child: Text(repairInfo['hours'].toString()),
+                    // ),
                     const Text(
                       "Odometer: ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Text(repairInfo['odometer']),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(right: 8.0),
+                    //   child: Text(repairInfo['odometer']),
+                    // ),
                     const Text(
                       "Technition: ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8.0),
-                      child: Text(eachCap(repairInfo['tech'])),
-                    ),
+                    // Padding(
+                    //   padding: const EdgeInsets.only(right: 8.0),
+                    //   child: Text(eachCap(repairInfo['tech'])),
+                    // ),
                     //
                   ],
                 ),
@@ -116,27 +124,27 @@ class _RepairInfoState extends State<RepairInfo> {
                     const Spacer(),
                     ElevatedButton(
                         onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertDialog(
-                                scrollable: true,
-                                title: const Text('Add Part'),
-                                content: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: PartForm(
-                                      vin: widget.vin,
-                                      repairId: repairInfo['id'],
-                                      refresh: refresh),
-                                ),
-                              );
-                            },
-                          ).then(
-                            (value) {
-                              widget.pageRefresh();
-                              refresh();
-                            },
-                          );
+                          // showDialog(
+                          //   context: context,
+                          //   builder: (BuildContext context) {
+                          //     return AlertDialog(
+                          //       scrollable: true,
+                          //       title: const Text('Add Part'),
+                          //       content: Padding(
+                          //         padding: const EdgeInsets.all(8.0),
+                          //         child: PartForm(
+                          //             vin: widget.vin,
+                          //             repairId: repairInfo['id'],
+                          //             refresh: refresh),
+                          //       ),
+                          //     );
+                          //   },
+                          // ).then(
+                          //   (value) {
+                          //     widget.refresh();
+                          //     refresh();
+                          //   },
+                          // );
                         },
                         child: const Icon(Icons.add)),
                   ],
@@ -144,13 +152,13 @@ class _RepairInfoState extends State<RepairInfo> {
               ),
               Expanded(
                 child: FutureBuilder(
-                  future: parts,
+                  // future: parts,
                   builder:
                       (BuildContext context, AsyncSnapshot<List> snapshot) {
                     List<Widget> children;
                     if (snapshot.hasData) {
-                      children = showAllParts(snapshot, context, refresh,
-                          widget.vin, repairInfo['id']);
+                      // children = showAllParts(snapshot, context, refresh,
+                      //     widget.vin, repairInfo['id']);
                     } else if (snapshot.hasError) {
                       children = [];
                       debugPrint("Error populating repairs");
@@ -164,10 +172,13 @@ class _RepairInfoState extends State<RepairInfo> {
                       ];
                     }
                     return RefreshIndicator(
-                      onRefresh: () => swipeRefresh(),
+                      onRefresh: () {
+                        return Future.delayed(Duration.zero);
+                        // swipeRefresh();
+                      },
                       child: ListView(
-                        children: children,
-                      ),
+                          // children: children,
+                          ),
                     );
                   },
                 ),
@@ -180,10 +191,10 @@ class _RepairInfoState extends State<RepairInfo> {
                     Column(
                       children: [
                         const Text("Cost:"),
-                        Text("Parts: \$${widget.repair.getRepairTotal()}"),
-                        Text(
-                            "Labor: \$${widget.repair.labor.toStringAsFixed(2)}"),
-                        Text("Total: \$${repairTotal.toStringAsFixed(2)}"),
+                        // Text("Parts: \$${widget.repair.getRepairTotal()}"),
+                        // Text(
+                        //     "Labor: \$${widget.repair.labor.toStringAsFixed(2)}"),
+                        // Text("Total: \$${repairTotal.toStringAsFixed(2)}"),
                       ],
                     )
                   ],

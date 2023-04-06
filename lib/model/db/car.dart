@@ -8,7 +8,7 @@ class CarDB {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final User? user = FirebaseAuth.instance.currentUser;
 
-  void add(Car? vehicle, {String? owner}) {
+  void add(Vehicle? vehicle, {String? owner}) {
     if (vehicle != null) {
       CollectionReference cars = _firestore.collection("cars");
       cars

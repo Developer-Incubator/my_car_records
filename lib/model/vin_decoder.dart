@@ -9,12 +9,12 @@ class VinDecoder {
       "https://vpic.nhtsa.dot.gov/api/vehicles/decodevinvalues/";
   final String _urlRear = "?format=json";
 
-  Future<Car?> decodeVin(String? vin) async {
+  Future<Vehicle?> decodeVin(String? vin) async {
     try {
       Uri uri = Uri.parse("$_urlFront$vin$_urlRear");
       http.Response res = await http.get(uri);
       Map<String, dynamic> vehicleInfo = jsonDecode(res.body);
-      return Car.fromJson(vehicleInfo["Results"][0]);
+      return Vehicle.fromJson(vehicleInfo["Results"][0]);
     } catch (e) {
       print(e.toString());
     }

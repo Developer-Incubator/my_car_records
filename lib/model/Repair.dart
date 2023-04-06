@@ -7,6 +7,7 @@
 /// [workRequested] work requested by the vehicle owner.
 
 class Repair {
+  final String? id;
   final String vehicleID;
   final double? hours;
   final double labor;
@@ -15,6 +16,7 @@ class Repair {
   final String workRequested;
 
   Repair({
+    this.id,
     required this.vehicleID,
     required this.hours,
     required this.labor,
@@ -23,8 +25,9 @@ class Repair {
     required this.workRequested,
   });
 
-  static Repair fromJson(Map<String, dynamic> json) {
+  static Repair fromJson(Map<String, dynamic> json, String id) {
     return Repair(
+      id: id,
       vehicleID: json["vehicle_id"],
       hours: json["hours"],
       labor: json["labor"],

@@ -1,4 +1,6 @@
 import 'package:flutter/widgets.dart';
+import 'package:my_car_records/controllers/repair/repair_info.dart';
+import 'package:my_car_records/model/repair.dart';
 import 'package:my_car_records/views/car_details.dart';
 import 'package:my_car_records/views/car_details/ios_car_details.dart';
 import 'package:my_car_records/views/home/home_screen.dart';
@@ -22,4 +24,9 @@ Map<String, Widget Function(BuildContext)> routes = {
       vin: args["vin"]!,
     );
   },
+  "/repairDetails": (context) {
+    final args =
+        ModalRoute.of(context)!.settings.arguments as Map<String, Repair>;
+    return RepairInfo(repair: args["repair"]!);
+  }
 };

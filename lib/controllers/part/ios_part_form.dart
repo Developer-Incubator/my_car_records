@@ -1,26 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:my_car_records/constance/constance.dart';
 
-class IOSCarForm extends StatelessWidget {
-  const IOSCarForm(
+class IOSPartForm extends StatelessWidget {
+  const IOSPartForm(
       {super.key,
+      required this.repairId,
       required this.formKey,
-      required this.vinController,
-      required this.makeController,
-      required this.modelController,
-      required this.yearController,
-      required this.ownerController,
-      required this.odometerController,
-      required this.refresh});
+      required this.nameController,
+      required this.quantityController,
+      required this.priceController});
+  final String repairId;
   final GlobalKey<FormState> formKey;
-  final TextEditingController vinController;
-  final TextEditingController makeController;
-  final TextEditingController modelController;
-  final TextEditingController yearController;
-  final TextEditingController ownerController;
-  final TextEditingController odometerController;
-  final Function refresh;
-
+  final TextEditingController nameController;
+  final TextEditingController quantityController;
+  final TextEditingController priceController;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -63,10 +56,10 @@ class IOSCarForm extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: CupertinoTextField(
-                        controller: vinController,
+                        controller: nameController,
                         prefix: const Padding(
                           padding: EdgeInsets.only(left: 8.0),
-                          child: Text("Vin:"),
+                          child: Text("Name:"),
                         ),
                         decoration: BoxDecoration(
                             border: Border.all(color: MyColorScheme.blueGrey),
@@ -77,11 +70,11 @@ class IOSCarForm extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: CupertinoTextField(
-                        controller: makeController,
+                        controller: quantityController,
                         prefix: const Padding(
                           padding:
                               EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
-                          child: Text("Make:"),
+                          child: Text("Quantity:"),
                         ),
                         decoration: BoxDecoration(
                           border: Border.all(color: MyColorScheme.blueGrey),
@@ -94,28 +87,11 @@ class IOSCarForm extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: CupertinoTextField(
-                        controller: modelController,
+                        controller: priceController,
                         prefix: const Padding(
                           padding:
                               EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
-                          child: Text("Model:"),
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: MyColorScheme.blueGrey),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: CupertinoTextField(
-                        controller: yearController,
-                        prefix: const Padding(
-                          padding:
-                              EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
-                          child: Text("Year:"),
+                          child: Text("Price:"),
                         ),
                         decoration: BoxDecoration(
                           border: Border.all(color: MyColorScheme.blueGrey),
@@ -146,7 +122,7 @@ class IOSCarForm extends StatelessWidget {
                     onPressed: () {
                       //TODO: add part to the db here
                       Navigator.pop(context);
-                      refresh();
+                      // refresh();
                     },
                   )
                 ],

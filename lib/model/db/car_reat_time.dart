@@ -22,14 +22,12 @@ void addCar(
   });
 }
 
-
-
 // Read
 /// gets all the cars from the database and returns them in an array as a Car object
 Future<List> getCars() async {
   DataSnapshot cars = await FirebaseDatabase.instance.ref().child("cars").get();
 
-  final List<Car> testArr = [];
+  final List<Vehicle> testArr = [];
 
   if (cars.exists) {
     for (DataSnapshot element in cars.children) {
@@ -51,17 +49,17 @@ Future<List> getCars() async {
 //
 /// [vin] vehicle id number.
 // Future<Car> getACar(String vin) async {
-  // DataSnapshot car =
-  //     await FirebaseDatabase.instance.ref().child("cars/$vin").get();
+// DataSnapshot car =
+//     await FirebaseDatabase.instance.ref().child("cars/$vin").get();
 
-  // // String vin = car.key.toString();
-  // int year = int.parse(car.child("year").value.toString());
-  // String make = car.child("make").value.toString();
-  // String model = car.child("model").value.toString();
-  // String owner = car.child("owner").value.toString();
-  // Car myCar = Car(vin, year, make, model, owner);
+// // String vin = car.key.toString();
+// int year = int.parse(car.child("year").value.toString());
+// String make = car.child("make").value.toString();
+// String model = car.child("model").value.toString();
+// String owner = car.child("owner").value.toString();
+// Car myCar = Car(vin, year, make, model, owner);
 
-  // return myCar;
+// return myCar;
 // }
 
 // update
