@@ -90,7 +90,7 @@ class Vehicle {
   String? manufacturerId;
   String? model;
   String? modelID;
-  String? modelYear;
+  int modelYear;
   String? motorcycleChassisType;
   String? motorcycleSuspensionType;
   String? ncsaBodyType;
@@ -242,7 +242,7 @@ class Vehicle {
     this.manufacturerId,
     this.model,
     this.modelID,
-    this.modelYear,
+    required this.modelYear,
     this.motorcycleChassisType,
     this.motorcycleSuspensionType,
     this.ncsaBodyType,
@@ -451,9 +451,7 @@ class Vehicle {
       displacementCI:
           double.tryParse(json["DisplacementCI"])?.toStringAsFixed(2),
       displacementL: double.tryParse(json["DisplacementL"])?.toStringAsFixed(1),
-      doors: json["Doors"].toString().isNotEmpty
-          ? json["AxleConfiguration"]
-          : "N/A",
+      doors: json["Doors"].toString().isNotEmpty ? json["Doors"] : "N/A",
       driveType:
           json["DriveType"].toString().isNotEmpty ? json["DriveType"] : "N/A",
       driverAssist: json["DriverAssist"].toString().isNotEmpty
@@ -543,8 +541,7 @@ class Vehicle {
           : "N/A",
       model: json["Model"].toString().isNotEmpty ? json["Model"] : "N/A",
       modelID: json["ModelID"].toString().isNotEmpty ? json["ModelID"] : "N/A",
-      modelYear:
-          json["ModelYear"].toString().isNotEmpty ? json["ModelYear"] : "N/A",
+      modelYear: int.tryParse(json["ModelYear"]) ?? 0000,
       motorcycleChassisType: json["MotorcycleChassisType"].toString().isNotEmpty
           ? json["MotorcycleChassisType"]
           : "N/A",

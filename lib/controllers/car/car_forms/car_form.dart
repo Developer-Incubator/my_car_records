@@ -103,7 +103,8 @@ class _CarFormState extends State<CarForm> {
                                         modelController.text =
                                             vehicle?.model ?? "N/A";
                                         yearController.text =
-                                            vehicle?.modelYear ?? "N/A";
+                                            vehicle?.modelYear.toString() ??
+                                                "N/A";
                                       });
                                     }
                                   } catch (e) {
@@ -196,7 +197,7 @@ class _CarFormState extends State<CarForm> {
                             vehicle ??= Vehicle(
                                 make: makeController.text,
                                 model: modelController.text,
-                                modelYear: yearController.text);
+                                modelYear: int.parse(yearController.text));
 
                             CarDB().add(vehicle);
                             Navigator.pop(context);

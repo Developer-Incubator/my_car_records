@@ -3,8 +3,9 @@ import 'package:my_car_records/views/home/ios_home.dart';
 
 final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 final GlobalKey<IOSHomePageState> iosHomeKey = GlobalKey<IOSHomePageState>();
-
-String homePageTitle = "My Car Records";
+final GlobalKey<IOSHomePageState> iosVehicleViewKey =
+    GlobalKey<IOSHomePageState>();
+final String homePageTitle = "My Car Records";
 
 class MyColorScheme {
   static Color blueGrey = Colors.blueGrey;

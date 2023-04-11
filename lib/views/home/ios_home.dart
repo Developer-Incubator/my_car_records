@@ -54,30 +54,30 @@ class IOSHomePageState extends State<IOSHomePage> {
                 child: Text("Could not get cars"),
               );
             }
-            if (snapshot.hasData) {
-              return ListView.builder(
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    QueryDocumentSnapshot car = snapshot.data!.docs[index];
-                    print(car.data());
 
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: CupertinoListTile(
-                        title: Text(
-                            "${car["year"]} ${car["make"]} ${car["model"]}"),
-                        subtitle: car["vin"] != null ? Text(car["vin"]) : null,
-                        onTap: () => Navigator.pushNamed(context, "/carDetails",
-                            arguments: {
-                              "carId": car.id,
-                              "make": car["make"].toString(),
-                              "model": car["model"].toString(),
-                              "year": car["year"].toString(),
-                              "vin": car["vin"].toString()
-                            }),
-                      ),
+            if (snapshot.hasData) {
+              return CupertinoListSection.insetGrouped(
+                children: [
+                  ...List.generate(snapshot.data!.docs.length, (index) {
+                    QueryDocumentSnapshot car = snapshot.data!.docs[index];
+
+                    return CupertinoListTile(
+                      title:
+                          Text("${car["year"]} ${car["make"]} ${car["model"]}"),
+                      subtitle: car["vin"] != null ? Text(car["vin"]) : null,
+                      trailing: const CupertinoListTileChevron(),
+                      onTap: () => Navigator.pushNamed(context, "/carDetails",
+                          arguments: {
+                            "carId": car.id,
+                            "make": car["make"].toString(),
+                            "model": car["model"].toString(),
+                            "year": car["year"].toString(),
+                            "vin": car["vin"].toString()
+                          }),
                     );
-                  });
+                  })
+                ],
+              );
             }
             return const Center(
               child: CupertinoActivityIndicator(),

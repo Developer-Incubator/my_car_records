@@ -1,3 +1,5 @@
+import 'package:my_car_records/model/part.dart';
+
 /// Create a Repair
 ///
 /// [hours] time to complete repair.
@@ -14,16 +16,17 @@ class Repair {
   final String? tech;
   final int? odometer;
   final String workRequested;
+  List<Part>? partList = [];
 
-  Repair({
-    this.id,
-    required this.vehicleID,
-    required this.hours,
-    required this.labor,
-    this.tech,
-    required this.odometer,
-    required this.workRequested,
-  });
+  Repair(
+      {this.id,
+      required this.vehicleID,
+      required this.hours,
+      required this.labor,
+      this.tech,
+      required this.odometer,
+      required this.workRequested,
+      this.partList});
 
   static Repair fromJson(Map<String, dynamic> json, String id) {
     return Repair(
@@ -57,6 +60,11 @@ class Repair {
       "odometer": odometer,
       "workRequested": workRequested,
     };
+  }
+
+  void addPart(Part part) {
+    partList ??= [];
+    return partList?.add(part);
   }
 
   ///get the total value of all the parts

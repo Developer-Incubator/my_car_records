@@ -32,6 +32,7 @@ class IOSVehicleSpecs extends StatelessWidget {
                 }
                 if (snapshot.hasData) {
                   Vehicle? vehicle = snapshot.data;
+
                   return VehicleSpecs(vehicle: vehicle!);
                 }
                 return SizedBox(

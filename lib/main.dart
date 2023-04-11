@@ -1,6 +1,7 @@
 import 'dart:io';
 
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:camera/camera.dart';
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -8,9 +9,15 @@ import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/constance/routes.dart';
 import 'package:my_car_records/views/login/login.dart';
 
+List<CameraDescription> cameras = [];
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseAppCheck.instance.activate(
+    webRecaptchaSiteKey: 'recaptcha-v3-site-key',
+  );
+  cameras = await availableCameras();
   runApp(const MyApp());
 }
 

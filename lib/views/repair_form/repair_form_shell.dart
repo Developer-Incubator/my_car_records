@@ -15,13 +15,13 @@ import 'package:my_car_records/model/db/repair_real_time.dart';
 class RepairForm extends StatelessWidget {
   RepairForm({
     Key? key,
-    required this.carID,
+    required this.vehicleID,
     required this.refresh,
     this.vin,
   }) : super(key: key);
 
   final String? vin;
-  final String carID;
+  final String vehicleID;
   final Function refresh;
 
   final formKey = GlobalKey<FormState>();
@@ -36,7 +36,7 @@ class RepairForm extends StatelessWidget {
     // addRepair(vin, 2.2, "145,654", "Ray", "Oil Change and tire rotation");
     return Platform.isIOS
         ? IOSRepairForm(
-            vehicleID: carID,
+            vehicleID: vehicleID,
             refresh: refresh,
             formKey: formKey,
             hoursController: hoursController,

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/controllers/car/car_info.dart';
 import 'package:my_car_records/model/car.dart';
 import 'package:my_car_records/views/car_details/ios_car_details.dart';
@@ -30,7 +31,8 @@ class _CarDetailsPageState extends State<CarDetailsPage> {
     // widget.car = getACar(widget.vin);
     return Platform.isIOS
         ? IOSCarDetails(
-            carId: widget.carId,
+            key: iosVehicleViewKey,
+            vehicleID: widget.carId,
             make: widget.make,
             model: widget.model,
             year: widget.year,
