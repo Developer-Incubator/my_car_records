@@ -5,6 +5,7 @@ import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/constance/routes.dart';
 import 'package:my_car_records/views/login/login.dart';
@@ -18,6 +19,9 @@ void main() async {
     webRecaptchaSiteKey: 'recaptcha-v3-site-key',
   );
   cameras = await availableCameras();
+  SystemChrome.setSystemUIOverlayStyle(
+      const SystemUiOverlayStyle(statusBarColor: Colors.white));
+
   runApp(const MyApp());
 }
 
@@ -33,6 +37,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(
+        const SystemUiOverlayStyle(statusBarColor: Colors.white));
     return Platform.isIOS
         ? CupertinoApp(
             debugShowCheckedModeBanner: false,

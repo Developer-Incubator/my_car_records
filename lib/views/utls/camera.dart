@@ -99,7 +99,7 @@ class CameraState extends State<Camera> {
                   );
                 } catch (e) {
                   // If an error occurs, log the error to the console.
-                  print(e);
+                  debugPrint(e.toString());
                 }
               },
               child: const Icon(CupertinoIcons.camera),

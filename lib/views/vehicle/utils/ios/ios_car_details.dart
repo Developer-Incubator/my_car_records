@@ -1,7 +1,5 @@
 import 'dart:typed_data';
 
-import 'package:camera/camera.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,10 +9,11 @@ import 'package:my_car_records/controllers/my_extensions.dart';
 import 'package:my_car_records/main.dart';
 import 'package:my_car_records/model/db/repair.dart';
 import 'package:my_car_records/model/repair.dart';
-import 'package:my_car_records/views/car_details/ios_vehicle_specs.dart';
-import 'package:my_car_records/views/car_details/utils/camera.dart';
-import 'package:my_car_records/views/repair_form/repair_form_shell.dart';
+
+import 'package:my_car_records/views/vehicle/utils/ios/ios_vehicle_specs.dart';
+import 'package:my_car_records/views/repair/repair_form/repair_form_shell.dart';
 import 'package:my_car_records/model/db/car.dart';
+import 'package:my_car_records/views/utls/camera.dart';
 import 'package:pull_down_button/pull_down_button.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -91,19 +90,12 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
   }
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    // double screenHeight = MediaQuery.of(context).size.height;
 
     Reference? noImagesRef = storageRef.child("General/noImageCar.jpeg");
     Reference? imagesRef = storageRef.child("${user!.uid}/${widget.vehicleID}");
-    const oneMegabyte = 1024 * 1024;
 
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
@@ -126,7 +118,7 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                 icon: CupertinoIcons.pencil,
                 onTap: () {
                   //TODO: add a way to edit the vehicle information
-                  print("To Edit Vehicle Info");
+                  debugPrint("To Edit Vehicle Info");
                 },
               ),
               const PullDownMenuDivider.large(),
@@ -152,7 +144,7 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
       child: SingleChildScrollView(
         child: FutureBuilder(
             future: Future.wait([
-              RepairDB().get(widget.vehicleID),
+              RepairDB().get(vehicleID: widget.vehicleID),
               noImagesRef.getData(),
               imagesRef.listAll()
             ]),
@@ -188,18 +180,15 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                               }
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return SizedBox(
-                                  width: screenWidth * .5,
-                                  child: const Center(
-                                    child: CupertinoActivityIndicator(),
-                                  ),
+                                return const Center(
+                                  child: CupertinoActivityIndicator(),
                                 );
                               }
                               List<Uint8List?> data = snapshot.data!;
                               return Container(
                                 padding:
                                     const EdgeInsets.only(right: 8, left: 8),
-                                height: screenHeight * .15,
+
                                 width: screenWidth * .5,
                                 decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(30)),
@@ -207,15 +196,10 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                                     ? CarouselSlider.builder(
                                         itemCount: data.length,
                                         options: CarouselOptions(
-                                          height: screenHeight * .15,
-                                          aspectRatio: 16 / 9,
-                                          viewportFraction: 0.8,
-                                          initialPage: 0,
-                                          enableInfiniteScroll: true,
-                                          reverse: false,
-                                          autoPlay: true,
+                                          autoPlay:
+                                              data.length > 1 ? true : false,
                                           autoPlayInterval:
-                                              const Duration(seconds: 3),
+                                              const Duration(seconds: 5),
                                           autoPlayAnimationDuration:
                                               const Duration(milliseconds: 800),
                                           autoPlayCurve: Curves.fastOutSlowIn,
@@ -380,7 +364,8 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                                           icon: CupertinoIcons
                                               .plus_rectangle_on_rectangle,
                                           onTap: () {
-                                            print("To Users Camera Roll");
+                                            //TODO: impliment users camera roll
+                                            debugPrint("To Users Camera Roll");
                                           },
                                         ),
                                         const PullDownMenuDivider.large(),
@@ -389,7 +374,8 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                                           icon:
                                               CupertinoIcons.photo_on_rectangle,
                                           onTap: () {
-                                            print("To Image Gallery");
+                                            //TODO: Create a photo galley for users to see all and edit photos
+                                            debugPrint("To Image Gallery");
                                           },
                                         ),
                                       ],
@@ -449,14 +435,18 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                             Repair repair = Repair.fromJson(
                                 snapshot.data[0]!.docs[index].data()
                                     as Map<String, dynamic>,
-                                snapshot.data[0]!.docs[index].id);
+                                snapshot.data[0]!.docs[index].id,
+                                widget.vehicleID);
 
                             return CupertinoListTile(
                               title: Text(repair.workRequested),
                               trailing: const CupertinoListTileChevron(),
                               onTap: () {
                                 Navigator.pushNamed(context, "/repairDetails",
-                                    arguments: {"repair": repair});
+                                    arguments: {
+                                      "vehicleID": widget.vehicleID,
+                                      "repair": repair
+                                    });
                               },
                             );
                           })

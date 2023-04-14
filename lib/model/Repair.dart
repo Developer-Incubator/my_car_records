@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_car_records/model/db/part.dart';
 import 'package:my_car_records/model/part.dart';
 
 /// Create a Repair
@@ -10,9 +12,9 @@ import 'package:my_car_records/model/part.dart';
 
 class Repair {
   final String? id;
-  final String vehicleID;
+  final String? vehicleID;
   final double? hours;
-  final double labor;
+  final double? labor;
   final String? tech;
   final int? odometer;
   final String workRequested;
@@ -20,18 +22,19 @@ class Repair {
 
   Repair(
       {this.id,
-      required this.vehicleID,
-      required this.hours,
-      required this.labor,
-      this.tech,
-      required this.odometer,
+      this.vehicleID,
       required this.workRequested,
+      this.hours = 0,
+      this.labor = 0,
+      this.tech,
+      this.odometer,
       this.partList});
 
-  static Repair fromJson(Map<String, dynamic> json, String id) {
+  static Repair fromJson(
+      Map<String, dynamic> json, String id, String vehicleID) {
     return Repair(
       id: id,
-      vehicleID: json["vehicle_id"],
+      vehicleID: vehicleID,
       hours: json["hours"],
       labor: json["labor"],
       tech: json["tech"],
@@ -42,7 +45,6 @@ class Repair {
 
   Map<String, dynamic> toJson() {
     return {
-      "vehicle_id": vehicleID,
       "hours": hours,
       "labor": labor,
       "tech": tech,
@@ -62,8 +64,19 @@ class Repair {
     };
   }
 
+  double laborTotal() {
+    return (labor! * hours!);
+  }
+
+  Future<QuerySnapshot<Map<String, dynamic>>> getParts() async {
+    dynamic parts =
+        await PartDB().get(vehicleID: vehicleID ?? "", repairID: id);
+    return parts;
+  }
+
   void addPart(Part part) {
     partList ??= [];
+
     return partList?.add(part);
   }
 

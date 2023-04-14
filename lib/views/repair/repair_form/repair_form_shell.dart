@@ -1,10 +1,6 @@
 import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_car_records/constance/constance.dart';
-import 'package:my_car_records/views/repair_form/ios_repair_form.dart';
-import 'package:my_car_records/model/db/repair_real_time.dart';
+import 'package:my_car_records/views/repair/repair_form/ios_repair_form.dart';
 
 /// form to create a repair on a car assigning the hours it takes to perform the repair, the current milege on the vehicle at time of repair, the techs name that performed the repairs, and the work that was requested by the customer.
 ///

@@ -1,7 +1,8 @@
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
-import 'package:my_car_records/model/car.dart';
+import 'package:my_car_records/model/vehicle.dart';
 
 class VinDecoder {
   // https://vpic.nhtsa.dot.gov/api/vehicles/decodevinextended/2CNFLEEW5A6267165?format=json
@@ -16,7 +17,7 @@ class VinDecoder {
       Map<String, dynamic> vehicleInfo = jsonDecode(res.body);
       return Vehicle.fromJson(vehicleInfo["Results"][0]);
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
     return null;
   }

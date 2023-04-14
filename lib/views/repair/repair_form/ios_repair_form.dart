@@ -1,19 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:my_car_records/constance/constance.dart';
+import 'package:my_car_records/model/db/repair.dart';
+import 'package:my_car_records/model/repair.dart';
 
-class IOSPartForm extends StatelessWidget {
-  const IOSPartForm(
+class IOSRepairForm extends StatelessWidget {
+  const IOSRepairForm(
       {super.key,
-      required this.repairId,
+      this.vin,
+      required this.vehicleID,
+      required this.refresh,
       required this.formKey,
-      required this.nameController,
-      required this.quantityController,
-      required this.priceController});
-  final String repairId;
+      required this.hoursController,
+      required this.laborController,
+      required this.odometerController,
+      required this.techController,
+      required this.workRequestedController});
+  final String? vin;
+  final String vehicleID;
+  final Function refresh;
+
   final GlobalKey<FormState> formKey;
-  final TextEditingController nameController;
-  final TextEditingController quantityController;
-  final TextEditingController priceController;
+  final TextEditingController hoursController;
+  final TextEditingController laborController;
+  final TextEditingController odometerController;
+  final TextEditingController techController;
+  final TextEditingController workRequestedController;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -33,14 +45,14 @@ class IOSPartForm extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(bottom: 20.0),
                       child: Text(
-                        "Add a Part",
+                        "Add a Repair",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ),
                     Text(
-                        "Add all the information about the part that is used in the repair ")
+                        "Add a repair for this vehicle to keep track of everything related to this vehicle")
                   ],
                 ),
               ),
@@ -56,25 +68,11 @@ class IOSPartForm extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: CupertinoTextField(
-                        controller: nameController,
-                        prefix: const Padding(
-                          padding: EdgeInsets.only(left: 8.0),
-                          child: Text("Name:"),
-                        ),
-                        decoration: BoxDecoration(
-                            border: Border.all(color: MyColorScheme.blueGrey),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10))),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: CupertinoTextField(
-                        controller: quantityController,
+                        controller: workRequestedController,
                         prefix: const Padding(
                           padding:
                               EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
-                          child: Text("Quantity:"),
+                          child: Text("Work Requested:"),
                         ),
                         decoration: BoxDecoration(
                           border: Border.all(color: MyColorScheme.blueGrey),
@@ -87,11 +85,62 @@ class IOSPartForm extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: CupertinoTextField(
-                        controller: priceController,
+                        controller: hoursController,
                         prefix: const Padding(
                           padding:
                               EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
-                          child: Text("Price:"),
+                          child: Text("Hours:"),
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: MyColorScheme.blueGrey),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: CupertinoTextField(
+                        controller: laborController,
+                        prefix: const Padding(
+                          padding:
+                              EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
+                          child: Text("Labor:"),
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: MyColorScheme.blueGrey),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: CupertinoTextField(
+                        controller: odometerController,
+                        prefix: const Padding(
+                          padding:
+                              EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
+                          child: Text("Odometer:"),
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: MyColorScheme.blueGrey),
+                          borderRadius: const BorderRadius.all(
+                            Radius.circular(10),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: CupertinoTextField(
+                        controller: techController,
+                        prefix: const Padding(
+                          padding:
+                              EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
+                          child: Text("Technition:"),
                         ),
                         decoration: BoxDecoration(
                           border: Border.all(color: MyColorScheme.blueGrey),
@@ -120,9 +169,15 @@ class IOSPartForm extends StatelessWidget {
                     color: CupertinoColors.activeGreen,
                     child: const Text("Submit"),
                     onPressed: () {
-                      //TODO: add part to the db here
+                      Repair newRepair = Repair(
+                          hours: double.parse(hoursController.text),
+                          labor: double.parse(laborController.text),
+                          odometer: int.parse(odometerController.text),
+                          workRequested: workRequestedController.text,
+                          tech: techController.text);
+                      RepairDB().add(vehicleID: vehicleID, repair: newRepair);
                       Navigator.pop(context);
-                      // refresh();
+                      refresh();
                     },
                   )
                 ],

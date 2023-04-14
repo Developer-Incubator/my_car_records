@@ -1,9 +1,4 @@
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
-// import 'package:my_car_records/model/db/part.dart';
-
-import 'package:my_car_records/model/part.dart';
-import 'package:my_car_records/model/repair.dart';
 
 import 'package:uuid/uuid.dart';
 

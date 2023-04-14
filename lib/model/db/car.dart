@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:my_car_records/controllers/my_extensions.dart';
-import 'package:my_car_records/model/car.dart';
+import 'package:my_car_records/model/vehicle.dart';
 
 class CarDB {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -10,10 +10,10 @@ class CarDB {
 
   void add(Vehicle? vehicle, {String? owner}) {
     if (vehicle != null) {
-      CollectionReference cars = _firestore.collection("cars");
+      CollectionReference cars = _firestore.collection(user!.uid);
       cars
           .add({
-            "user_id": user!.uid,
+            // "user_id": user!.uid,
             "vin": vehicle.vin,
             "make": capitalize(vehicle.make!),
             "model": vehicle.model,
@@ -29,8 +29,8 @@ class CarDB {
 
   Future<QuerySnapshot<Map<String, dynamic>>> get() async {
     return await _firestore
-        .collection('cars')
-        .where("user_id", isEqualTo: user!.uid)
+        .collection(user!.uid)
+        // .where("user_id", isEqualTo: user!.uid)
         .get()
         .then((value) {
       return value;
@@ -42,7 +42,7 @@ class CarDB {
         .collection("cars")
         .doc(carId)
         .delete()
-        .then((value) => print("Deleted car"))
-        .catchError((error) => print(error));
+        .then((value) => debugPrint("Deleted car"))
+        .catchError((error) => debugPrint(error));
   }
 }

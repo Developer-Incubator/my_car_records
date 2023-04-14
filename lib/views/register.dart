@@ -40,8 +40,7 @@ class _RegisterPage extends State<RegisterPage> {
               child: const Text("Submit"),
               onPressed: () async {
                 try {
-                  final UserCredential credential = await FirebaseAuth.instance
-                      .createUserWithEmailAndPassword(
+                  await FirebaseAuth.instance.createUserWithEmailAndPassword(
                     email: email.text,
                     password: password.text,
                   );
@@ -50,12 +49,17 @@ class _RegisterPage extends State<RegisterPage> {
                       navKey.currentContext!, "/dashboard");
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'weak-password') {
-                    print('The password provided is too weak.');
+                    //TODO: Inform user that there password is too weak
+                    debugPrint('The password provided is too weak.');
                   } else if (e.code == 'email-already-in-use') {
-                    print('The account already exists for that email.');
+                    //TODO: Inform user that the email is already in use
+                    debugPrint('The account already exists for that email.');
+                  } else {
+                    //TODO: research into the different error codes that can come back from firebase
+                    debugPrint(e.code);
                   }
                 } catch (e) {
-                  print(e);
+                  debugPrint(e.toString());
                 }
               })
         ],

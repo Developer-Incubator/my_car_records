@@ -5,7 +5,7 @@ final GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 final GlobalKey<IOSHomePageState> iosHomeKey = GlobalKey<IOSHomePageState>();
 final GlobalKey<IOSHomePageState> iosVehicleViewKey =
     GlobalKey<IOSHomePageState>();
-final String homePageTitle = "My Car Records";
+const String homePageTitle = "My Car Records";
 
 class MyColorScheme {
   static Color blueGrey = Colors.blueGrey;

@@ -1,7 +1,6 @@
 import 'package:flutter/widgets.dart';
 import 'package:my_car_records/views/repair/repair_info.dart';
-import 'package:my_car_records/model/repair.dart';
-import 'package:my_car_records/views/car_details.dart';
+import 'package:my_car_records/views/vehicle/vehicle_details.dart';
 import 'package:my_car_records/views/home/home_screen.dart';
 import 'package:my_car_records/views/login/login.dart';
 import 'package:my_car_records/views/profile.dart';
@@ -25,7 +24,7 @@ Map<String, Widget Function(BuildContext)> routes = {
   },
   "/repairDetails": (context) {
     final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, Repair>;
-    return RepairInfo(repair: args["repair"]!);
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    return RepairInfo(vehicleID: args["vehicleID"], repair: args["repair"]!);
   }
 };

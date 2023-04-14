@@ -1,9 +1,7 @@
 import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_car_records/controllers/part/part_form.dart';
 import 'package:my_car_records/model/repair.dart';
+import 'package:my_car_records/views/repair/utils/ios_repair_info.dart';
 
 /// displays all the information about a single Repair including parts
 ///
@@ -13,11 +11,10 @@ import 'package:my_car_records/model/repair.dart';
 ///
 // ignore: must_be_immutable
 class RepairInfo extends StatefulWidget {
-  // ignore: prefer_typing_uninitialized_variables
+  const RepairInfo({Key? key, required this.vehicleID, required this.repair})
+      : super(key: key);
+  final String vehicleID;
   final Repair repair;
-
-  const RepairInfo({Key? key, required this.repair}) : super(key: key);
-
   @override
   State<RepairInfo> createState() => _RepairInfoState();
 }
@@ -41,39 +38,18 @@ class _RepairInfoState extends State<RepairInfo> {
     }
 
     return Platform.isIOS
-        ? CupertinoPageScaffold(
-            navigationBar: CupertinoNavigationBar(
-              middle: Text(
-                "Repair Info",
-                style: const TextStyle(color: CupertinoColors.white),
-              ),
-              trailing: CupertinoButton(
-                padding: EdgeInsets.zero,
-                child: const Icon(
-                  CupertinoIcons.add,
-                  color: CupertinoColors.white,
-                ),
-                onPressed: () => showCupertinoDialog(
-                    context: context,
-                    builder: (context) {
-                      //PartForm
-                      return CupertinoPopupSurface(
-                          child: PartForm(
-                              repairId: widget.repair.id!, refresh: refresh));
-                    }),
-              ),
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [Text(widget.repair.vehicleID)],
-            ))
+        ? IOSRepairInfo(
+            vehicleID: widget.vehicleID,
+            repair: widget.repair,
+            refresh: refresh,
+          )
         : Column(
             children: [
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                 child: Row(
-                  children: [
-                    const Text(
+                  children: const [
+                    Text(
                       "ID: ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -84,8 +60,8 @@ class _RepairInfoState extends State<RepairInfo> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                 child: Row(
-                  children: [
-                    const Text(
+                  children: const [
+                    Text(
                       "hours: ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -93,7 +69,7 @@ class _RepairInfoState extends State<RepairInfo> {
                     //   padding: const EdgeInsets.only(right: 8),
                     //   child: Text(repairInfo['hours'].toString()),
                     // ),
-                    const Text(
+                    Text(
                       "Odometer: ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -101,7 +77,7 @@ class _RepairInfoState extends State<RepairInfo> {
                     //   padding: const EdgeInsets.only(right: 8.0),
                     //   child: Text(repairInfo['odometer']),
                     // ),
-                    const Text(
+                    Text(
                       "Technition: ",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
@@ -150,47 +126,47 @@ class _RepairInfoState extends State<RepairInfo> {
                   ],
                 ),
               ),
-              Expanded(
-                child: FutureBuilder(
-                  // future: parts,
-                  builder:
-                      (BuildContext context, AsyncSnapshot<List> snapshot) {
-                    List<Widget> children;
-                    if (snapshot.hasData) {
-                      // children = showAllParts(snapshot, context, refresh,
-                      //     widget.vin, repairInfo['id']);
-                    } else if (snapshot.hasError) {
-                      children = [];
-                      debugPrint("Error populating repairs");
-                    } else {
-                      children = const <Widget>[
-                        SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: CircularProgressIndicator(),
-                        ),
-                      ];
-                    }
-                    return RefreshIndicator(
-                      onRefresh: () {
-                        return Future.delayed(Duration.zero);
-                        // swipeRefresh();
-                      },
-                      child: ListView(
-                          // children: children,
-                          ),
-                    );
-                  },
-                ),
-              ),
+              // Expanded(
+              //   child: FutureBuilder(
+              //     // future: parts,
+              //     builder:
+              //         (BuildContext context, AsyncSnapshot<List> snapshot) {
+              //       // List<Widget> children;
+              //       if (snapshot.hasData) {
+              //         // children = showAllParts(snapshot, context, refresh,
+              //         //     widget.vin, repairInfo['id']);
+              //       } else if (snapshot.hasError) {
+              //         children = [];
+              //         debugPrint("Error populating repairs");
+              //       } else {
+              //         children = const <Widget>[
+              //           SizedBox(
+              //             width: 60,
+              //             height: 60,
+              //             child: CircularProgressIndicator(),
+              //           ),
+              //         ];
+              //       }
+              //       return RefreshIndicator(
+              //         onRefresh: () {
+              //           return Future.delayed(Duration.zero);
+              //           // swipeRefresh();
+              //         },
+              //         child: ListView(
+              //             // children: children,
+              //             ),
+              //       );
+              //     },
+              //   ),
+              // ),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: Row(
                   children: [
                     const Spacer(),
                     Column(
-                      children: [
-                        const Text("Cost:"),
+                      children: const [
+                        Text("Cost:"),
                         // Text("Parts: \$${widget.repair.getRepairTotal()}"),
                         // Text(
                         //     "Labor: \$${widget.repair.labor.toStringAsFixed(2)}"),

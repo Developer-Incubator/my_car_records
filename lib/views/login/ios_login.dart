@@ -34,24 +34,28 @@ class IOSLogin extends StatelessWidget {
               child: const Text("Submit"),
               onPressed: () async {
                 try {
-                  final UserCredential credential = await FirebaseAuth.instance
-                      .signInWithEmailAndPassword(
-                          email: email.text, password: password.text);
+                  await FirebaseAuth.instance.signInWithEmailAndPassword(
+                      email: email.text, password: password.text);
                   Navigator.pushReplacementNamed(
                       navKey.currentContext!, "/dashboard");
                 } on FirebaseAuthException catch (e) {
                   if (e.code == 'user-not-found') {
-                    print('No user found for that email.');
+                    //TODO: impliment system for when no user is found in DB
+                    debugPrint('No user found for that email.');
                   } else if (e.code == 'wrong-password') {
-                    print('Wrong password provided for that user.');
+                    //TODO: impliment system for when user enters the wrong password
+                    debugPrint('Wrong password provided for that user.');
+                  } else {
+                    //TODO: research into the different error codes that can come back from firebase
+                    debugPrint(e.code);
                   }
                 }
               }),
           CupertinoButton(
-              child: Text("Sign in with Google"),
               onPressed: (() {
                 signInWithGoogle();
-              })),
+              }),
+              child: const Text("Sign in with Google")),
           signInWithAppleButton,
           CupertinoButton(
               child: const Text("Register"),

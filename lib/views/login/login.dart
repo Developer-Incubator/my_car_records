@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/controllers/signin.dart';
 import 'package:my_car_records/views/login/ios_login.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
@@ -19,11 +18,8 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-        print('User is currently signed out!');
-      } else {
+      if (user != null) {
         Navigator.pushReplacementNamed(context, "/dashboard");
-        print('User is signed in!');
       }
     });
   }
@@ -39,8 +35,7 @@ class _LoginPageState extends State<LoginPage> {
     onPressed: () async {
       try {
         // if();
-        UserCredential? user = await signInWithApple();
-        print(user);
+        await signInWithApple();
       } catch (e) {
         debugPrint(e.toString());
       }

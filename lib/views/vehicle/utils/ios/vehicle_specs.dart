@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_car_records/model/car.dart';
+import 'package:my_car_records/model/vehicle.dart';
 import 'package:my_car_records/views/utls/info_item.dart';
 
 class VehicleSpecs extends StatelessWidget {

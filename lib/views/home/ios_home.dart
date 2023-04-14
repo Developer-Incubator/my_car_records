@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_car_records/constance/constance.dart';
-import 'package:my_car_records/controllers/car/car_forms/car_form.dart';
+import 'package:my_car_records/views/vehicle/car_forms/car_form.dart';
 import 'package:my_car_records/model/db/car.dart';
 
 class IOSHomePage extends StatefulWidget {
@@ -21,9 +21,9 @@ class IOSHomePageState extends State<IOSHomePage> {
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
       navigationBar: CupertinoNavigationBar(
-        middle: Text(
+        middle: const Text(
           homePageTitle,
-          style: const TextStyle(color: CupertinoColors.white),
+          style: TextStyle(color: CupertinoColors.white),
         ),
         leading: CupertinoButton(
           padding: EdgeInsets.zero,
@@ -57,6 +57,7 @@ class IOSHomePageState extends State<IOSHomePage> {
 
             if (snapshot.hasData) {
               return CupertinoListSection.insetGrouped(
+                header: const Text("Vehicle List"),
                 children: [
                   ...List.generate(snapshot.data!.docs.length, (index) {
                     QueryDocumentSnapshot car = snapshot.data!.docs[index];

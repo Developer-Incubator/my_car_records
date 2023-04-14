@@ -2,9 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:my_car_records/constance/constance.dart';
-import 'package:my_car_records/controllers/car/car_info.dart';
-import 'package:my_car_records/model/car.dart';
-import 'package:my_car_records/views/car_details/ios_car_details.dart';
+import 'package:my_car_records/views/vehicle/utils/ios/ios_car_details.dart';
 
 class CarDetailsPage extends StatefulWidget {
   final String carId;

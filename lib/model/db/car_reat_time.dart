@@ -1,7 +1,7 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 // import 'package:my_car_records/controllers/my_extensions.dart';
-import 'package:my_car_records/model/car.dart';
+import 'package:my_car_records/model/vehicle.dart';
 
 // Create
 /// add a car to the database
@@ -30,14 +30,12 @@ Future<List> getCars() async {
   final List<Vehicle> testArr = [];
 
   if (cars.exists) {
-    for (DataSnapshot element in cars.children) {
-      String vin = element.key.toString();
-      int year = int.parse(element.child("year").value.toString());
-      String make = element.child("make").value.toString();
-      String model = element.child("model").value.toString();
-      String owner = element.child("owner").value.toString();
-      // testArr.add(Car(vin, year, make, model, owner));
-    }
+    // for (DataSnapshot element in cars.children) {
+    // String make = element.child("make").value.toString();
+    // String model = element.child("model").value.toString();
+    // String owner = element.child("owner").value.toString();
+    // testArr.add(Car(vin, year, make, model, owner));
+    // }
   } else {
     debugPrint("No Cars");
   }

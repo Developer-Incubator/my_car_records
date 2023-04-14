@@ -1,36 +1,40 @@
 import 'package:flutter/cupertino.dart';
 import 'package:my_car_records/constance/constance.dart';
-import 'package:my_car_records/model/db/repair.dart';
-import 'package:my_car_records/model/repair.dart';
+import 'package:my_car_records/model/db/car.dart';
+import 'package:my_car_records/model/vehicle.dart';
+import 'package:my_car_records/model/vin_decoder.dart';
 
-class IOSRepairForm extends StatelessWidget {
-  const IOSRepairForm(
+class IOSCarForm extends StatefulWidget {
+  const IOSCarForm(
       {super.key,
-      this.vin,
-      required this.vehicleID,
-      required this.refresh,
       required this.formKey,
-      required this.hoursController,
-      required this.laborController,
+      required this.vinController,
+      required this.makeController,
+      required this.modelController,
+      required this.yearController,
+      required this.ownerController,
       required this.odometerController,
-      required this.techController,
-      required this.workRequestedController});
-  final String? vin;
-  final String vehicleID;
+      required this.refresh});
+  final GlobalKey<FormState> formKey;
+  final TextEditingController vinController;
+  final TextEditingController makeController;
+  final TextEditingController modelController;
+  final TextEditingController yearController;
+  final TextEditingController ownerController;
+  final TextEditingController odometerController;
   final Function refresh;
 
-  final GlobalKey<FormState> formKey;
-  final TextEditingController hoursController;
-  final TextEditingController laborController;
-  final TextEditingController odometerController;
-  final TextEditingController techController;
-  final TextEditingController workRequestedController;
+  @override
+  State<IOSCarForm> createState() => _IOSCarFormState();
+}
 
+class _IOSCarFormState extends State<IOSCarForm> {
+  Vehicle? vehicle;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Form(
-        key: formKey,
+        key: widget.formKey,
         // header: const Text("Add a Vehicle"),
         child: Stack(
           children: <Widget>[
@@ -45,14 +49,14 @@ class IOSRepairForm extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.only(bottom: 20.0),
                       child: Text(
-                        "Add a Repair",
+                        "Add a Vehicle",
                         textAlign: TextAlign.center,
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 18),
                       ),
                     ),
                     Text(
-                        "Add a repair for this vehicle to keep track of everything related to this vehicle")
+                        "Choose to add a vehicle either by: Searching for the VIN to get your vehicles information or enter it in manualy")
                   ],
                 ),
               ),
@@ -68,11 +72,49 @@ class IOSRepairForm extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: CupertinoTextField(
-                        controller: workRequestedController,
+                        controller: widget.vinController,
+                        prefix: const Padding(
+                          padding: EdgeInsets.only(left: 8.0),
+                          child: Text("Vin:"),
+                        ),
+                        suffix: CupertinoButton(
+                          child: const Text("Search"),
+                          onPressed: () async {
+                            try {
+                              vehicle = await VinDecoder()
+                                  .decodeVin(widget.vinController.text);
+
+                              if (vehicle != null) {
+                                setState(() {
+                                  widget.makeController.text =
+                                      vehicle?.make ?? "N/A";
+                                  widget.modelController.text =
+                                      vehicle?.model ?? "N/A";
+                                  widget.yearController.text =
+                                      vehicle?.modelYear.toString() ?? "N/A";
+                                });
+                              }
+                            } catch (e) {
+                              debugPrint(e.toString());
+                            }
+
+                            // Navigator.pop(context);
+                          },
+                        ),
+                        decoration: BoxDecoration(
+                            border: Border.all(color: MyColorScheme.blueGrey),
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10))),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8.0),
+                      child: CupertinoTextField(
+                        controller: widget.makeController,
                         prefix: const Padding(
                           padding:
                               EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
-                          child: Text("Work Requested:"),
+                          child: Text("Make:"),
                         ),
                         decoration: BoxDecoration(
                           border: Border.all(color: MyColorScheme.blueGrey),
@@ -85,11 +127,11 @@ class IOSRepairForm extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: CupertinoTextField(
-                        controller: hoursController,
+                        controller: widget.modelController,
                         prefix: const Padding(
                           padding:
                               EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
-                          child: Text("Hours:"),
+                          child: Text("Model:"),
                         ),
                         decoration: BoxDecoration(
                           border: Border.all(color: MyColorScheme.blueGrey),
@@ -102,45 +144,11 @@ class IOSRepairForm extends StatelessWidget {
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 8.0),
                       child: CupertinoTextField(
-                        controller: laborController,
+                        controller: widget.yearController,
                         prefix: const Padding(
                           padding:
                               EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
-                          child: Text("Labor:"),
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: MyColorScheme.blueGrey),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: CupertinoTextField(
-                        controller: odometerController,
-                        prefix: const Padding(
-                          padding:
-                              EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
-                          child: Text("Odometer:"),
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(color: MyColorScheme.blueGrey),
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(10),
-                          ),
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: CupertinoTextField(
-                        controller: techController,
-                        prefix: const Padding(
-                          padding:
-                              EdgeInsets.only(left: 8.0, top: 14, bottom: 14),
-                          child: Text("Technition:"),
+                          child: Text("Year:"),
                         ),
                         decoration: BoxDecoration(
                           border: Border.all(color: MyColorScheme.blueGrey),
@@ -169,15 +177,14 @@ class IOSRepairForm extends StatelessWidget {
                     color: CupertinoColors.activeGreen,
                     child: const Text("Submit"),
                     onPressed: () {
-                      Repair newRepair = Repair(
-                          vehicleID: vehicleID,
-                          hours: double.parse(hoursController.text),
-                          labor: double.parse(laborController.text),
-                          odometer: int.parse(odometerController.text),
-                          workRequested: workRequestedController.text);
-                      RepairDB().add(newRepair);
+                      vehicle ??= Vehicle(
+                          make: widget.makeController.text,
+                          model: widget.modelController.text,
+                          modelYear: int.parse(widget.yearController.text));
+
+                      CarDB().add(vehicle);
                       Navigator.pop(context);
-                      refresh();
+                      widget.refresh();
                     },
                   )
                 ],

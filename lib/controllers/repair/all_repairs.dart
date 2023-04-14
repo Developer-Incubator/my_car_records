@@ -5,8 +5,6 @@ import 'package:my_car_records/controllers/repair/update_repair_form.dart';
 import 'package:my_car_records/model/db/car_reat_time.dart';
 import 'package:my_car_records/model/repair.dart';
 
-import 'package:my_car_records/views/repair_details.dart';
-
 /// Creates a list of card widgets to populate the repairs list
 ///
 /// [vin] vehicle id that is getting the repair.
