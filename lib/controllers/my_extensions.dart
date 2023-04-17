@@ -1,4 +1,5 @@
 String capitalize(String str) {
+  str.toLowerCase();
   return "${str[0].toUpperCase()}${str.substring(1).toLowerCase()}";
 }
 

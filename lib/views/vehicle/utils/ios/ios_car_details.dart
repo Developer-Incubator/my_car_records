@@ -1,0 +1,463 @@
+import 'dart:typed_data';
+
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:my_car_records/constance/constance.dart';
+import 'package:my_car_records/controllers/my_extensions.dart';
+import 'package:my_car_records/main.dart';
+import 'package:my_car_records/model/db/repair.dart';
+import 'package:my_car_records/model/repair.dart';
+
+import 'package:my_car_records/views/vehicle/utils/ios/ios_vehicle_specs.dart';
+import 'package:my_car_records/views/repair/repair_form/repair_form_shell.dart';
+import 'package:my_car_records/model/db/car.dart';
+import 'package:my_car_records/views/utls/camera.dart';
+import 'package:pull_down_button/pull_down_button.dart';
+import 'package:carousel_slider/carousel_slider.dart';
+
+class IOSCarDetails extends StatefulWidget {
+  const IOSCarDetails(
+      {super.key,
+      required this.vehicleID,
+      required this.make,
+      required this.model,
+      required this.year,
+      this.vin});
+  final String vehicleID;
+  final String make;
+  final String model;
+  final String year;
+  final String? vin;
+
+  @override
+  State<IOSCarDetails> createState() => IOSCarDetailsState();
+}
+
+class IOSCarDetailsState extends State<IOSCarDetails> {
+  final User? user = FirebaseAuth.instance.currentUser;
+
+  final Reference storageRef = FirebaseStorage.instance.ref();
+
+  refresh() {
+    setState(() {});
+  }
+
+  void _showDeleteCarDialog(BuildContext context) {
+    showCupertinoModalPopup<void>(
+      context: context,
+      builder: (BuildContext context) => CupertinoAlertDialog(
+        title: const Text('Delete Vehicle'),
+        content:
+            const Text('Are you sure you would like to delete this vehicle'),
+        actions: <CupertinoDialogAction>[
+          CupertinoDialogAction(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'),
+          ),
+          CupertinoDialogAction(
+            /// This parameter indicates the action would perform
+            /// a destructive action such as deletion, and turns
+            /// the action's text color to red.
+            isDestructiveAction: true,
+            onPressed: () {
+              CarDB().delete(widget.vehicleID);
+
+              Navigator.popUntil(context, ModalRoute.withName("/dashboard"));
+              iosHomeKey.currentState!.setState(() {});
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showAddRepairPopUp() {
+    showCupertinoDialog(
+        context: context,
+        builder: (context) {
+          return CupertinoPopupSurface(
+              child: RepairForm(
+            refresh: refresh,
+            vehicleID: widget.vehicleID,
+            vin: widget.vin,
+          ));
+        });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    // double screenHeight = MediaQuery.of(context).size.height;
+
+    Reference? noImagesRef = storageRef.child("General/noImageCar.jpeg");
+    Reference? imagesRef = storageRef.child("${user!.uid}/${widget.vehicleID}");
+
+    return CupertinoPageScaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      navigationBar: CupertinoNavigationBar(
+          middle: Text(
+            "${widget.year} ${capitalize(widget.make)} ${widget.model}",
+            style: const TextStyle(color: CupertinoColors.white),
+          ),
+          trailing: PullDownButton(
+            itemBuilder: (context) => [
+              PullDownMenuItem(
+                title: 'Add Repair',
+                icon: CupertinoIcons.add,
+                onTap: () {
+                  _showAddRepairPopUp();
+                },
+              ),
+              PullDownMenuItem(
+                title: 'Edit Vehicle',
+                icon: CupertinoIcons.pencil,
+                onTap: () {
+                  //TODO: add a way to edit the vehicle information
+                  debugPrint("To Edit Vehicle Info");
+                },
+              ),
+              const PullDownMenuDivider.large(),
+              PullDownMenuItem(
+                title: 'Delete Vehicle',
+                icon: CupertinoIcons.trash,
+                isDestructive: true,
+                onTap: () {
+                  _showDeleteCarDialog(context);
+                },
+              ),
+            ],
+            position: PullDownMenuPosition.automatic,
+            buttonBuilder: (context, showMenu) => CupertinoButton(
+              onPressed: showMenu,
+              padding: EdgeInsets.zero,
+              child: const Icon(
+                CupertinoIcons.ellipsis,
+                color: CupertinoColors.white,
+              ),
+            ),
+          )),
+      child: SingleChildScrollView(
+        child: FutureBuilder(
+            future: Future.wait([
+              RepairDB().get(vehicleID: widget.vehicleID),
+              noImagesRef.getData(),
+              imagesRef.listAll()
+            ]),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.hasError) {
+                return const Text("Could not retrieve vehicle repairs");
+              }
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CupertinoActivityIndicator());
+              }
+              Uint8List noImageImageUint8List = snapshot.data[1];
+              ListResult imageListResults = snapshot.data[2];
+              List<Future<Uint8List?>> imageList = [];
+              for (var element in imageListResults.items) {
+                imageList.add(element.getData());
+              }
+
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 14.0),
+                    child: Row(
+                      children: [
+                        FutureBuilder(
+                            future: Future.wait(imageList),
+                            builder: (context,
+                                AsyncSnapshot<List<Uint8List?>> snapshot) {
+                              if (snapshot.hasError) {
+                                return Image.memory(
+                                  noImageImageUint8List,
+                                  width: screenWidth * .55,
+                                );
+                              }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CupertinoActivityIndicator(),
+                                );
+                              }
+                              List<Uint8List?> data = snapshot.data!;
+                              return Container(
+                                padding:
+                                    const EdgeInsets.only(right: 8, left: 8),
+
+                                width: screenWidth * .5,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(30)),
+                                child: data.isNotEmpty
+                                    ? CarouselSlider.builder(
+                                        itemCount: data.length,
+                                        options: CarouselOptions(
+                                          autoPlay:
+                                              data.length > 1 ? true : false,
+                                          autoPlayInterval:
+                                              const Duration(seconds: 5),
+                                          autoPlayAnimationDuration:
+                                              const Duration(milliseconds: 800),
+                                          autoPlayCurve: Curves.fastOutSlowIn,
+                                          enlargeCenterPage: true,
+                                          enlargeFactor: 0.3,
+                                          scrollDirection: Axis.horizontal,
+                                        ),
+                                        itemBuilder: (BuildContext context,
+                                            int itemIndex, int pageViewIndex) {
+                                          return CupertinoContextMenu(
+                                            actions: <Widget>[
+                                              CupertinoContextMenuAction(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                isDefaultAction: true,
+                                                trailingIcon: CupertinoIcons
+                                                    .doc_on_clipboard_fill,
+                                                child: const Text('Copy'),
+                                              ),
+                                              CupertinoContextMenuAction(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                trailingIcon:
+                                                    CupertinoIcons.share,
+                                                child: const Text('Share'),
+                                              ),
+                                              CupertinoContextMenuAction(
+                                                onPressed: () {
+                                                  Navigator.pop(context);
+                                                },
+                                                trailingIcon:
+                                                    CupertinoIcons.heart,
+                                                child: const Text('Favorite'),
+                                              ),
+                                              CupertinoContextMenuAction(
+                                                onPressed: () {
+                                                  imageListResults
+                                                      .items[itemIndex]
+                                                      .delete()
+                                                      .then(
+                                                          (value) => refresh());
+                                                  // refresh();
+                                                  Navigator.pop(context);
+                                                },
+                                                isDestructiveAction: true,
+                                                trailingIcon:
+                                                    CupertinoIcons.delete,
+                                                child: const Text('Delete'),
+                                              ),
+                                            ],
+                                            child: Image.memory(
+                                              data[itemIndex]!,
+                                              fit: BoxFit.fitWidth,
+                                            ),
+                                          );
+                                        })
+                                    : Image.memory(
+                                        noImageImageUint8List,
+                                        width: screenWidth * .5,
+                                      ),
+                                // Image(
+                                //     width: screenWidth * .5, image:
+                                // const NetworkImage(
+                                //     'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRFcWLa3OBZA7nASekS1HqjnoQ9TaagdrmNjHkN9e0lceyBCHcLwBGShj4B7dqcJUZy_uc&usqp=CAU'),
+                              );
+                            }),
+                        Column(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Vin ',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blueGrey),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: widget.vin,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal))
+                                    ],
+                                  ),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Make ',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blueGrey),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: widget.make,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal))
+                                    ],
+                                  ),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Model ',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blueGrey),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: widget.model,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal))
+                                    ],
+                                  ),
+                                ),
+                                RichText(
+                                  text: TextSpan(
+                                    text: 'Year ',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.blueGrey),
+                                    children: <TextSpan>[
+                                      TextSpan(
+                                          text: widget.year,
+                                          style: const TextStyle(
+                                              fontWeight: FontWeight.normal))
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 4.0),
+                              child: SizedBox(
+                                width: screenWidth * .37,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    PullDownButton(
+                                      itemBuilder: (context) => [
+                                        PullDownMenuItem(
+                                          title: 'Take Photo',
+                                          icon: Icons.camera_alt_outlined,
+                                          onTap: () {
+                                            Navigator.push(
+                                              context,
+                                              CupertinoPageRoute(
+                                                builder: (context) {
+                                                  return Camera(
+                                                    camera: cameras[0],
+                                                    vehicleID: widget.vehicleID,
+                                                    refresh: refresh,
+                                                  );
+                                                },
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                        PullDownMenuItem(
+                                          title: 'Import Image',
+                                          icon: CupertinoIcons
+                                              .plus_rectangle_on_rectangle,
+                                          onTap: () {
+                                            //TODO: impliment users camera roll
+                                            debugPrint("To Users Camera Roll");
+                                          },
+                                        ),
+                                        const PullDownMenuDivider.large(),
+                                        PullDownMenuItem(
+                                          title: 'Gallery',
+                                          icon:
+                                              CupertinoIcons.photo_on_rectangle,
+                                          onTap: () {
+                                            //TODO: Create a photo galley for users to see all and edit photos
+                                            debugPrint("To Image Gallery");
+                                          },
+                                        ),
+                                      ],
+                                      position: PullDownMenuPosition.automatic,
+                                      buttonBuilder: (context, showMenu) =>
+                                          SizedBox(
+                                        height: 40,
+                                        width: 40,
+                                        child: CupertinoButton(
+                                          onPressed: showMenu,
+                                          color: Colors.blueGrey,
+                                          padding: EdgeInsets.zero,
+                                          child: const Icon(
+                                            CupertinoIcons.photo_on_rectangle,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: 40,
+                                      width: 60,
+                                      child: CupertinoButton(
+                                          padding: EdgeInsets.zero,
+                                          color: Colors.blueGrey,
+                                          child: const Text("Specs"),
+                                          onPressed: () =>
+                                              Navigator.of(context).push(
+                                                CupertinoPageRoute(
+                                                  builder: (_) =>
+                                                      IOSVehicleSpecs(
+                                                    vin: widget.vin,
+                                                  ),
+                                                ),
+                                              )),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 12.0),
+                    child: SafeArea(
+                      child: CupertinoListSection.insetGrouped(
+                        header: const Text(
+                          "Repair List",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        children: [
+                          ...List.generate(snapshot.data[0]!.docs.length,
+                              (index) {
+                            Repair repair = Repair.fromJson(
+                                snapshot.data[0]!.docs[index].data()
+                                    as Map<String, dynamic>,
+                                snapshot.data[0]!.docs[index].id,
+                                widget.vehicleID);
+
+                            return CupertinoListTile(
+                              title: Text(repair.workRequested),
+                              trailing: const CupertinoListTileChevron(),
+                              onTap: () {
+                                Navigator.pushNamed(context, "/repairDetails",
+                                    arguments: {
+                                      "vehicleID": widget.vehicleID,
+                                      "repair": repair
+                                    });
+                              },
+                            );
+                          })
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            }),
+      ),
+    );
+  }
+}
