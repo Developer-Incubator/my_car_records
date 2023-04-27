@@ -1,15 +1,21 @@
+import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_car_records/constance/constance.dart';
+import 'package:my_car_records/model/vehicle.dart';
 import 'package:my_car_records/views/vehicle/car_forms/car_form.dart';
 import 'package:my_car_records/model/db/car.dart';
 
 class IOSHomePage extends StatefulWidget {
   const IOSHomePage({
     super.key,
+    required this.user,
+    required this.firestore,
     required this.refresh,
   });
-
+  final User user;
+  final FirebaseFirestore firestore;
   final Function refresh;
 
   @override
@@ -17,6 +23,8 @@ class IOSHomePage extends StatefulWidget {
 }
 
 class IOSHomePageState extends State<IOSHomePage> {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
   @override
   Widget build(BuildContext context) {
     return CupertinoPageScaffold(
@@ -43,13 +51,17 @@ class IOSHomePageState extends State<IOSHomePage> {
                 context: context,
                 builder: (context) {
                   return CupertinoPopupSurface(
-                      child: CarForm(refresh: widget.refresh));
+                      child: CarForm(
+                          user: widget.user,
+                          firestore: widget.firestore,
+                          refresh: widget.refresh));
                 })),
       ),
-      child: FutureBuilder<QuerySnapshot>(
-          future: CarDB().get(),
-          builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      child: FutureBuilder<List<Vehicle>>(
+          future: CarDB(firestore: firestore, user: widget.user).get(),
+          builder: (context, AsyncSnapshot<List<Vehicle>> snapshot) {
             if (snapshot.hasError) {
+              log(snapshot.error.toString());
               return const Center(
                 child: Text("Could not get cars"),
               );
@@ -59,21 +71,19 @@ class IOSHomePageState extends State<IOSHomePage> {
               return CupertinoListSection.insetGrouped(
                 header: const Text("Vehicle List"),
                 children: [
-                  ...List.generate(snapshot.data!.docs.length, (index) {
-                    QueryDocumentSnapshot car = snapshot.data!.docs[index];
+                  ...List.generate(snapshot.data!.length, (index) {
+                    Vehicle vehicle = snapshot.data![index];
 
                     return CupertinoListTile(
-                      title:
-                          Text("${car["year"]} ${car["make"]} ${car["model"]}"),
-                      subtitle: car["vin"] != null ? Text(car["vin"]) : null,
+                      title: Text(
+                          "${vehicle.modelYear} ${vehicle.make} ${vehicle.model}"),
+                      subtitle: vehicle.vin != null ? Text(vehicle.vin!) : null,
                       trailing: const CupertinoListTileChevron(),
                       onTap: () => Navigator.pushNamed(context, "/carDetails",
                           arguments: {
-                            "carId": car.id,
-                            "make": car["make"].toString(),
-                            "model": car["model"].toString(),
-                            "year": car["year"].toString(),
-                            "vin": car["vin"].toString()
+                            "vehicle": vehicle,
+                            "user": widget.user,
+                            "firestore": widget.firestore,
                           }),
                     );
                   })

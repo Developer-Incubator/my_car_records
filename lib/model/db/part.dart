@@ -27,7 +27,7 @@ class PartDB {
         .catchError((error) => debugPrint("Failed to add part: $error"));
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>>? get({
+  Future<List<Part>> get({
     String? vehicleID,
     String? repairID,
   }) async {
@@ -37,6 +37,19 @@ class PartDB {
         .collection("repairs")
         .doc(repairID)
         .collection("parts")
-        .get();
+        .get()
+        .then((value) {
+      List<Part> partsList = [];
+      for (var element in value.docs) {
+        Map<String, dynamic> partInfo = element.data();
+        Part newPart = Part(
+            id: element.id,
+            name: partInfo["name"],
+            quantity: partInfo["quantity"],
+            unitPrice: partInfo["unit_price"]);
+        partsList.add(newPart);
+      }
+      return partsList;
+    });
   }
 }

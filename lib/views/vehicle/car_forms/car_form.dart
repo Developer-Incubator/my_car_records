@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_car_records/model/vehicle.dart';
 import 'package:my_car_records/views/vehicle/car_forms/ios_form.dart';
@@ -8,9 +10,15 @@ import 'package:my_car_records/model/db/car_reat_time.dart';
 /// form to input car information to save records about the car
 // need to check vin for length as well as make a drop down with all the dent manufacturers and all of there products
 class CarForm extends StatefulWidget {
-  const CarForm({Key? key, required this.refresh}) : super(key: key);
+  const CarForm(
+      {Key? key,
+      required this.user,
+      required this.firestore,
+      required this.refresh})
+      : super(key: key);
+  final User user;
+  final FirebaseFirestore firestore;
   final Function refresh;
-
   @override
   State<CarForm> createState() => _CarFormState();
 }
@@ -23,6 +31,7 @@ class _CarFormState extends State<CarForm> {
   final yearController = TextEditingController();
   final ownerController = TextEditingController();
   final odometerController = TextEditingController();
+
   Vehicle? vehicle;
 
   @override
@@ -42,6 +51,8 @@ class _CarFormState extends State<CarForm> {
   Widget build(BuildContext context) {
     return Platform.isIOS
         ? IOSCarForm(
+            user: widget.user,
+            firestore: widget.firestore,
             formKey: formKey,
             vinController: vinController,
             makeController: makeController,
@@ -145,7 +156,9 @@ class _CarFormState extends State<CarForm> {
                                 int.parse(yearController.text),
                                 makeController.text,
                                 modelController.text,
-                                ownerController.text);
+                                ownerController.text.isNotEmpty
+                                    ? ownerController.text
+                                    : "N/A");
 
                             widget.refresh();
 

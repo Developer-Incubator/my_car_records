@@ -13,13 +13,11 @@ Map<String, Widget Function(BuildContext)> routes = {
   "/dashboard": (context) => const MyHomePage(),
   "/carDetails": (context) {
     final args =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+        ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return CarDetailsPage(
-      carId: args["carId"]!,
-      make: args["make"]!,
-      model: args["model"]!,
-      year: args["year"]!,
-      vin: args["vin"]!,
+      vehicle: args["vehicle"]!,
+      user: args["user"],
+      firestore: args["firestore"],
     );
   },
   "/repairDetails": (context) {

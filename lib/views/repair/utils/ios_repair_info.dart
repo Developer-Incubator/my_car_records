@@ -75,7 +75,6 @@ class _IOSRepairInfoState extends State<IOSRepairInfo> {
               imagesRef.listAll(),
             ]),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
-              widget.repair.getParts();
               if (snapshot.hasError) {
                 return Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -147,13 +146,9 @@ class _IOSRepairInfoState extends State<IOSRepairInfo> {
                                 ),
                               ),
                               children: [
-                                ...List.generate(
-                                    snapshot.data?[0].docs.length ?? 0,
+                                ...List.generate(snapshot.data?[0].length ?? 0,
                                     (index) {
-                                  Part part = Part.fromJson(
-                                      snapshot.data![0].docs[index].data()
-                                          as Map<String, dynamic>,
-                                      snapshot.data![0].docs[index].id);
+                                  Part part = snapshot.data?[0][index];
 
                                   return CupertinoListTile(
                                     title: Text(part.name),

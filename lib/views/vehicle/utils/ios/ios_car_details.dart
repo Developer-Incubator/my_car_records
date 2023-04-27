@@ -1,15 +1,13 @@
 import 'dart:typed_data';
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/controllers/my_extensions.dart';
-import 'package:my_car_records/main.dart';
-import 'package:my_car_records/model/db/repair.dart';
 import 'package:my_car_records/model/repair.dart';
-
+import 'package:my_car_records/model/vehicle.dart';
 import 'package:my_car_records/views/vehicle/utils/ios/ios_vehicle_specs.dart';
 import 'package:my_car_records/views/repair/repair_form/repair_form_shell.dart';
 import 'package:my_car_records/model/db/car.dart';
@@ -20,16 +18,12 @@ import 'package:carousel_slider/carousel_slider.dart';
 class IOSCarDetails extends StatefulWidget {
   const IOSCarDetails(
       {super.key,
-      required this.vehicleID,
-      required this.make,
-      required this.model,
-      required this.year,
-      this.vin});
-  final String vehicleID;
-  final String make;
-  final String model;
-  final String year;
-  final String? vin;
+      required this.user,
+      required this.firestore,
+      required this.vehicle});
+  final FirebaseFirestore firestore;
+  final User user;
+  final Vehicle vehicle;
 
   @override
   State<IOSCarDetails> createState() => IOSCarDetailsState();
@@ -64,7 +58,8 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
             /// the action's text color to red.
             isDestructiveAction: true,
             onPressed: () {
-              CarDB().delete(widget.vehicleID);
+              CarDB(user: widget.user, firestore: widget.firestore)
+                  .delete(widget.vehicle.id!);
 
               Navigator.popUntil(context, ModalRoute.withName("/dashboard"));
               iosHomeKey.currentState!.setState(() {});
@@ -83,8 +78,8 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
           return CupertinoPopupSurface(
               child: RepairForm(
             refresh: refresh,
-            vehicleID: widget.vehicleID,
-            vin: widget.vin,
+            vehicleID: widget.vehicle.id!,
+            vin: widget.vehicle.vin,
           ));
         });
   }
@@ -95,13 +90,14 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
     // double screenHeight = MediaQuery.of(context).size.height;
 
     Reference? noImagesRef = storageRef.child("General/noImageCar.jpeg");
-    Reference? imagesRef = storageRef.child("${user!.uid}/${widget.vehicleID}");
+    Reference? imagesRef =
+        storageRef.child("${user!.uid}/${widget.vehicle.id}");
 
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
       navigationBar: CupertinoNavigationBar(
           middle: Text(
-            "${widget.year} ${capitalize(widget.make)} ${widget.model}",
+            "${widget.vehicle.modelYear} ${capitalize(widget.vehicle.make)} ${widget.vehicle.model}",
             style: const TextStyle(color: CupertinoColors.white),
           ),
           trailing: PullDownButton(
@@ -144,9 +140,9 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
       child: SingleChildScrollView(
         child: FutureBuilder(
             future: Future.wait([
-              RepairDB().get(vehicleID: widget.vehicleID),
+              widget.vehicle.getRepairs(widget.firestore),
               noImagesRef.getData(),
-              imagesRef.listAll()
+              imagesRef.listAll(),
             ]),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasError) {
@@ -281,7 +277,7 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                                         color: Colors.blueGrey),
                                     children: <TextSpan>[
                                       TextSpan(
-                                          text: widget.vin,
+                                          text: widget.vehicle.vin,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.normal))
                                     ],
@@ -295,7 +291,7 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                                         color: Colors.blueGrey),
                                     children: <TextSpan>[
                                       TextSpan(
-                                          text: widget.make,
+                                          text: widget.vehicle.make,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.normal))
                                     ],
@@ -309,7 +305,7 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                                         color: Colors.blueGrey),
                                     children: <TextSpan>[
                                       TextSpan(
-                                          text: widget.model,
+                                          text: widget.vehicle.model,
                                           style: const TextStyle(
                                               fontWeight: FontWeight.normal))
                                     ],
@@ -323,7 +319,8 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                                         color: Colors.blueGrey),
                                     children: <TextSpan>[
                                       TextSpan(
-                                          text: widget.year,
+                                          text: widget.vehicle.modelYear
+                                              .toString(),
                                           style: const TextStyle(
                                               fontWeight: FontWeight.normal))
                                     ],
@@ -351,7 +348,8 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                                                 builder: (context) {
                                                   return Camera(
                                                     camera: cameras[0],
-                                                    vehicleID: widget.vehicleID,
+                                                    vehicleID:
+                                                        widget.vehicle.id!,
                                                     refresh: refresh,
                                                   );
                                                 },
@@ -406,7 +404,7 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                                                 CupertinoPageRoute(
                                                   builder: (_) =>
                                                       IOSVehicleSpecs(
-                                                    vin: widget.vin,
+                                                    vin: widget.vehicle.vin,
                                                   ),
                                                 ),
                                               )),
@@ -430,21 +428,15 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                               fontWeight: FontWeight.bold, fontSize: 16),
                         ),
                         children: [
-                          ...List.generate(snapshot.data[0]!.docs.length,
-                              (index) {
-                            Repair repair = Repair.fromJson(
-                                snapshot.data[0]!.docs[index].data()
-                                    as Map<String, dynamic>,
-                                snapshot.data[0]!.docs[index].id,
-                                widget.vehicleID);
-
+                          ...List.generate(snapshot.data[0]!.length, (index) {
+                            Repair repair = snapshot.data[0][index];
                             return CupertinoListTile(
                               title: Text(repair.workRequested),
                               trailing: const CupertinoListTileChevron(),
                               onTap: () {
                                 Navigator.pushNamed(context, "/repairDetails",
                                     arguments: {
-                                      "vehicleID": widget.vehicleID,
+                                      "vehicleID": widget.vehicle.id,
                                       "repair": repair
                                     });
                               },

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/controllers/signin.dart';
+import 'package:my_car_records/model/db/firebase/firebase_auth_manager.dart';
 
 class IOSLogin extends StatelessWidget {
   const IOSLogin(
@@ -15,6 +16,7 @@ class IOSLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAuth auth = FirebaseAuth.instance;
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
         middle: Text('Login'),
@@ -27,28 +29,18 @@ class IOSLogin extends StatelessWidget {
             controller: email,
           ),
           CupertinoTextField(
-            placeholder: "password",
+            placeholder: "Password",
             controller: password,
           ),
           CupertinoButton.filled(
               child: const Text("Submit"),
               onPressed: () async {
-                try {
-                  await FirebaseAuth.instance.signInWithEmailAndPassword(
-                      email: email.text, password: password.text);
+                UserCredential? credential =
+                    await FirebaseAuthManager(auth: auth)
+                        .signinWithEmailAndPassword(email.text, password.text);
+                if (credential != null) {
                   Navigator.pushReplacementNamed(
                       navKey.currentContext!, "/dashboard");
-                } on FirebaseAuthException catch (e) {
-                  if (e.code == 'user-not-found') {
-                    //TODO: impliment system for when no user is found in DB
-                    debugPrint('No user found for that email.');
-                  } else if (e.code == 'wrong-password') {
-                    //TODO: impliment system for when user enters the wrong password
-                    debugPrint('Wrong password provided for that user.');
-                  } else {
-                    //TODO: research into the different error codes that can come back from firebase
-                    debugPrint(e.code);
-                  }
                 }
               }),
           CupertinoButton(

@@ -22,27 +22,32 @@ class RepairDB {
         .catchError((error) => debugPrint("Failed to add repair: $error"));
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> get(
-      {required String vehicleID}) async {
-    return await _firestore
+  Future<List<Repair>> get({required String vehicleID}) async {
+    dynamic repairs = await _firestore
         .collection(user!.uid)
         .doc(vehicleID)
         .collection('repairs')
         // .where("vehicle_id", isEqualTo: vehicleID)
         .get()
         .then((value) {
-      return value;
+      List<Repair> repairList = [];
+      for (var repair in value.docs) {
+        Map<String, dynamic> repairInfo = repair.data();
+        Map<String, dynamic> json = {
+          "id": repair.id,
+          "vehicleID": vehicleID,
+          "work_requested": repairInfo["work_requested"],
+          "tech": repairInfo["tech"],
+          "hours": repairInfo["hours"],
+          "labor": repairInfo["labor"]
+        };
+        repairList.add(Repair.fromJson(json));
+      }
+
+      return repairList;
     });
+    return repairs;
   }
-  // Future<QuerySnapshot<Map<String, dynamic>>> get({vehicleID}) async {
-  //   return await _firestore
-  //       .collection('repairs')
-  //       .where("vehicle_id", isEqualTo: vehicleID)
-  //       .get()
-  //       .then((value) {
-  //     return value;
-  //   });
-  // }
 
   void delete(String vehicleID, String repairId) {
     _firestore

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:my_car_records/model/vehicle.dart';
 import 'package:my_car_records/model/vin_decoder.dart';
 import 'package:my_car_records/views/vehicle/utils/ios/vehicle_specs.dart';
@@ -20,7 +21,7 @@ class IOSVehicleSpecs extends StatelessWidget {
       ),
       child: vin != null
           ? FutureBuilder(
-              future: VinDecoder().decodeVin(vin),
+              future: VinDecoder(Client()).decodeVin(vin),
               builder:
                   (BuildContext context, AsyncSnapshot<Vehicle?> snapshot) {
                 if (snapshot.hasError) {

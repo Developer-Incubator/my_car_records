@@ -27,26 +27,19 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final User? user = FirebaseAuth.instance.currentUser;
+  // final User? user = FirebaseAuth.instance.currentUser;
 
   refresh() {
     setState(() {});
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> getCars() async {
-    return await FirebaseFirestore.instance
-        .collection('cars')
-        .where("user_id", isEqualTo: user!.uid)
-        .get()
-        .then((value) {
-      return value;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final User user = FirebaseAuth.instance.currentUser!;
+    final FirebaseFirestore firestore = FirebaseFirestore.instance;
     return Platform.isIOS
-        ? IOSHomePage(key: iosHomeKey, refresh: refresh)
+        ? IOSHomePage(
+            key: iosHomeKey, user: user, firestore: firestore, refresh: refresh)
         : Scaffold(
             appBar: AppBar(
               actions: <Widget>[
@@ -61,7 +54,10 @@ class _MyHomePageState extends State<MyHomePage> {
                           title: const Text('Car Form'),
                           content: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: CarForm(refresh: refresh),
+                            child: CarForm(
+                                user: user,
+                                firestore: firestore,
+                                refresh: refresh),
                           ),
                         );
                       },
