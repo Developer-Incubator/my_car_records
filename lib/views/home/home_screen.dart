@@ -1,12 +1,14 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+
 import 'package:flutter/material.dart';
 import 'package:my_car_records/constance/constance.dart';
+import 'package:my_car_records/utils/sharedprefs.dart';
 import 'package:my_car_records/views/home/ios_home.dart';
 // import 'package:my_car_records/controllers/CarForm.dart';
 
+import '../../model/user.dart';
 import '../vehicle/car_forms/car_form.dart';
 // import '../../controllers/car/car_list.dart';
 
@@ -28,6 +30,13 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // final User? user = FirebaseAuth.instance.currentUser;
+  late User? user = SharedPrefs.getUser();
+
+  // @override
+  // initState(){
+  //   super.initState();
+
+  // }
 
   refresh() {
     setState(() {});
@@ -35,11 +44,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final User user = FirebaseAuth.instance.currentUser!;
-    final FirebaseFirestore firestore = FirebaseFirestore.instance;
+    // final User user = FirebaseAuth.instance.currentUser!;
+    // final FirebaseFirestore firestore = FirebaseFirestore.instance;
     return Platform.isIOS
-        ? IOSHomePage(
-            key: iosHomeKey, user: user, firestore: firestore, refresh: refresh)
+        ? IOSHomePage(key: iosHomeKey, user: user!, refresh: refresh)
         : Scaffold(
             appBar: AppBar(
               actions: <Widget>[
@@ -54,10 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           title: const Text('Car Form'),
                           content: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: CarForm(
-                                user: user,
-                                firestore: firestore,
-                                refresh: refresh),
+                            // child: CarForm(user: user, refresh: refresh),
                           ),
                         );
                       },

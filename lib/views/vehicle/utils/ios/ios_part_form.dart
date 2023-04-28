@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:my_car_records/constance/constance.dart';
-import 'package:my_car_records/model/db/part.dart';
+import 'package:my_car_records/model/db/fb/part.dart';
 import 'package:my_car_records/model/part.dart';
 
 class IOSPartForm extends StatelessWidget {

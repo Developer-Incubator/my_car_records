@@ -1,8 +1,13 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/controllers/signin.dart';
+import 'package:my_car_records/model/db/user.dart';
+import 'package:my_car_records/utils/sharedprefs.dart';
 import 'package:my_car_records/views/login/ios_login.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
+
+import '../../model/user.dart';
+// import 'package:http/http.dart' as http;
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -14,14 +19,29 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user != null) {
-        Navigator.pushReplacementNamed(context, "/dashboard");
-      }
-    });
+
+    User? user = SharedPrefs.getUser();
+
+    if (user != null && user.sessionToken.isNotEmpty) {
+      // print(SharedPrefs.getUser());
+      WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
+        // Navigator.pushReplacementNamed(navKey.currentContext!, "/dashboard");
+        await DBUser.loginWithToken().then((value) {
+          if (value == true) {
+            Navigator.pushReplacementNamed(
+                navKey.currentContext!, "/dashboard");
+          }
+        });
+
+        // if (loggedIn) {
+        //   Navigator.pushReplacementNamed(navKey.currentContext!, "/dashboard");
+        // }
+      });
+    }
   }
 
   @override
@@ -39,9 +59,6 @@ class _LoginPageState extends State<LoginPage> {
       } catch (e) {
         debugPrint(e.toString());
       }
-
-      // Now send the credential (especially `credential.authorizationCode`) to your server to create a session
-      // after they have been validated with Apple (see `Integration` section for more information on how to do this)
     },
   );
 

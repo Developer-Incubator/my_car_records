@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_car_records/controllers/my_extensions.dart';
 import 'package:my_car_records/controllers/part/update_part_form.dart';
-import 'package:my_car_records/model/db/part_real_time.dart';
+import 'package:my_car_records/model/db/fb/part_real_time.dart';
 import 'package:my_car_records/model/part.dart';
 
 /// showAllParts

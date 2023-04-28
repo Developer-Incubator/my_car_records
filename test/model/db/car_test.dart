@@ -76,7 +76,7 @@ import 'package:fake_cloud_firestore/fake_cloud_firestore.dart';
 import 'package:firebase_auth_mocks/firebase_auth_mocks.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
-import 'package:my_car_records/model/db/car.dart';
+import 'package:my_car_records/model/db/fb/car.dart';
 import 'package:my_car_records/model/vehicle.dart';
 
 Vehicle testVehicle = Vehicle.fromJson({

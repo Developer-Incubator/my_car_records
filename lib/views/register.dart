@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_car_records/constance/constance.dart';
-import 'package:my_car_records/model/db/firebase/firebase_auth_manager.dart';
+import 'package:my_car_records/model/db/fb/firebase/firebase_auth_manager.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

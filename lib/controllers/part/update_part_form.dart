@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_car_records/model/db/part_real_time.dart';
+import 'package:my_car_records/model/db/fb/part_real_time.dart';
 
 /// updates information about a part and refreshes the state to update the page to display the correct information.
 ///

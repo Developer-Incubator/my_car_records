@@ -1,8 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/controllers/signin.dart';
-import 'package:my_car_records/model/db/firebase/firebase_auth_manager.dart';
+import 'package:my_car_records/model/db/user.dart';
+import 'package:my_car_records/model/user.dart';
+import 'package:my_car_records/utils/sharedprefs.dart';
 
 class IOSLogin extends StatelessWidget {
   const IOSLogin(
@@ -16,7 +17,9 @@ class IOSLogin extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseAuth auth = FirebaseAuth.instance;
+    email.text = 'test@mail.com';
+    password.text = 'test';
+    // FirebaseAuth auth = FirebaseAuth.instance;
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(
         middle: Text('Login'),
@@ -35,11 +38,12 @@ class IOSLogin extends StatelessWidget {
           CupertinoButton.filled(
               child: const Text("Submit"),
               onPressed: () async {
-                UserCredential? credential =
-                    await FirebaseAuthManager(auth: auth)
-                        .signinWithEmailAndPassword(email.text, password.text);
-                if (credential != null) {
-                  Navigator.pushReplacementNamed(
+                User? user = await DBUser.loginWithEmailAndPassword(
+                    email.text, password.text);
+                if (user != null) {
+                  SharedPrefs.prefs!.setString("user", user.toString());
+
+                  Navigator.popAndPushNamed(
                       navKey.currentContext!, "/dashboard");
                 }
               }),

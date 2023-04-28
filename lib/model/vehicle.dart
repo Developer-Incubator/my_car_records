@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_car_records/model/db/repair.dart';
 import 'package:my_car_records/model/repair.dart';
 
 class Vehicle {
@@ -93,7 +92,7 @@ class Vehicle {
   String? manufacturerId;
   String model;
   String? modelID;
-  String modelYear;
+  int modelYear;
   String? motorcycleChassisType;
   String? motorcycleSuspensionType;
   String? ncsaBodyType;
@@ -414,7 +413,7 @@ class Vehicle {
       manufacturerId: json["ManufacturerId"] ?? "N/A",
       model: json["Model"],
       modelID: json["ModelID"] ?? "N/A",
-      modelYear: json["ModelYear"].toString(),
+      modelYear: int.parse(json["ModelYear"].toString()),
       motorcycleChassisType: json["MotorcycleChassisType"] ?? "N/A",
       motorcycleSuspensionType: json["MotorcycleSuspensionType"] ?? "N/A",
       ncsaBodyType: json["NCSABodyType"] ?? "N/A",
@@ -492,9 +491,11 @@ class Vehicle {
     return '{"ABS": $abs,"ActiveSafetySysNote": $activeSafetySysNote,"AdaptiveCruiseControl":$adaptiveCruiseControl,"AdaptiveDrivingBeam": $adaptiveDrivingBeam, "AdaptiveHeadlights": $adaptiveHeadlights, "AdditionalErrorText": $additionalErrorText, "AirBagLocCurtain": $airBagLocCurtain, "AirBagLocFront": $airBagLocFront, "AirBagLocKnee": $airBagLocKnee, "AirBagLocSeatCushion": $airBagLocSeatCushion,"AirBagLocSide": $airBagLocSide,"AutoReverseSystem": ,"AutomaticPedestrianAlertingSound": $automaticPedestrianAlertingSound, "AxleConfiguration": $axleConfiguration, "Axles": $axles,"BasePrice": $basePrice, "BatteryA": $batteryA,"BatteryA_to": $batteryATo,"BatteryCells": $batteryCells,"BatteryInfo": $batteryInfo,"BatteryKWh": $batteryKWh,"BatteryKWh_to": $batteryKWhTo,"BatteryModules": $batteryModules,"BatteryPacks": $batteryPacks,"BatteryType": $batteryType,"BatteryV": $batteryV, "BatteryV_to": $batteryV,"BedLengthIN": $bedLengthIN, "BedType": $bedType,"BlindSpotIntervention": $blindSpotIntervention,"BlindSpotMon": $blindSpotMon,"BodyCabType": $bodyCabType, "BodyClass": $bodyClass, "BrakeSystemDesc": $brakeSystemDesc,"BrakeSystemType": $brakeSystemType, "BusFloorConfigType": $busFloorConfigType,"BusLength": $busLength, "BusType": $busType, "CIB": $cib,"CashForClunkers": $cashForClunkers, "ChargerLevel": $chargerLevel,"ChargerPowerKW": $chargerPowerKW, "CoolingType": $coolingType, "CurbWeightLB": $curbWeightLB, "CustomMotorcycleType": $customMotorcycleType, "DaytimeRunningLight": $daytimeRunningLight, "DestinationMarket": $destinationMarket, "DisplacementCC": $displacementCC, "DisplacementCI": $displacementCI, "DisplacementL": $displacementL, "Doors": $doors,"DriveType": $driveType, "DriverAssist": $driverAssist,"DynamicBrakeSupport": $dynamicBrakeSupport, "EDR": $edr,"ESC": $esc, "EVDriveUnit": $evDriveUnit, "ElectrificationLevel": $electrificationLevel, "EngineConfiguration": $engineConfiguration, "EngineCycles": $engineCycles, "EngineCylinders": $engineCycles,"EngineHP": $engineHP, "EngineHP_to": $engineHPTo,"EngineKW": $engineKW, "EngineManufacturer": $engineManufacturer, "EngineModel": $engineModel, "EntertainmentSystem": $entertainmentSystem,"ErrorCode": $errorCode, "ErrorText": $errorText,"ForwardCollisionWarning": $forwardCollisionWarning, "FuelInjectionType": $fuelInjectionType,"FuelTypePrimary": $fuelTypePrimary, "FuelTypeSecondary": $fuelTypeSecondary,"GCWR": $gcwr, "GCWR_to": $gcwrTo, "GVWR": $gvwr, "GVWR_to": $gvwrTo, "KeylessIgnition": $keylessIgnition, "LaneCenteringAssistance": $laneCenteringAssistance, "LaneDepartureWarning": $laneDepartureWarning, "LaneKeepSystem": $laneKeepSystem,  "LowerBeamHeadlampLightSource": $lowerBeamHeadlampLightSource, "Make": $make, "MakeID": $makeID, "Manufacturer": $manufacturer,"ManufacturerId": $manufacturerId, "Model":$model,"ModelID": $modelID, "ModelYear": $modelYear,"MotorcycleChassisType": $motorcycleChassisType, "MotorcycleSuspensionType": $motorcycleSuspensionType,"NCSABodyType": $ncsaBodyType, "NCSAMake": $ncsaMake, "NCSAMapExcApprovedBy": $ncsaMapExcApprovedBy, "NCSAMapExcApprovedOn": $ncsaMapExcApprovedOn, "NCSAMappingException": $ncsaMappingException, "NCSAModel": "$ncsaModel,"NCSANote": $ncsaNote, "NonLandUse": $nonLandUse, "Note": $note, "OtherBusInfo": $otherBusInfo, "OtherEngineInfo": $otherEngineInfo,"OtherMotorcycleInfo": $otherMotorcycleInfo, "OtherRestraintSystemInfo": $otherRestraintSystemInfo, "OtherTrailerInfo": $otherTrailerInfo,  "ParkAssist": $parkAssist, "PedestrianAutomaticEmergencyBraking": $pedestrianAutomaticEmergencyBraking, "PlantCity": $plantCity, "PlantCompanyName": $plantCompanyName, "PlantCountry": $plantCountry, "PlantState": $plantState, "PossibleValues": $possibleValues, "Pretensioner": $pretensioner, "RearAutomaticEmergencyBraking": $rearAutomaticEmergencyBraking, "RearCrossTrafficAlert": $rearCrossTrafficAlert,"RearVisibilitySystem": $rearVisibilitySystem,"SAEAutomationLevel": $saeAutomationLevel, "SAEAutomationLevel_to": $saeAutomationLevelTo, "SeatBeltsAll": $seatBeltsAll, "SeatRows": $seatRows, "Seats":$seats, "SemiautomaticHeadlampBeamSwitching": $semiAutomaticHeadlampBeamSwitching, "Series": $series, "Series2": $series2, "SteeringLocation": $steeringLocation, "SuggestedVIN": $suggestedVIN, "TPMS": $tpms, "TopSpeedMPH": $topSpeedMPH, "TrackWidth": $trackWidth, "TractionControl":$tractionControl, "TrailerBodyType": $trailerBodyType, "TrailerLength": $trailerLength, "TrailerType": $trailerType, "TransmissionSpeeds": $transmissionSpeeds, "TransmissionStyle": $transmissionStyle, "Trim": $trim, "Trim2": $trim2, "Turbo": $turbo, "VIN": $vin, "ValveTrainDesign": $valveTrainDesign, "VehicleDescriptor": $vehicleDescriptor, "VehicleType": $vehicleType, "WheelBaseLong": $wheelBaseLong, "WheelBaseShort": $wheelBaseShort,"WheelBaseType": $wheelBaseType, "WheelSizeFront": $wheelSizeFront, "WheelSizeRear": $wheelSizeRear, "Wheels": $wheels, "Windows": $windows }';
   }
 
+  /// TODO: convert to use my backend
   Future<List<Repair>> getRepairs(FirebaseFirestore firestore) async {
-    List<Repair> repairs = await RepairDB().get(vehicleID: id!);
-    repairList = repairs;
-    return repairs;
+    //   List<Repair> repairs = await RepairDB().get(vehicleID: id!);
+    //   repairList = repairs;
+    // return repairs;
+    return [];
   }
 }

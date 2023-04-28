@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/constance/routes.dart';
-import 'package:my_car_records/model/db/firebase/firebase_manager.dart';
+import 'package:my_car_records/model/db/fb/firebase/firebase_manager.dart';
+import 'package:my_car_records/utils/sharedprefs.dart';
 import 'package:my_car_records/views/login/login.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await SharedPrefs.initialize();
   FirebaseManager.initialize();
   cameras = await availableCameras();
   SystemChrome.setSystemUIOverlayStyle(

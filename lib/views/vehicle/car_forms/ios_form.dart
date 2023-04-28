@@ -1,9 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:my_car_records/constance/constance.dart';
-import 'package:my_car_records/model/db/car.dart';
+import 'package:my_car_records/model/user.dart';
 import 'package:my_car_records/model/vehicle.dart';
 import 'package:my_car_records/model/vin_decoder.dart';
 
@@ -11,7 +9,6 @@ class IOSCarForm extends StatefulWidget {
   const IOSCarForm(
       {super.key,
       required this.user,
-      required this.firestore,
       required this.formKey,
       required this.vinController,
       required this.makeController,
@@ -21,7 +18,6 @@ class IOSCarForm extends StatefulWidget {
       required this.odometerController,
       required this.refresh});
   final User user;
-  final FirebaseFirestore firestore;
   final GlobalKey<FormState> formKey;
   final TextEditingController vinController;
   final TextEditingController makeController;
@@ -185,13 +181,13 @@ class _IOSCarFormState extends State<IOSCarForm> {
                     child: const Text("Submit"),
                     onPressed: () {
                       vehicle ??= Vehicle(
-                          firestore: widget.firestore,
                           make: widget.makeController.text,
                           model: widget.modelController.text,
-                          modelYear: widget.yearController.text);
+                          modelYear: int.parse(widget.yearController.text));
+                      //TODO: Change to use my db
 
-                      CarDB(firestore: widget.firestore, user: widget.user)
-                          .add(vehicle);
+                      // CarDB(firestore: widget.firestore, user: widget.user)
+                      //     .add(vehicle);
                       Navigator.pop(context);
                       widget.refresh();
                     },

@@ -1,23 +1,16 @@
 import 'dart:io';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:my_car_records/model/db/fb/car_reat_time.dart';
+import 'package:my_car_records/model/user.dart';
 import 'package:my_car_records/model/vehicle.dart';
+import 'package:my_car_records/utils/sharedprefs.dart';
 import 'package:my_car_records/views/vehicle/car_forms/ios_form.dart';
-
-import 'package:my_car_records/model/db/car_reat_time.dart';
 
 /// form to input car information to save records about the car
 // need to check vin for length as well as make a drop down with all the dent manufacturers and all of there products
 class CarForm extends StatefulWidget {
-  const CarForm(
-      {Key? key,
-      required this.user,
-      required this.firestore,
-      required this.refresh})
-      : super(key: key);
-  final User user;
-  final FirebaseFirestore firestore;
+  const CarForm({Key? key, required this.refresh}) : super(key: key);
+
   final Function refresh;
   @override
   State<CarForm> createState() => _CarFormState();
@@ -33,6 +26,7 @@ class _CarFormState extends State<CarForm> {
   final odometerController = TextEditingController();
 
   Vehicle? vehicle;
+  late User user = SharedPrefs.getUser()!;
 
   @override
   void dispose() {
@@ -51,8 +45,7 @@ class _CarFormState extends State<CarForm> {
   Widget build(BuildContext context) {
     return Platform.isIOS
         ? IOSCarForm(
-            user: widget.user,
-            firestore: widget.firestore,
+            user: user,
             formKey: formKey,
             vinController: vinController,
             makeController: makeController,

@@ -1,4 +1,4 @@
-import 'package:my_car_records/model/db/part.dart';
+import 'package:my_car_records/model/db/fb/part.dart';
 import 'package:my_car_records/model/part.dart';
 
 /// Create a Repair
