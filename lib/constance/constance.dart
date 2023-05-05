@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:my_car_records/views/home/ios_home.dart';
+import 'package:my_car_records/views/vehicle/utils/ios/ios_car_details.dart';
 
 // Backend URLs
 const String urlfront = "http://192.168.0.222:8080/api";
@@ -10,7 +11,8 @@ const String loginWithTokenURL = "$urlfront/user/login_with_token";
 GlobalKey<NavigatorState> navKey = GlobalKey<NavigatorState>();
 GlobalKey<NavigatorState> homeKey = GlobalKey<NavigatorState>();
 GlobalKey<IOSHomePageState> iosHomeKey = GlobalKey<IOSHomePageState>();
-GlobalKey<IOSHomePageState> iosVehicleViewKey = GlobalKey<IOSHomePageState>();
+GlobalKey<IOSCarDetailsState> iosVehicleViewKey =
+    GlobalKey<IOSCarDetailsState>();
 
 const String homePageTitle = "My Car Records";
 

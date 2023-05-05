@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_car_records/model/db/fb/part_real_time.dart';
 
 /// updates information about a part and refreshes the state to update the page to display the correct information.
 ///
@@ -99,13 +98,7 @@ class UpdatePartForm extends StatelessWidget {
                     const SnackBar(content: Text('Part Updated')),
                   );
 
-                  updatePart(
-                      vin,
-                      repairId,
-                      partId,
-                      nameController.text,
-                      int.parse(quantityController.text),
-                      double.parse(priceController.text));
+                  ///TODO: impliment update part here
 
                   Navigator.pop(context);
                 }

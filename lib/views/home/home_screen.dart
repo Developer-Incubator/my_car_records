@@ -4,12 +4,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:my_car_records/constance/constance.dart';
+import 'package:my_car_records/model/user.dart';
 import 'package:my_car_records/utils/sharedprefs.dart';
 import 'package:my_car_records/views/home/ios_home.dart';
 // import 'package:my_car_records/controllers/CarForm.dart';
 
-import '../../model/user.dart';
-import '../vehicle/car_forms/car_form.dart';
 // import '../../controllers/car/car_list.dart';
 
 /// MyHomePage
@@ -30,7 +29,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   // final User? user = FirebaseAuth.instance.currentUser;
-  late User? user = SharedPrefs.getUser();
+  User? user = SharedPrefs.getUser();
 
   // @override
   // initState(){

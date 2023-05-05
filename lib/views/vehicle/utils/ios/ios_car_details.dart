@@ -1,13 +1,13 @@
+import 'dart:async';
 import 'dart:typed_data';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/controllers/my_extensions.dart';
-import 'package:my_car_records/model/db/fb/car.dart';
+import 'package:my_car_records/model/db/vehicle.dart';
 import 'package:my_car_records/model/repair.dart';
+import 'package:my_car_records/model/user.dart';
 import 'package:my_car_records/model/vehicle.dart';
 import 'package:my_car_records/views/vehicle/utils/ios/ios_vehicle_specs.dart';
 import 'package:my_car_records/views/repair/repair_form/repair_form_shell.dart';
@@ -16,12 +16,8 @@ import 'package:pull_down_button/pull_down_button.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class IOSCarDetails extends StatefulWidget {
-  const IOSCarDetails(
-      {super.key,
-      required this.user,
-      required this.firestore,
-      required this.vehicle});
-  final FirebaseFirestore firestore;
+  const IOSCarDetails({super.key, required this.user, required this.vehicle});
+
   final User user;
   final Vehicle vehicle;
 
@@ -30,8 +26,6 @@ class IOSCarDetails extends StatefulWidget {
 }
 
 class IOSCarDetailsState extends State<IOSCarDetails> {
-  final User? user = FirebaseAuth.instance.currentUser;
-
   final Reference storageRef = FirebaseStorage.instance.ref();
 
   refresh() {
@@ -57,11 +51,14 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
             /// a destructive action such as deletion, and turns
             /// the action's text color to red.
             isDestructiveAction: true,
-            onPressed: () {
-              CarDB(user: widget.user, firestore: widget.firestore)
-                  .delete(widget.vehicle.id!);
+            onPressed: () async {
+              await DBVehicle.delete(widget.vehicle.id!).then((value) =>
+                  Navigator.popUntil(
+                      context, ModalRoute.withName("/dashboard")));
+              // CarDB(user: widget.user, firestore: widget.firestore)
+              //     .delete(widget.vehicle.id!);
 
-              Navigator.popUntil(context, ModalRoute.withName("/dashboard"));
+              // Navigator.popUntil(context, ModalRoute.withName("/dashboard"));
               iosHomeKey.currentState!.setState(() {});
             },
             child: const Text('Delete'),
@@ -73,15 +70,17 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
 
   void _showAddRepairPopUp() {
     showCupertinoDialog(
-        context: context,
-        builder: (context) {
-          return CupertinoPopupSurface(
-              child: RepairForm(
+      context: context,
+      builder: (context) {
+        return CupertinoPopupSurface(
+          child: RepairForm(
             refresh: refresh,
             vehicleID: widget.vehicle.id!,
             vin: widget.vehicle.vin,
-          ));
-        });
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -91,7 +90,7 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
 
     Reference? noImagesRef = storageRef.child("General/noImageCar.jpeg");
     Reference? imagesRef =
-        storageRef.child("${user!.uid}/${widget.vehicle.id}");
+        storageRef.child("${widget.user.id}/${widget.vehicle.id}");
 
     return CupertinoPageScaffold(
       backgroundColor: CupertinoColors.systemGroupedBackground,
@@ -137,28 +136,35 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
               ),
             ),
           )),
-      child: SingleChildScrollView(
-        child: FutureBuilder(
-            future: Future.wait([
-              widget.vehicle.getRepairs(widget.firestore),
-              noImagesRef.getData(),
-              imagesRef.listAll(),
-            ]),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasError) {
-                return const Text("Could not retrieve vehicle repairs");
-              }
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(child: CupertinoActivityIndicator());
-              }
-              Uint8List noImageImageUint8List = snapshot.data[1];
-              ListResult imageListResults = snapshot.data[2];
-              List<Future<Uint8List?>> imageList = [];
-              for (var element in imageListResults.items) {
-                imageList.add(element.getData());
-              }
+      child: FutureBuilder(
+          future: Future.wait([
+            widget.vehicle.getRepairs(),
+            noImagesRef.getData(),
+            imagesRef.listAll(),
+          ]),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasError) {
+              print(snapshot.error);
+              return const Text("Could not retrieve vehicle repairs");
+            }
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Stack(
+                children: const [
+                  Align(
+                      alignment: Alignment.center,
+                      child: CupertinoActivityIndicator()),
+                ],
+              );
+            }
+            Uint8List noImageImageUint8List = snapshot.data[1];
+            ListResult imageListResults = snapshot.data[2];
+            List<Future<Uint8List?>> imageList = [];
+            for (var element in imageListResults.items) {
+              imageList.add(element.getData());
+            }
 
-              return Column(
+            return SingleChildScrollView(
+              child: Column(
                 children: [
                   Padding(
                     padding: const EdgeInsets.only(top: 14.0),
@@ -362,7 +368,7 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                                           icon: CupertinoIcons
                                               .plus_rectangle_on_rectangle,
                                           onTap: () {
-                                            //TODO: impliment users camera roll
+                                            ///TODO: impliment users camera roll
                                             debugPrint("To Users Camera Roll");
                                           },
                                         ),
@@ -372,7 +378,7 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                                           icon:
                                               CupertinoIcons.photo_on_rectangle,
                                           onTap: () {
-                                            //TODO: Create a photo galley for users to see all and edit photos
+                                            ///TODO: Create a photo galley for users to see all and edit photos
                                             debugPrint("To Image Gallery");
                                           },
                                         ),
@@ -447,9 +453,9 @@ class IOSCarDetailsState extends State<IOSCarDetails> {
                     ),
                   ),
                 ],
-              );
-            }),
-      ),
+              ),
+            );
+          }),
     );
   }
 }

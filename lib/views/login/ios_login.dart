@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/controllers/signin.dart';
 import 'package:my_car_records/model/db/user.dart';
@@ -38,14 +39,11 @@ class IOSLogin extends StatelessWidget {
           CupertinoButton.filled(
               child: const Text("Submit"),
               onPressed: () async {
-                User? user = await DBUser.loginWithEmailAndPassword(
-                    email.text, password.text);
-                if (user != null) {
-                  SharedPrefs.prefs!.setString("user", user.toString());
+                User? user = await DBUser(Client())
+                    .loginWithEmailAndPassword(email.text, password.text);
+                SharedPrefs.prefs!.setString("user", user.toString());
 
-                  Navigator.popAndPushNamed(
-                      navKey.currentContext!, "/dashboard");
-                }
+                Navigator.popAndPushNamed(navKey.currentContext!, "/dashboard");
               }),
           CupertinoButton(
               onPressed: (() {

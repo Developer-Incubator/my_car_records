@@ -7,10 +7,36 @@ import 'package:http/http.dart' as http;
 import 'package:my_car_records/utils/sharedprefs.dart';
 
 class DBUser {
-  static Future<User> loginWithEmailAndPassword(
-      String email, String password) async {
+  final http.Client client;
+  DBUser(this.client);
+  Future<User?> register(String email, String password,
+      {String? username, String? firstName, String? lastName}) async {
+    var res = await client.post(
+      Uri.parse("$urlfront/user/signup"),
+      body: jsonEncode(
+        {
+          "userInfo": {
+            "email": email,
+            "password": password,
+            "username": username,
+            "firstName": firstName,
+            "lastName": lastName,
+          }
+        },
+      ),
+    );
+
+    Map<String, dynamic> data = jsonDecode(res.body);
+    if (data["error"] != null) {
+      log(data["error"]);
+      throw Exception(data["error"]);
+    }
+    return User.fromJson(data["message"]);
+  }
+
+  Future<User> loginWithEmailAndPassword(String email, String password) async {
     try {
-      var res = await http.Client().post(
+      var res = await client.post(
         Uri.parse(loginURL),
         body: jsonEncode(
           {"email": email, "password": password},
@@ -23,10 +49,10 @@ class DBUser {
     }
   }
 
-  static Future<bool> loginWithToken() async {
+  Future<bool> loginWithToken() async {
     try {
       User user = User.fromString(SharedPrefs.prefs!.getString('user')!);
-      http.Response res = await http.post(
+      http.Response res = await client.post(
         Uri.parse(loginWithTokenURL),
         body: jsonEncode(
           {'id': user.id, 'session_token': user.sessionToken},
@@ -42,8 +68,8 @@ class DBUser {
     }
   }
 
-  static Future<void> logout(User user) async {
-    await http.put(Uri.parse("$urlfront/user/${user.id}"));
+  Future<void> logout(User user) async {
+    await client.put(Uri.parse("$urlfront/user/${user.id}"));
     user.sessionToken = '';
     SharedPrefs.saveUser(user);
   }

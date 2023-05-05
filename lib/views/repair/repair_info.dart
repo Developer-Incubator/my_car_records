@@ -13,7 +13,7 @@ import 'package:my_car_records/views/repair/utils/ios_repair_info.dart';
 class RepairInfo extends StatefulWidget {
   const RepairInfo({Key? key, required this.vehicleID, required this.repair})
       : super(key: key);
-  final String vehicleID;
+  final int vehicleID;
   final Repair repair;
   @override
   State<RepairInfo> createState() => _RepairInfoState();
@@ -30,18 +30,11 @@ class _RepairInfoState extends State<RepairInfo> {
     //     double.parse(widget.repair.getRepairTotal()) + widget.repair.labor;
 
     // refreshes the list of parts to keep it accurate when a part is deleted.
-    refresh() {
-      setState(() {
-        // parts = getParts(widget.vin, repairInfo['id']);
-        // widget.pageRefresh();
-      });
-    }
 
     return Platform.isIOS
         ? IOSRepairInfo(
             vehicleID: widget.vehicleID,
             repair: widget.repair,
-            refresh: refresh,
           )
         : Column(
             children: [

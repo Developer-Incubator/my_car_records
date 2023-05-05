@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/controllers/signin.dart';
 import 'package:my_car_records/model/db/user.dart';
@@ -30,7 +31,7 @@ class _LoginPageState extends State<LoginPage> {
       // print(SharedPrefs.getUser());
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
         // Navigator.pushReplacementNamed(navKey.currentContext!, "/dashboard");
-        await DBUser.loginWithToken().then((value) {
+        await DBUser(Client()).loginWithToken().then((value) {
           if (value == true) {
             Navigator.pushReplacementNamed(
                 navKey.currentContext!, "/dashboard");

@@ -1,36 +1,30 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_car_records/constance/constance.dart';
+import 'package:my_car_records/model/user.dart';
 import 'package:my_car_records/model/vehicle.dart';
+import 'package:my_car_records/utils/sharedprefs.dart';
 import 'package:my_car_records/views/vehicle/utils/ios/ios_car_details.dart';
 
 class CarDetailsPage extends StatefulWidget {
-  const CarDetailsPage(
-      {Key? key,
-      required this.user,
-      required this.firestore,
-      required this.vehicle})
-      : super(key: key);
+  const CarDetailsPage({Key? key, required this.vehicle}) : super(key: key);
   final Vehicle vehicle;
-  final User user;
-  final FirebaseFirestore firestore;
+
   @override
-  State<CarDetailsPage> createState() => _CarDetailsPageState();
+  State<CarDetailsPage> createState() => CarDetailsPageState();
 }
 
-class _CarDetailsPageState extends State<CarDetailsPage> {
+class CarDetailsPageState extends State<CarDetailsPage> {
   @override
   Widget build(BuildContext context) {
     // widget.car = getACar(widget.vin);
+    User? user = SharedPrefs.getUser();
     return Platform.isIOS
         ? IOSCarDetails(
             key: iosVehicleViewKey,
             vehicle: widget.vehicle,
-            user: widget.user,
-            firestore: widget.firestore,
+            user: user!,
           )
         :
         //TODO: Convert to own page, need to refactor to match how ios is doing its CRUD

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:my_car_records/constance/constance.dart';
-import 'package:my_car_records/model/db/fb/part.dart';
+import 'package:my_car_records/model/db/part.dart';
 import 'package:my_car_records/model/part.dart';
 
 class IOSPartForm extends StatelessWidget {
@@ -14,8 +14,8 @@ class IOSPartForm extends StatelessWidget {
     required this.priceController,
     // required this.refresh
   });
-  final String vehicleID;
-  final String repairId;
+  final int vehicleID;
+  final int repairId;
   final GlobalKey<FormState> formKey;
   final TextEditingController nameController;
   final TextEditingController quantityController;
@@ -126,16 +126,21 @@ class IOSPartForm extends StatelessWidget {
                   CupertinoButton(
                     color: CupertinoColors.activeGreen,
                     child: const Text("Submit"),
-                    onPressed: () {
+                    onPressed: () async {
                       Part newPart = Part(
+                          repairId: repairId,
                           name: nameController.text,
-                          quantity: double.tryParse(quantityController.text),
-                          unitPrice: double.tryParse(priceController.text));
-                      PartDB().add(
-                          repairID: repairId,
-                          part: newPart,
-                          vehicleID: vehicleID);
-                      Navigator.pop(context);
+                          quantity:
+                              double.tryParse(quantityController.text) ?? 1,
+                          unitPrice:
+                              double.tryParse(priceController.text) ?? 0.00);
+
+                      await DBPart.add(newPart).then((value) {
+                        if (value) {
+                          Navigator.pop(context);
+                        }
+                      });
+
                       // refresh();
                     },
                   )

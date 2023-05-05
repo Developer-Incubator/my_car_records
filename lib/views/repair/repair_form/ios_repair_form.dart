@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:my_car_records/constance/constance.dart';
-import 'package:my_car_records/model/db/fb/repair.dart';
+import 'package:my_car_records/model/db/repair.dart';
 import 'package:my_car_records/model/repair.dart';
 
 class IOSRepairForm extends StatelessWidget {
@@ -16,7 +16,7 @@ class IOSRepairForm extends StatelessWidget {
       required this.techController,
       required this.workRequestedController});
   final String? vin;
-  final String vehicleID;
+  final int vehicleID;
   final Function refresh;
 
   final GlobalKey<FormState> formKey;
@@ -168,16 +168,18 @@ class IOSRepairForm extends StatelessWidget {
                   CupertinoButton(
                     color: CupertinoColors.activeGreen,
                     child: const Text("Submit"),
-                    onPressed: () {
+                    onPressed: () async {
                       Repair newRepair = Repair(
+                          vehicleID: vehicleID,
                           hours: double.parse(hoursController.text),
                           labor: double.parse(laborController.text),
                           odometer: int.parse(odometerController.text),
                           workRequested: workRequestedController.text,
                           tech: techController.text);
-                      RepairDB().add(vehicleID: vehicleID, repair: newRepair);
-                      Navigator.pop(context);
-                      refresh();
+                      await DBRepair.add(newRepair).then((value) {
+                        Navigator.pop(context);
+                        refresh();
+                      });
                     },
                   )
                 ],

@@ -1,9 +1,10 @@
 import 'dart:convert';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_car_records/controllers/my_extensions.dart';
+import 'package:my_car_records/model/db/repair.dart';
 import 'package:my_car_records/model/repair.dart';
 
 class Vehicle {
-  String? id;
+  int? id;
   String? abs;
   String? activeSafetySysNote;
   String? adaptiveCruiseControl;
@@ -157,7 +158,6 @@ class Vehicle {
   List<Repair>? repairList;
 
   Vehicle({
-    firestore,
     this.id,
     this.abs,
     this.activeSafetySysNote,
@@ -317,12 +317,10 @@ class Vehicle {
   }
 
   static Vehicle fromJson(
-    Map<String, dynamic> json, {
-    FirebaseFirestore? firestore,
-  }) {
+    Map<String, dynamic> json,
+  ) {
     return Vehicle(
-      firestore: firestore,
-      id: json["id"] ?? "N/A",
+      id: int.tryParse(json["id"].toString()),
       abs: json["ABS"] ?? "N/A",
       activeSafetySysNote: json["ActiveSafetySysNote"] ?? "N/A",
       adaptiveCruiseControl: json["AdaptiveCruiseControl"] ?? "N/A",
@@ -407,7 +405,7 @@ class Vehicle {
       laneKeepSystem: json["LaneKeepSystem"] ?? "N/A",
       lowerBeamHeadlampLightSource:
           json["LowerBeamHeadlampLightSource"] ?? "N/A",
-      make: json["Make"],
+      make: capitalize(json["Make"]),
       makeID: json["MakeID"] ?? "N/A",
       manufacturer: json["Manufacturer"] ?? "N/A",
       manufacturerId: json["ManufacturerId"] ?? "N/A",
@@ -492,10 +490,7 @@ class Vehicle {
   }
 
   /// TODO: convert to use my backend
-  Future<List<Repair>> getRepairs(FirebaseFirestore firestore) async {
-    //   List<Repair> repairs = await RepairDB().get(vehicleID: id!);
-    //   repairList = repairs;
-    // return repairs;
-    return [];
+  Future<List<Repair>> getRepairs() async {
+    return await DBRepair.getAll(id!);
   }
 }

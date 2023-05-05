@@ -2,9 +2,10 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:my_car_records/model/user.dart';
+import 'package:my_car_records/utils/sharedprefs.dart';
 
 class Camera extends StatefulWidget {
   const Camera(
@@ -14,7 +15,7 @@ class Camera extends StatefulWidget {
       required this.refresh});
 
   final CameraDescription camera;
-  final String vehicleID;
+  final int vehicleID;
   final Function refresh;
 
   @override
@@ -120,16 +121,16 @@ class DisplayPictureScreen extends StatelessWidget {
       required this.refresh});
 
   final String imagePath;
-  final String vehicleID;
+  final int vehicleID;
   final Function refresh;
 
   @override
   Widget build(BuildContext context) {
-    final User? user = FirebaseAuth.instance.currentUser;
+    User? user = SharedPrefs.getUser();
     double screenHeight = MediaQuery.of(context).size.height;
     var key = UniqueKey();
     Reference storageRef =
-        FirebaseStorage.instance.ref("${user!.uid}/$vehicleID/$key");
+        FirebaseStorage.instance.ref("${user!.id}/$vehicleID/$key");
 
     return CupertinoPageScaffold(
       navigationBar: const CupertinoNavigationBar(

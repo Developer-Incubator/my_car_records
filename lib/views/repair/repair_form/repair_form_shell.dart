@@ -17,7 +17,7 @@ class RepairForm extends StatelessWidget {
   }) : super(key: key);
 
   final String? vin;
-  final String vehicleID;
+  final int vehicleID;
   final Function refresh;
 
   final formKey = GlobalKey<FormState>();
@@ -63,7 +63,7 @@ class RepairForm extends StatelessWidget {
                   TextFormField(
                     decoration: const InputDecoration(
                       labelText: "Labor",
-                      hintText: "Price of the Technititon",
+                      hintText: "Price of the technititon per hour",
                     ),
                     controller: laborController,
                     keyboardType: TextInputType.number,

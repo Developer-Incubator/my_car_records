@@ -4,14 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:my_car_records/views/vehicle/utils/ios/ios_part_form.dart';
 
 class PartForm extends StatelessWidget {
-  PartForm(
-      {Key? key,
-      required this.vehicleID,
-      required this.repairId,
-      required refresh})
-      : super(key: key);
-  final String vehicleID;
-  final String repairId;
+  PartForm({
+    Key? key,
+    required this.vehicleID,
+    required this.repairId,
+  }) : super(key: key);
+  final int vehicleID;
+  final int repairId;
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
   final quantityController = TextEditingController();

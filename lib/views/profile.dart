@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:my_car_records/constance/constance.dart';
 import 'package:my_car_records/model/db/user.dart';
 import 'package:my_car_records/utils/sharedprefs.dart';
@@ -42,7 +43,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 CupertinoButton.filled(
                     child: const Text("Sign Out"),
                     onPressed: () async {
-                      await DBUser.logout(user!);
+                      await DBUser(Client()).logout(user!);
 
                       // await FirebaseAuth.instance.signOut();
                       Navigator.of(navKey.currentContext!)

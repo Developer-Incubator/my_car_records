@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_car_records/controllers/my_extensions.dart';
 
 import 'package:my_car_records/controllers/repair/update_repair_form.dart';
-import 'package:my_car_records/model/db/fb/car_reat_time.dart';
 import 'package:my_car_records/model/repair.dart';
 
 /// Creates a list of card widgets to populate the repairs list
@@ -31,7 +30,8 @@ List<Widget> showAllRepairs(vin, repairList, context, refresh) {
               PopupMenuItem(
                   child: TextButton(
                       onPressed: (() {
-                        deleteCar(vin);
+                        ///TODO: delete Vehicle here
+
                         refresh();
                       }),
                       child: const Text("Delete"))),

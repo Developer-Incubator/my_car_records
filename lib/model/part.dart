@@ -5,38 +5,40 @@
 /// [quantity] the amount of the item needed
 /// [unitPrice] the price of an individual item
 class Part {
-  final String? id;
+  final int? id;
+  final int repairId;
   final String name;
-  final double? quantity;
+  final double quantity;
   final double? unitPrice;
-  Part({this.id, required this.name, this.quantity = 1, this.unitPrice = 0.00});
-
-  /// multiplies the price of the item by the quantityto get the toal price of the part
-  double getPartTotal() {
-    double total = (unitPrice ?? 0) * (quantity ?? 1);
-
-    return total;
-  }
+  final double? total;
+  Part({
+    this.id,
+    required this.repairId,
+    required this.name,
+    this.quantity = 1,
+    this.unitPrice = 0.00,
+    this.total = 0.00,
+  });
 
   /// returns the information about the part in json format
   Map<String, dynamic> getPartInfo() {
-    return {"id": id, "name": name, "price": unitPrice, "quantity": quantity};
+    return {
+      "id": id,
+      "repair_id": repairId,
+      "title": name,
+      "price": unitPrice,
+      "quantity": quantity,
+      "total": total
+    };
   }
 
-  static Part fromJson(Map<String, dynamic> json, String id) {
+  static Part fromJson(Map<String, dynamic> json) {
     return Part(
-      id: id,
-      name: json["name"],
-      quantity: json["quantity"],
-      unitPrice: json["unit_price"],
-    );
-  }
-
-  static Future<Part> fromID(
-      {required String vehicleID, required String repairID}) async {
-    // await ;
-    return Future.delayed(Duration.zero, () {
-      return Part(name: 'blas');
-    });
+        id: json["id"] ?? 0,
+        repairId: json["repair_id"],
+        name: json["title"],
+        quantity: double.parse(json["quantity"].toString()),
+        unitPrice: double.parse(json["price"].toString()),
+        total: double.parse(json['total']));
   }
 }

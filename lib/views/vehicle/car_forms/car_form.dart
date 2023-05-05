@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:my_car_records/model/db/fb/car_reat_time.dart';
 import 'package:my_car_records/model/user.dart';
 import 'package:my_car_records/model/vehicle.dart';
 import 'package:my_car_records/utils/sharedprefs.dart';
@@ -144,14 +143,7 @@ class _CarFormState extends State<CarForm> {
                               const SnackBar(content: Text('Car Added')),
                             );
 
-                            addCar(
-                                vinController.text,
-                                int.parse(yearController.text),
-                                makeController.text,
-                                modelController.text,
-                                ownerController.text.isNotEmpty
-                                    ? ownerController.text
-                                    : "N/A");
+                            /// TODO: add vahicle goes here
 
                             widget.refresh();
 

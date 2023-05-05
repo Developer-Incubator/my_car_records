@@ -1,6 +1,5 @@
 // need to check vin for length as well as make a drop down with all the dent manufacturers and all of there products
 import 'package:flutter/material.dart';
-import 'package:my_car_records/model/db/fb/car_reat_time.dart';
 
 /// updates information about a car and refreshes the state to update the page to display the correct information.
 ///
@@ -138,13 +137,8 @@ class _CarUpdateFormState extends State<CarUpdateForm> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Car Updated')),
                       );
-                      updateCar(
-                        vinController.text,
-                        int.parse(yearController.text),
-                        makeController.text,
-                        modelController.text,
-                        ownerController.text,
-                      );
+
+                      ///TODO: Update Vehicle here
 
                       widget.refresh();
 

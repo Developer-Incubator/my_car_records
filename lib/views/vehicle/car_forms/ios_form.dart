@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart';
 import 'package:my_car_records/constance/constance.dart';
+import 'package:my_car_records/model/db/vehicle.dart';
 import 'package:my_car_records/model/user.dart';
 import 'package:my_car_records/model/vehicle.dart';
 import 'package:my_car_records/model/vin_decoder.dart';
@@ -179,17 +180,20 @@ class _IOSCarFormState extends State<IOSCarForm> {
                   CupertinoButton(
                     color: CupertinoColors.activeGreen,
                     child: const Text("Submit"),
-                    onPressed: () {
+                    onPressed: () async {
                       vehicle ??= Vehicle(
                           make: widget.makeController.text,
                           model: widget.modelController.text,
                           modelYear: int.parse(widget.yearController.text));
                       //TODO: Change to use my db
-
+                      await DBVehicle.addVehicle(vehicle!).then((value) {
+                        if (value) {
+                          Navigator.pop(context);
+                          widget.refresh();
+                        }
+                      });
                       // CarDB(firestore: widget.firestore, user: widget.user)
                       //     .add(vehicle);
-                      Navigator.pop(context);
-                      widget.refresh();
                     },
                   )
                 ],

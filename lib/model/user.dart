@@ -1,24 +1,24 @@
 import 'dart:convert';
 
 class User {
-  final int id;
-  String username;
-  String firstName;
-  String lastName;
+  final int? id;
+  String? username;
+  String? firstName;
+  String? lastName;
   String email;
   String sessionToken;
 
   User(
-      {required this.id,
-      required this.username,
-      required this.sessionToken,
-      required this.firstName,
-      required this.lastName,
+      {this.id,
+      this.username,
+      this.sessionToken = "",
+      this.firstName = "",
+      this.lastName = "",
       required this.email});
 
   static User fromJson(Map<String, dynamic> json) {
     return User(
-        id: int.parse(json["id"]),
+        id: json["id"],
         username: json["username"],
         sessionToken: json["session_token"],
         firstName: json["first_name"],
@@ -41,5 +41,16 @@ class User {
   @override
   String toString() {
     return "{\"id\":$id,\"username\": \"$username\", \"email\": \"$email\",\"first_name\":\"$firstName\",\"last_name\":\"$lastName\",\"session_token\":\"$sessionToken\"}";
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "username": username,
+      "session_token": sessionToken,
+      "first_name": firstName,
+      "last-name": lastName,
+      "email": email
+    };
   }
 }

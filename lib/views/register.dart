@@ -1,7 +1,9 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:http/http.dart';
 import 'package:my_car_records/constance/constance.dart';
-import 'package:my_car_records/model/db/fb/firebase/firebase_auth_manager.dart';
+import 'package:my_car_records/model/db/user.dart';
+import 'package:my_car_records/model/user.dart';
+import 'package:my_car_records/utils/sharedprefs.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -11,9 +13,11 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPage extends State<RegisterPage> {
+  TextEditingController username = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
-  FirebaseAuth auth = FirebaseAuth.instance;
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
   @override
   void dispose() {
     super.dispose();
@@ -31,21 +35,35 @@ class _RegisterPage extends State<RegisterPage> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           CupertinoTextField(
+            placeholder: "Username",
+            controller: username,
+          ),
+          CupertinoTextField(
             placeholder: "Email",
             controller: email,
           ),
           CupertinoTextField(
-            placeholder: "password",
+            placeholder: "Password",
             controller: password,
+          ),
+          CupertinoTextField(
+            placeholder: "Firstname",
+            controller: firstName,
+          ),
+          CupertinoTextField(
+            placeholder: "Last Name",
+            controller: lastName,
           ),
           CupertinoButton.filled(
               child: const Text("Submit"),
               onPressed: () async {
-                UserCredential? credential =
-                    await FirebaseAuthManager(auth: auth)
-                        .signup(email.text, password.text);
-
-                if (credential != null) {
+                User? newUser = await DBUser(Client()).register(
+                    email.text, password.text,
+                    username: username.text,
+                    firstName: firstName.text,
+                    lastName: lastName.text);
+                if (newUser != null) {
+                  SharedPrefs.saveUser(newUser);
                   Navigator.pop(navKey.currentContext!);
                   Navigator.pushReplacementNamed(
                       navKey.currentContext!, "/dashboard");

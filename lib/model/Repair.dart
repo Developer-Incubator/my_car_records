@@ -1,4 +1,5 @@
-import 'package:my_car_records/model/db/fb/part.dart';
+import 'package:my_car_records/model/db/part.dart';
+import 'package:my_car_records/model/db/repair.dart';
 import 'package:my_car_records/model/part.dart';
 
 /// Create a Repair
@@ -10,34 +11,38 @@ import 'package:my_car_records/model/part.dart';
 /// [workRequested] work requested by the vehicle owner.
 
 class Repair {
-  final String? id;
-  final String? vehicleID;
+  final int? id;
+  final int? vehicleID;
   final double? hours;
   final double? labor;
   final String? tech;
   final int? odometer;
   final String workRequested;
-  List<Part>? partList = [];
+  double total = 0.00;
+  // List<Part>? partList = [];
 
-  Repair(
-      {this.id,
-      this.vehicleID,
-      required this.workRequested,
-      this.hours = 0,
-      this.labor = 0,
-      this.tech,
-      this.odometer,
-      this.partList}) {
-    getParts();
+  Repair({
+    this.id,
+    this.vehicleID,
+    required this.workRequested,
+    this.hours = 0,
+    this.labor = 0,
+    this.tech,
+    this.odometer,
+    // this.partList
+  }) {
+    getTotal();
+    print(total);
+    // getParts();
   }
 
   static Repair fromJson(Map<String, dynamic> json) {
     return Repair(
       id: json["id"],
-      vehicleID: json["vehicleID"],
-      hours: json["hours"],
-      labor: json["labor"],
-      tech: json["tech"],
+      vehicleID: json["vehicle_id"],
+      hours: double.parse(json["hours"].toString()),
+      labor: double.parse(json["labor"].toString()),
+      tech: json["technition"],
       odometer: json["odometer"],
       workRequested: json["work_requested"],
     );
@@ -46,12 +51,13 @@ class Repair {
   /// returns all information about repair in json form
   Map<String, dynamic> getRepairInfo() {
     return {
+      "vehicleId": vehicleID,
       "hours": hours,
       "labor": labor,
-      "tech": tech,
+      "technition": tech,
       "odometer": odometer,
       "workRequested": workRequested,
-      "partList": partList,
+      // "partList": partList,
     };
   }
 
@@ -60,11 +66,11 @@ class Repair {
   }
 
   Future<List<Part?>> getParts() async {
-    List<Part> partsList =
-        await PartDB().get(vehicleID: vehicleID, repairID: id);
-    partList = partsList;
-    return partsList;
+    return await DBPart.getAll(id!);
   }
 
-  /// TODO: Get total cost of parts
+  Future<double> getTotal() async {
+    return await DBRepair.getTotal(id!);
+    // total = await DBRepair.getTotal(id!) ?? 0.00;
+  }
 }

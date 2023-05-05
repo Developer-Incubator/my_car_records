@@ -57,8 +57,6 @@ class IOSHomePageState extends State<IOSHomePage> {
         ),
       ),
       child: FutureBuilder<List<Vehicle>>(
-          //TODO: fetch users cars from the db
-          // future: Future.delayed(Duration.zero, () => []),
           future: DBVehicle.getVehicles(),
           builder: (context, AsyncSnapshot<List<Vehicle>> snapshot) {
             if (snapshot.hasError) {
@@ -69,7 +67,6 @@ class IOSHomePageState extends State<IOSHomePage> {
             }
 
             if (snapshot.hasData) {
-              print(snapshot.data);
               return CupertinoListSection.insetGrouped(
                 header: const Text("Vehicle List"),
                 children: [
@@ -83,7 +80,6 @@ class IOSHomePageState extends State<IOSHomePage> {
                       onTap: () => Navigator.pushNamed(context, "/carDetails",
                           arguments: {
                             "vehicle": vehicle,
-                            "user": widget.user,
                           }),
                     );
                   })

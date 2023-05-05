@@ -16,8 +16,6 @@ Map<String, Widget Function(BuildContext)> routes = {
         ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
     return CarDetailsPage(
       vehicle: args["vehicle"]!,
-      user: args["user"],
-      firestore: args["firestore"],
     );
   },
   "/repairDetails": (context) {
